@@ -20,9 +20,27 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+  //Class for limelight using AI Object Detection
   public static class LimelightNoteConstants{
-    public static final double limelightMountAngleDegrees = 0;
+    //How many degrees back is your limelight rotated from perfectly vertical
+    public static final double limelightMountAngleDegrees = 0; //Change later when it is on the robot
 
-    
+    //Distance between the center of the limelight's lens to the floor
+    public static final double limelightLensHeightInches = 0;
+
+    //Distance form the target to the floor
+    public static final double goalHeightInches = 0; 
+  }
+
+  //Class for limelight using AprilTag
+  public static class LimelightSpeakerConstants{
+    //How many degrees back is your limelight rotated from perfectly vertical
+    public static final double limelightMountAngleDegrees = 0; //Change later when it is on the robot
+
+    //Distance between the center of the limelight's lens to the floor
+    public static final double limelightLensHeightInches = 0;
+
+    //Distance form the target to the floor
+    public static final double goalHeightInches = 0; 
   }
 }
