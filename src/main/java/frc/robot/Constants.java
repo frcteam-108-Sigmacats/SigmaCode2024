@@ -16,4 +16,29 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+  public static class IntakeConstants{
+    //IDs for the motors on the intake mechanism
+    public static final int pivotMotorID = 9;
+
+    public static final int intakeMotorID = 10;
+
+    //PID gains for pivot control
+    public static final double kP = 0.0;//change when given the robot
+    public static final double kI = 0.0;//change when given the robot
+    public static final double kD = 0.0;//change when given the robot
+
+    //DIO port number for laser sensor that will be mounted to the intake
+    public static final int irSensorDIOPort = 0;//might have to change
+
+    //Values for the intake angle's
+    public static final double restPos = 0;//The rest position which will also be the handoff position
+    public static final double groundIntakePos = 0;//The position where we will intake from the ground (Find value first)
+    public static final double sourceZonePos = 0;//The position where we will intake a note coming from the source zone that is not the ground (Find value first)
+
+
+    //The speeds for intaking and outtaking
+    public static final double intakeSpeed = 0.0; //Change speed when robot is done
+    public static final double outtakeSpeed = 0.0; //Change speed when robot is done
+
+  }
 }
