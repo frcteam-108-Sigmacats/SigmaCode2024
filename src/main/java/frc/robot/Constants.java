@@ -41,6 +41,6 @@ public final class Constants {
     public static final double limelightLensHeightInches = 0;
 
     //Distance form the target to the floor
-    public static final double goalHeightInches = 0; 
+    public static final double goalHeightInches = 77.625; 
   }
 }
