@@ -92,7 +92,7 @@ public class MAXSwerveModule extends SubsystemBase {
         ModuleConstants.kTurningMaxOutput);
 
     //Setting up Idle mode and Current Limit. Needed to not overpower the motors and burn it
-    driveMotor.setIdleMode(IdleMode.kBrake);
+    driveMotor.setIdleMode(IdleMode.kCoast);
     turnMotor.setIdleMode(IdleMode.kBrake);
     driveMotor.setSmartCurrentLimit(ModuleConstants.kDrivingMotorCurrentLimit);
     turnMotor.setSmartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit);

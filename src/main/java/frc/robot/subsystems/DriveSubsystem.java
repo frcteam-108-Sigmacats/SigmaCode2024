@@ -46,7 +46,7 @@ public class DriveSubsystem extends SubsystemBase {
   private SwerveDriveOdometry odometry;
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    //Setting the gyor to factory default
+    //Setting the gyro to factory default
     gyro.getConfigurator().apply(new Pigeon2Configuration());
     gyro.clearStickyFaults();
     //Resets the gyro

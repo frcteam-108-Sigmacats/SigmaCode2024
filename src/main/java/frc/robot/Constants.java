@@ -69,12 +69,13 @@ public final class Constants {
       public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
     
     //PID Set Up for Drive and Turn Motors
-      public static final double kDrivingP = 0.04;
-      public static final double kDrivingI = 0;
-      public static final double kDrivingD = 0;
+      public static final double kDrivingP = 0.04;//Change when robot is with software
+      public static final double kDrivingI = 0;//Change when robot is with software
+      public static final double kDrivingD = 0;//Change when robot is with software
       public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
       public static final double kDrivingMinOutput = -1;
       public static final double kDrivingMaxOutput = 1;
+
       public static final double kTurningP = 1;
       public static final double kTurningI = 0;
       public static final double kTurningD = 0;
