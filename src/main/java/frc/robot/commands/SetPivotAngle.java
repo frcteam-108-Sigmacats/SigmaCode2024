@@ -44,6 +44,9 @@ public class SetPivotAngle extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(Math.abs(pivotAngle - shooterSub.getPivotAngle()) <= 1){
+      return true;
+    }
     return false;
   }
 }

@@ -11,6 +11,8 @@ public class SetFlyWheelSpeeds extends Command {
   private ShooterSubsystem shooterSub;
 
   private double speed;
+
+  private int counter;
   /** Creates a new SetFlyWheelSpeeds. */
   public SetFlyWheelSpeeds(ShooterSubsystem shooterSub, double speed) {
     this.shooterSub = shooterSub;
@@ -22,11 +24,14 @@ public class SetFlyWheelSpeeds extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    counter = 0;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    counter++;
     shooterSub.setFlyWheelSpeeds(speed);
   }
 
@@ -39,6 +44,9 @@ public class SetFlyWheelSpeeds extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(counter >= 150){
+      return true;
+    }
     return false;
   }
 }

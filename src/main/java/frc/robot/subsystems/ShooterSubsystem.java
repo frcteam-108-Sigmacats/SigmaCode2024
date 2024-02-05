@@ -14,6 +14,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterMechConstants;
@@ -80,7 +81,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterRightMotor.setIdleMode(IdleMode.kCoast);
 
     //Configuring pivot motor
-    shooterPivotMotor.setSmartCurrentLimit(10);//Units are in amps
+    shooterPivotMotor.setSmartCurrentLimit(20);//Units are in amps
     shooterPivotMotor.setIdleMode(IdleMode.kCoast);
 
     //Configure Pivot PID Controller
@@ -89,8 +90,19 @@ public class ShooterSubsystem extends SubsystemBase {
     pivotControl.setD(ShooterMechConstants.kD);
     pivotControl.setFeedbackDevice(shooterPivotAbsEnc);
 
-    //Setting Absolute Encoder to 360 degree position
+    // Enable PID wrap around for the turning motor. This will allow the PID
+    // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
+    // to 10 degrees will go through 0 rather than the other direction which is a
+    // longer route.
+    pivotControl.setPositionPIDWrappingEnabled(true);
+    pivotControl.setPositionPIDWrappingMinInput(0);
+    pivotControl.setPositionPIDWrappingMaxInput(360);
+
+    pivotControl.setOutputRange(-1, 1);
+
+    //Setting Absolute Encoder to 360 degree position and inversion
     shooterPivotAbsEnc.setPositionConversionFactor(360);
+    shooterPivotAbsEnc.setInverted(true);
 
     //Burn flash on motors
     indexMotor.burnFlash();
@@ -128,6 +140,7 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Shooter Angle", getPivotAngle());
   }
 
   @Override

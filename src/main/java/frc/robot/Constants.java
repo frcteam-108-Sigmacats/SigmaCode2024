@@ -34,7 +34,7 @@ public final class Constants {
     public static final double restPos = 0; //Change later when the robot is in software
 
     //PID gains for Pivot Controller
-    public static final double kP = 0.1;//Change later when robot is with software
+    public static final double kP = 0.07;//Change later when robot is with software
     public static final double kI = 0.0;//Change later when robot is with software
     public static final double kD = 0.0;//Change later when robot is with software
 
