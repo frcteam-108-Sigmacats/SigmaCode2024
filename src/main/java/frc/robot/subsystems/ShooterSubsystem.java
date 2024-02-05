@@ -80,7 +80,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterRightMotor.setIdleMode(IdleMode.kCoast);
 
     //Configuring pivot motor
-    shooterPivotMotor.setSmartCurrentLimit(40);//Units are in amps
+    shooterPivotMotor.setSmartCurrentLimit(10);//Units are in amps
     shooterPivotMotor.setIdleMode(IdleMode.kCoast);
 
     //Configure Pivot PID Controller
@@ -88,6 +88,9 @@ public class ShooterSubsystem extends SubsystemBase {
     pivotControl.setI(ShooterMechConstants.kI);
     pivotControl.setD(ShooterMechConstants.kD);
     pivotControl.setFeedbackDevice(shooterPivotAbsEnc);
+
+    //Setting Absolute Encoder to 360 degree position
+    shooterPivotAbsEnc.setPositionConversionFactor(360);
 
     //Burn flash on motors
     indexMotor.burnFlash();

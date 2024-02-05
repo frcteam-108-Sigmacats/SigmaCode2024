@@ -5,7 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
+import frc.robot.commands.SetFlyWheelSpeeds;
 import frc.robot.commands.SetPivotAngle;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,16 +20,21 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ShooterSubsystem m_exampleSubsystem = new ShooterSubsystem();
+  private final ShooterSubsystem shooterSub = new ShooterSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
+  private Trigger kA, kB;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+    kA.whileTrue(new SetPivotAngle(shooterSub, 0));
+    //kB.whileTrue(new SetFlyWheelSpeeds(shooterSub, -0.8));
   }
 
   /**
@@ -46,7 +51,8 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    kA = m_driverController.a();
+    kB = m_driverController.b();
   }
 
   /**

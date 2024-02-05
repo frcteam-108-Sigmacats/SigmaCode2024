@@ -34,7 +34,7 @@ public final class Constants {
     public static final double restPos = 0; //Change later when the robot is in software
 
     //PID gains for Pivot Controller
-    public static final double kP = 0.0;//Change later when robot is with software
+    public static final double kP = 0.1;//Change later when robot is with software
     public static final double kI = 0.0;//Change later when robot is with software
     public static final double kD = 0.0;//Change later when robot is with software
 
@@ -42,6 +42,6 @@ public final class Constants {
     public static final int shootSensorID = 2;
 
     //Should the right side of the flywheel motors need to be inverted to spin the same direction as the left side of the flywheel motor
-    public static boolean rightFlywheelInverted = false;
+    public static boolean rightFlywheelInverted = true;
   }
 }
