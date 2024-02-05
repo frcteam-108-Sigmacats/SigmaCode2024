@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
@@ -54,8 +55,8 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeMotor.clearFaults();
 
     //Configuring the pivotIntakeMotor and Intake Motor
-    pivotIntakeMotor.setIdleMode(IdleMode.kBrake);//Don't let the motor move much even when robot is disabled
-    pivotIntakeMotor.setSmartCurrentLimit(40);//Sets the amount of amps the motor should at max take (Units:amps)
+    pivotIntakeMotor.setIdleMode(IdleMode.kCoast);//Don't let the motor move much even when robot is disabled
+    pivotIntakeMotor.setSmartCurrentLimit(20);//Sets the amount of amps the motor should at max take (Units:amps)
 
     intakeMotor.setIdleMode(IdleMode.kCoast);//Don't let the motor move much even when robot is disabled
     intakeMotor.setSmartCurrentLimit(40);//Sets the amount of amps the motor should at max take (Units:amps)
@@ -65,6 +66,14 @@ public class IntakeSubsystem extends SubsystemBase {
     pivotControl.setI(IntakeConstants.kI);//Sets the I gain (Error compensation power to reach the exact position)
     pivotControl.setD(IntakeConstants.kD);//Sets the D gain (Stop power (Basically helps with smoother stop of mechanism))
     pivotControl.setFeedbackDevice(intakeAbsEnc);//Sets the encoder we want the PID to follow 
+
+    //Configuring Absolute Encoder
+    intakeAbsEnc.setPositionConversionFactor(360);
+
+    pivotControl.setPositionPIDWrappingEnabled(true);
+    pivotControl.setPositionPIDWrappingMinInput(0);
+    pivotControl.setPositionPIDWrappingMaxInput(360);
+    pivotControl.setOutputRange(-1, 1);
 
     //Burns flash to finish configuring the motors (Basically saying to set the configurations)
     pivotIntakeMotor.burnFlash();
@@ -98,6 +107,7 @@ public class IntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Intake Angle", getPivotAngle());
   }
 
   @Override

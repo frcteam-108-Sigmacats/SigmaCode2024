@@ -34,14 +34,16 @@ public class RunIntakeCmd extends Command {
   @Override
   public void execute() {
     //if there is no note in th intake AND in the shooter (add later)
-    if(!intakeSubsystem.getIRSensor()){
-      intakeSubsystem.setIntakeAngle(intakePos);
-      intakeSubsystem.setIntakeSpeed(IntakeConstants.intakeSpeed);
-    }
-    else{
-      intakeSubsystem.setIntakeAngle(IntakeConstants.restPos);
-      intakeSubsystem.setIntakeSpeed(0);
-    }
+    // if(!intakeSubsystem.getIRSensor()){
+    //   intakeSubsystem.setIntakeAngle(intakePos);
+    //   intakeSubsystem.setIntakeSpeed(IntakeConstants.intakeSpeed);
+    // }
+    // else{
+    //   intakeSubsystem.setIntakeAngle(IntakeConstants.restPos);
+    //   intakeSubsystem.setIntakeSpeed(0);
+    // }
+    intakeSubsystem.setIntakeAngle(intakePos);
+    intakeSubsystem.setIntakeSpeed(IntakeConstants.intakeSpeed);
   }
 
   // Called once the command ends or is interrupted.
@@ -51,9 +53,9 @@ public class RunIntakeCmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(intakeSubsystem.getIRSensor()){
-      return true;
-    }
+    // if(intakeSubsystem.getIRSensor()){
+    //   return true;
+    // }
     return false;
   }
 }

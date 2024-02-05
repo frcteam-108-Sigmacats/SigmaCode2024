@@ -23,7 +23,7 @@ public final class Constants {
     public static final int intakeMotorID = 10;
 
     //PID gains for pivot control
-    public static final double kP = 0.0;//change when given the robot
+    public static final double kP = 0.01;//change when given the robot
     public static final double kI = 0.0;//change when given the robot
     public static final double kD = 0.0;//change when given the robot
 
@@ -37,7 +37,7 @@ public final class Constants {
 
 
     //The speeds for intaking and outtaking
-    public static final double intakeSpeed = 0.0; //Change speed when robot is done
+    public static final double intakeSpeed = 0.5; //Change speed when robot is done
     public static final double outtakeSpeed = 0.0; //Change speed when robot is done
 
   }

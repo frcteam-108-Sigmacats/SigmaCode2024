@@ -33,13 +33,13 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     //Intake does not move from rest position
-    intakeSubsystem.setDefaultCommand(new RestIntakeCmd(intakeSubsystem));
+    //intakeSubsystem.setDefaultCommand(new RestIntakeCmd(intakeSubsystem));
 
     // Configure the trigger bindings
     configureBindings();
 
     //When y is pressed intake runs to pick up from ground
-    dRTrigger.whileTrue(new RunIntakeCmd(intakeSubsystem, IntakeConstants.groundIntakePos));
+    dRTrigger.whileTrue(new RunIntakeCmd(intakeSubsystem, 30));
   }
 
   /**
