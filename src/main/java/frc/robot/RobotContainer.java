@@ -6,8 +6,10 @@ package frc.robot;
 
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.IntakeRollersRest;
 import frc.robot.commands.RestIntakeCmd;
 import frc.robot.commands.RunIntakeCmd;
+import frc.robot.commands.RunOuttakeCmd;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -24,7 +26,7 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
   //Instantiating the controllers buttons
-  private Trigger dRTrigger;
+  private Trigger dRTrigger, dLTrigger;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driver =
@@ -33,13 +35,16 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     //Intake does not move from rest position
-    //intakeSubsystem.setDefaultCommand(new RestIntakeCmd(intakeSubsystem));
+    // intakeSubsystem.setDefaultCommand(new RestIntakeCmd(intakeSubsystem));
 
     // Configure the trigger bindings
     configureBindings();
 
     //When y is pressed intake runs to pick up from ground
-    dRTrigger.whileTrue(new RunIntakeCmd(intakeSubsystem, 30));
+    dRTrigger.whileTrue(new RunIntakeCmd(intakeSubsystem, IntakeConstants.groundIntakePos));
+    dRTrigger.whileFalse(new RestIntakeCmd(intakeSubsystem));
+    dLTrigger.whileTrue(new RunOuttakeCmd(intakeSubsystem, IntakeConstants.groundIntakePos));
+    dLTrigger.whileFalse(new RestIntakeCmd(intakeSubsystem));
   }
 
   /**
@@ -57,6 +62,7 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     dRTrigger = driver.rightTrigger();
+    dLTrigger = driver.leftTrigger();
   }
 
   /**

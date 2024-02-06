@@ -69,11 +69,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     //Configuring Absolute Encoder
     intakeAbsEnc.setPositionConversionFactor(360);
-
-    pivotControl.setPositionPIDWrappingEnabled(true);
-    pivotControl.setPositionPIDWrappingMinInput(0);
-    pivotControl.setPositionPIDWrappingMaxInput(360);
-    pivotControl.setOutputRange(-1, 1);
+    intakeAbsEnc.setInverted(false);
 
     //Burns flash to finish configuring the motors (Basically saying to set the configurations)
     pivotIntakeMotor.burnFlash();
@@ -131,6 +127,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
   //Sets the intake speed for intaking and outtaking
   public void setIntakeSpeed(double speed){
-    pivotIntakeMotor.set(speed);
+    intakeMotor.set(speed);
   }
 }
