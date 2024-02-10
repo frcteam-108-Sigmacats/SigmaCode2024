@@ -4,6 +4,11 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
@@ -27,7 +32,10 @@ public class ShooterSubsystem extends SubsystemBase {
   private CANSparkFlex shooterRightMotor;
 
   //Motor for running index rollers
-  private CANSparkFlex indexMotor;
+  private TalonFX indexMotor;
+
+  private CurrentLimitsConfigs currentLimit = new CurrentLimitsConfigs();
+  private MotorOutputConfigs motorOutput = new MotorOutputConfigs();
 
   //Instantiate the shooter pivot absolute encoder
   private AbsoluteEncoder shooterPivotAbsEnc;
@@ -38,6 +46,8 @@ public class ShooterSubsystem extends SubsystemBase {
   //Instantiate Infrared Sensor
   private DigitalInput shooterSensor;
 
+
+  private double indexSpeed = 0;
   /** Creates a new ExampleSubsystem. */
   public ShooterSubsystem() {
     //Assigning ID to shooter pivot motor
@@ -48,7 +58,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterRightMotor = new CANSparkFlex(ShooterMechConstants.shooterRightMotorID, MotorType.kBrushless);
 
     //Assinging ID to Index Motor
-    indexMotor = new CANSparkFlex(ShooterMechConstants.indexMotorID, MotorType.kBrushless);
+    indexMotor = new TalonFX(ShooterMechConstants.indexMotorID);
 
     //Assinging the port number for the infrared sensor
     shooterSensor = new DigitalInput(ShooterMechConstants.shootSensorID);
@@ -59,7 +69,10 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterLeftMotor.restoreFactoryDefaults();
     shooterRightMotor.restoreFactoryDefaults();
 
-    indexMotor.restoreFactoryDefaults();
+    indexMotor.getConfigurator().apply(new TalonFXConfiguration());
+
+    currentLimit.SupplyCurrentLimit = 40.0;
+    motorOutput.NeutralMode = NeutralModeValue.Coast;
 
     //Assinging the absolute encoder to the pivot motor
     shooterPivotAbsEnc = shooterPivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
@@ -70,9 +83,8 @@ public class ShooterSubsystem extends SubsystemBase {
     //Configuration of everything
 
     //Configuring index motor
-    indexMotor.setSmartCurrentLimit(40);//Unit is in amps
-    indexMotor.setIdleMode(IdleMode.kCoast);
-
+      indexMotor.getConfigurator().apply(currentLimit);
+      indexMotor.getConfigurator().apply(motorOutput);
     //Configuring flywheel motors
     shooterLeftMotor.setSmartCurrentLimit(40);//Units are in amps
     shooterLeftMotor.setIdleMode(IdleMode.kCoast);
@@ -105,7 +117,6 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterPivotAbsEnc.setInverted(true);
 
     //Burn flash on motors
-    indexMotor.burnFlash();
 
     shooterPivotMotor.burnFlash();
 
@@ -141,6 +152,8 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shooter Angle", getPivotAngle());
+    // SmartDashboard.putNumber("Set Kraken Speed", indexSpeed);
+    indexSpeed = SmartDashboard.getNumber("Set Kraken Speed", 0);
   }
 
   @Override
@@ -164,6 +177,9 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterRightMotor.follow(shooterLeftMotor, ShooterMechConstants.rightFlywheelInverted);
   }
   public void setIndexRollerSpeed(){
-    indexMotor.set(ShooterMechConstants.indexMotorSpeed);
+    indexMotor.set(indexSpeed);
+  }
+  public void setIndexRollerSpeed(double speed){
+    indexMotor.set(speed);
   }
 }

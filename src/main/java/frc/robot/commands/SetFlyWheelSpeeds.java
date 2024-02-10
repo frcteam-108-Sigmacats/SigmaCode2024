@@ -33,20 +33,24 @@ public class SetFlyWheelSpeeds extends Command {
   public void execute() {
     counter++;
     shooterSub.setFlyWheelSpeeds(speed);
+    if(counter >= 150){
+      shooterSub.setIndexRollerSpeed();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     shooterSub.setFlyWheelSpeeds(0);
+    shooterSub.setIndexRollerSpeed(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(counter >= 150){
-      return true;
-    }
+    // if(counter >= 150){
+    //   return true;
+    // }
     return false;
   }
 }

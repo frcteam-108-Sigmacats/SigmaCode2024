@@ -21,7 +21,7 @@ public final class Constants {
     public static final int indexMotorID = 11;
 
     //Speed to run index motor
-    public static final double indexMotorSpeed = 0.0; //Change when robot is with software
+    public static final double indexMotorSpeed = 1.0; //Change when robot is with software
 
     //IDs for the flywheel motors
     public static final int shooterLeftMotorID = 12;
