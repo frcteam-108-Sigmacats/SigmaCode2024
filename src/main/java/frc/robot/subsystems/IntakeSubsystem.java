@@ -39,6 +39,7 @@ public class IntakeSubsystem extends SubsystemBase {
     //Assigning the motors their IDs
     pivotIntakeMotor = new CANSparkMax(IntakeConstants.pivotMotorID, MotorType.kBrushless);
     intakeMotor = new CANSparkMax(IntakeConstants.intakeMotorID, MotorType.kBrushless);
+    transferMotor = new CANSparkFlex(IntakeConstants.transferMotorID, MotorType.kBrushless);
 
     //Assigning the PID Controller to the pivot motor built in speed controller
     pivotControl = pivotIntakeMotor.getPIDController();
@@ -52,16 +53,21 @@ public class IntakeSubsystem extends SubsystemBase {
     //Resetting the motors to factory default and clears sticky faults
     pivotIntakeMotor.restoreFactoryDefaults();
     intakeMotor.restoreFactoryDefaults();
+    transferMotor.restoreFactoryDefaults();
 
     pivotIntakeMotor.clearFaults();
     intakeMotor.clearFaults();
+    transferMotor.clearFaults();
 
-    //Configuring the pivotIntakeMotor and Intake Motor
+    //Configuring the pivotIntakeMotor, Intake Motor, Transfer Motor
     pivotIntakeMotor.setIdleMode(IdleMode.kCoast);//Don't let the motor move much even when robot is disabled
     pivotIntakeMotor.setSmartCurrentLimit(20);//Sets the amount of amps the motor should at max take (Units:amps)
 
     intakeMotor.setIdleMode(IdleMode.kCoast);//Don't let the motor move much even when robot is disabled
     intakeMotor.setSmartCurrentLimit(40);//Sets the amount of amps the motor should at max take (Units:amps)
+
+    transferMotor.setIdleMode(IdleMode.kCoast);
+    transferMotor.setSmartCurrentLimit(30);
 
     //Configuring the PID Controller
     pivotControl.setP(IntakeConstants.kP);//Sets the P gain (Starting power to reach set position closely)
@@ -76,6 +82,7 @@ public class IntakeSubsystem extends SubsystemBase {
     //Burns flash to finish configuring the motors (Basically saying to set the configurations)
     pivotIntakeMotor.burnFlash();
     intakeMotor.burnFlash();
+    transferMotor.burnFlash();
   }
 
   /**
@@ -129,6 +136,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   //Sets the intake speed for intaking and outtaking
   public void setIntakeSpeed(double speed){
-    intakeMotor.set(speed);
+    intakeMotor.set(IntakeConstants.intakeSpeed);
+    transferMotor.set(IntakeConstants.transferSpeed);
   }
 }
