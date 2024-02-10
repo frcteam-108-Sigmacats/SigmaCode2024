@@ -19,9 +19,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  //Instantiating pivot motor and intake motor
+  //Instantiating pivot motor, intake motor, and transfer motor
   private CANSparkMax pivotIntakeMotor;
   private CANSparkMax intakeMotor;
+
+  private CANSparkFlex transferMotor;
 
   //Instantiating PID Controller for controlling intake pivot
   private SparkPIDController pivotControl;

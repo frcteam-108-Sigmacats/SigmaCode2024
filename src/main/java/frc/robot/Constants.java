@@ -22,6 +22,8 @@ public final class Constants {
 
     public static final int intakeMotorID = 10;
 
+    public static final int transferMotorID = 17;
+
     //PID gains for pivot control
     public static final double kP = 0.01;//change when given the robot
     public static final double kI = 0.0;//change when given the robot
