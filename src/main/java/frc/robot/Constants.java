@@ -30,6 +30,11 @@ public final class Constants {
     //ID for shooter pivot motor
     public static final int shooterPivotMotorID = 14;
 
+    //Current Limits for all motors in the shooter mechanism
+    public static final int flywheelCurrentLimit = 40;//Units in amps
+    public static final int pivotCurrentLimit = 30;//Units in amps
+    public static final int indexCurrentLimit = 20;//Units in amps
+
     //Pivot angles
     public static final double restPos = 0; //Change later when the robot is in software
 
@@ -39,7 +44,7 @@ public final class Constants {
     public static final double kD = 0.0;//Change later when robot is with software
 
     //Port number for Shooter Sensor
-    public static final int shootSensorID = 2;
+    public static final int transferSensorID = 2;
 
     //Should the right side of the flywheel motors need to be inverted to spin the same direction as the left side of the flywheel motor
     public static boolean rightFlywheelInverted = true;

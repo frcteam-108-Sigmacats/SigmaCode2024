@@ -35,10 +35,6 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    // kA.whileTrue(new SetPivotAngle(shooterSub, 50));
-    //kA.whileTrue(new SetAngleAndFlywheelSpeeds(shooterSub, 35, -0.8));
-    kB.whileTrue(new SetFlyWheelSpeeds(shooterSub, -0.8));
-    // kA.whileTrue(new SetIndexRollerSpeeds(shooterSub));
   }
 
   /**

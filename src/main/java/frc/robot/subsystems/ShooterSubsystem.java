@@ -4,11 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
@@ -32,10 +27,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private CANSparkFlex shooterRightMotor;
 
   //Motor for running index rollers
-  private TalonFX indexMotor;
-
-  private CurrentLimitsConfigs currentLimit = new CurrentLimitsConfigs();
-  private MotorOutputConfigs motorOutput = new MotorOutputConfigs();
+  private CANSparkFlex indexMotor;
 
   //Instantiate the shooter pivot absolute encoder
   private AbsoluteEncoder shooterPivotAbsEnc;
@@ -43,85 +35,82 @@ public class ShooterSubsystem extends SubsystemBase {
   //Instantiate PID Controller for shooter pivot
   private SparkPIDController pivotControl;
 
-  //Instantiate Infrared Sensor
-  private DigitalInput shooterSensor;
+  //Instantiate Infrared Sensor that will be on the transfer mechanism
+  private DigitalInput transferSensor;
 
-
-  private double indexSpeed = 0;
   /** Creates a new ExampleSubsystem. */
   public ShooterSubsystem() {
     //Assigning ID to shooter pivot motor
-    shooterPivotMotor = new CANSparkMax(ShooterMechConstants.shooterPivotMotorID, MotorType.kBrushless);
+      shooterPivotMotor = new CANSparkMax(ShooterMechConstants.shooterPivotMotorID, MotorType.kBrushless);
 
     //Assigning ID to flywheel motors
-    shooterLeftMotor = new CANSparkFlex(ShooterMechConstants.shooterLeftMotorID, MotorType.kBrushless);
-    shooterRightMotor = new CANSparkFlex(ShooterMechConstants.shooterRightMotorID, MotorType.kBrushless);
+      shooterLeftMotor = new CANSparkFlex(ShooterMechConstants.shooterLeftMotorID, MotorType.kBrushless);
+      shooterRightMotor = new CANSparkFlex(ShooterMechConstants.shooterRightMotorID, MotorType.kBrushless);
 
     //Assinging ID to Index Motor
-    indexMotor = new TalonFX(ShooterMechConstants.indexMotorID);
+      indexMotor = new CANSparkFlex(ShooterMechConstants.indexMotorID, MotorType.kBrushless);
 
-    //Assinging the port number for the infrared sensor
-    shooterSensor = new DigitalInput(ShooterMechConstants.shootSensorID);
+    //Assigning the laser sensor to a DIO port
+      transferSensor = new DigitalInput(ShooterMechConstants.transferSensorID);
 
     //Resetting the motors
-    shooterPivotMotor.restoreFactoryDefaults();
-    
-    shooterLeftMotor.restoreFactoryDefaults();
-    shooterRightMotor.restoreFactoryDefaults();
+      shooterPivotMotor.restoreFactoryDefaults();
+      
+      shooterLeftMotor.restoreFactoryDefaults();
+      shooterRightMotor.restoreFactoryDefaults();
 
-    indexMotor.getConfigurator().apply(new TalonFXConfiguration());
+      indexMotor.restoreFactoryDefaults();
 
-    currentLimit.SupplyCurrentLimit = 40.0;
-    motorOutput.NeutralMode = NeutralModeValue.Coast;
 
     //Assinging the absolute encoder to the pivot motor
-    shooterPivotAbsEnc = shooterPivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
+      shooterPivotAbsEnc = shooterPivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
     //Assinging pivot controller to the pivot motor built in PID controller
-    pivotControl = shooterPivotMotor.getPIDController();
+      pivotControl = shooterPivotMotor.getPIDController();
 
     //Configuration of everything
 
     //Configuring index motor
-      indexMotor.getConfigurator().apply(currentLimit);
-      indexMotor.getConfigurator().apply(motorOutput);
-    //Configuring flywheel motors
-    shooterLeftMotor.setSmartCurrentLimit(40);//Units are in amps
-    shooterLeftMotor.setIdleMode(IdleMode.kCoast);
+      indexMotor.setSmartCurrentLimit(ShooterMechConstants.indexCurrentLimit);
+      indexMotor.setIdleMode(IdleMode.kCoast);
 
-    shooterRightMotor.setSmartCurrentLimit(40);//Units are in amps
-    shooterRightMotor.setIdleMode(IdleMode.kCoast);
+    //Configuring flywheel motors
+      shooterLeftMotor.setSmartCurrentLimit(ShooterMechConstants.flywheelCurrentLimit);//Units are in amps
+      shooterLeftMotor.setIdleMode(IdleMode.kCoast);
+
+      shooterRightMotor.setSmartCurrentLimit(ShooterMechConstants.flywheelCurrentLimit);//Units are in amps
+      shooterRightMotor.setIdleMode(IdleMode.kCoast);
 
     //Configuring pivot motor
-    shooterPivotMotor.setSmartCurrentLimit(20);//Units are in amps
-    shooterPivotMotor.setIdleMode(IdleMode.kCoast);
+      shooterPivotMotor.setSmartCurrentLimit(ShooterMechConstants.pivotCurrentLimit);//Units are in amps
+      shooterPivotMotor.setIdleMode(IdleMode.kCoast);
 
     //Configure Pivot PID Controller
-    pivotControl.setP(ShooterMechConstants.kP);
-    pivotControl.setI(ShooterMechConstants.kI);
-    pivotControl.setD(ShooterMechConstants.kD);
-    pivotControl.setFeedbackDevice(shooterPivotAbsEnc);
+      pivotControl.setP(ShooterMechConstants.kP);
+      pivotControl.setI(ShooterMechConstants.kI);
+      pivotControl.setD(ShooterMechConstants.kD);
+      pivotControl.setFeedbackDevice(shooterPivotAbsEnc);
 
     // Enable PID wrap around for the turning motor. This will allow the PID
     // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
     // to 10 degrees will go through 0 rather than the other direction which is a
     // longer route.
-    pivotControl.setPositionPIDWrappingEnabled(true);
-    pivotControl.setPositionPIDWrappingMinInput(0);
-    pivotControl.setPositionPIDWrappingMaxInput(360);
+      pivotControl.setPositionPIDWrappingEnabled(true);
+      pivotControl.setPositionPIDWrappingMinInput(0);
+      pivotControl.setPositionPIDWrappingMaxInput(360);
 
-    pivotControl.setOutputRange(-1, 1);
+      pivotControl.setOutputRange(-1, 1);
 
     //Setting Absolute Encoder to 360 degree position and inversion
-    shooterPivotAbsEnc.setPositionConversionFactor(360);
-    shooterPivotAbsEnc.setInverted(true);
+      shooterPivotAbsEnc.setPositionConversionFactor(360);
+      shooterPivotAbsEnc.setInverted(true);
 
     //Burn flash on motors
 
-    shooterPivotMotor.burnFlash();
+      shooterPivotMotor.burnFlash();
 
-    shooterLeftMotor.burnFlash();
-    shooterRightMotor.burnFlash();
+      shooterLeftMotor.burnFlash();
+      shooterRightMotor.burnFlash();
   }
 
   /**
@@ -152,8 +141,6 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shooter Angle", getPivotAngle());
-    // SmartDashboard.putNumber("Set Kraken Speed", indexSpeed);
-    indexSpeed = SmartDashboard.getNumber("Set Kraken Speed", 0);
   }
 
   @Override
@@ -161,25 +148,29 @@ public class ShooterSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
-  public double getPivotAngle(){
-    return shooterPivotAbsEnc.getPosition();
-  }
+  //Getting the current angle of the shooter
+    public double getPivotAngle(){
+      return shooterPivotAbsEnc.getPosition();
+    }
 
-  public boolean getIRSensor(){
-    return shooterSensor.get();
-  }
+  //Getting whether or not the sensor is seeing anything
+    public boolean getIRSensor(){
+      return transferSensor.get();
+    }
 
-  public void setPivotAngle(double angle){
-    pivotControl.setReference(angle, ControlType.kPosition);
-  }
-  public void setFlyWheelSpeeds(double speed){
-    shooterLeftMotor.set(speed);
-    shooterRightMotor.follow(shooterLeftMotor, ShooterMechConstants.rightFlywheelInverted);
-  }
-  public void setIndexRollerSpeed(){
-    indexMotor.set(indexSpeed);
-  }
-  public void setIndexRollerSpeed(double speed){
-    indexMotor.set(speed);
-  }
+  //Setting the shooter to a desired angle
+    public void setPivotAngle(double angle){
+      pivotControl.setReference(angle, ControlType.kPosition);
+    }
+  
+  //Setting the flywheels to a desired speed
+    public void setFlyWheelSpeeds(double speed){
+      shooterLeftMotor.set(speed);
+      shooterRightMotor.set(-(speed - 0.1));
+    }
+  
+  //Setting the index rollers to a desired speed
+    public void setIndexRollerSpeed(){
+      indexMotor.set(ShooterMechConstants.indexMotorSpeed);
+    }
 }
