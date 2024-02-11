@@ -42,7 +42,7 @@ public class SetFlyWheelSpeeds extends Command {
   @Override
   public void end(boolean interrupted) {
     shooterSub.setFlyWheelSpeeds(0);
-    shooterSub.setIndexRollerSpeed(0);
+    shooterSub.setIndexRollerSpeed();
   }
 
   // Returns true when the command should end.
