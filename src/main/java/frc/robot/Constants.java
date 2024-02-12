@@ -19,13 +19,13 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
   public static final class ChassisConstants{
     //Max Drive and Turn Speed Restrictions
-    public static final double kMaxSpeedMPS = 12;
-    public static final double kMaxAngularSpeed = 2 * Math.PI;
+      public static final double kMaxSpeedMPS = 12;
+      public static final double kMaxAngularSpeed = 2 * Math.PI;
 
     //Distance between the centers of the left wheels and right wheels
-    public static final double kTrackWidth = Units.inchesToMeters(22.4375);
+      public static final double kTrackWidth = Units.inchesToMeters(22.4375);
     //Distance between the centers of the front wheels and back wheels
-    public static final double kWheelBase = Units.inchesToMeters(22.4375);
+      public static final double kWheelBase = Units.inchesToMeters(22.4375);
 
     public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
       new Translation2d(kWheelBase / 2.0, kTrackWidth / 2.0), 
@@ -34,10 +34,10 @@ public final class Constants {
       new Translation2d(-kWheelBase / 2.0, -kTrackWidth / 2.0));
 
     //Is Gyro inverted
-    public static final boolean gyroReversed = false;
+      public static final boolean gyroReversed = false;
 
     //Used to prevent stick drift
-    public static double deadband = 0.15;
+      public static double deadband = 0.15;
   }
   public static class ModuleConstants{
     //Driving Pinion Teeth

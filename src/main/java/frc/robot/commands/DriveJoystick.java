@@ -20,6 +20,7 @@ public class DriveJoystick extends Command {
 
   //Geting the joystick for rotating the robot
   private double rotation;
+  
   //Whether or not to use the gyro scope
   private boolean fieldRelative;
   
