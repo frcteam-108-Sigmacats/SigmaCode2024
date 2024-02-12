@@ -24,6 +24,11 @@ public final class Constants {
 
     public static final int transferMotorID = 17;
 
+    //Current Limits for the motors on the intake/transfer mechanism
+    public static final int pivotMotorCurrentLimit = 30; //Units in amps
+    public static final int intakeMotorCurrentLimit = 20; //Units in amps
+    public static final int transferMotorCurrentLimit = 20; //Units in amps
+
     //PID gains for pivot control
     public static final double kP = 0.01;//change when given the robot
     public static final double kI = 0.0;//change when given the robot
@@ -40,8 +45,9 @@ public final class Constants {
 
     //The speeds for intaking, outtaking
     public static final double intakeSpeed = 0.75; //Change speed when robot is done
-    public static final double transferSpeed = -0.5 //Change speed when robot is done
+    public static final double transferSpeed = -0.5; //Change speed when robot is done
     public static final double outtakeSpeed = -0.75; //Change speed when robot is done
+    public static final double reverseTransferSpeed = 0.5; //Change speed when robot is done
 
   }
 }

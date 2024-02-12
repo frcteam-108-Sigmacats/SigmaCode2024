@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
@@ -20,69 +21,69 @@ import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
   //Instantiating pivot motor, intake motor, and transfer motor
-  private CANSparkMax pivotIntakeMotor;
-  private CANSparkMax intakeMotor;
+    private CANSparkMax pivotIntakeMotor;
+    private CANSparkMax intakeMotor;
 
-  private CANSparkFlex transferMotor;
+    private CANSparkFlex transferMotor;
 
   //Instantiating PID Controller for controlling intake pivot
-  private SparkPIDController pivotControl;
+    private SparkPIDController pivotControl;
 
   //Instantiating Absolute Encoder for Pivot reading
-  private AbsoluteEncoder intakeAbsEnc;
+    private AbsoluteEncoder intakeAbsEnc;
 
   //Instantiating intake sensor reading
-  private DigitalInput intakeSensor;
+    private DigitalInput intakeSensor;
 
   /** Creates a new ExampleSubsystem. */
   public IntakeSubsystem() {
     //Assigning the motors their IDs
-    pivotIntakeMotor = new CANSparkMax(IntakeConstants.pivotMotorID, MotorType.kBrushless);
-    intakeMotor = new CANSparkMax(IntakeConstants.intakeMotorID, MotorType.kBrushless);
-    transferMotor = new CANSparkFlex(IntakeConstants.transferMotorID, MotorType.kBrushless);
+      pivotIntakeMotor = new CANSparkMax(IntakeConstants.pivotMotorID, MotorType.kBrushless);
+      intakeMotor = new CANSparkMax(IntakeConstants.intakeMotorID, MotorType.kBrushless);
+      transferMotor = new CANSparkFlex(IntakeConstants.transferMotorID, MotorType.kBrushless);
 
     //Assigning the PID Controller to the pivot motor built in speed controller
-    pivotControl = pivotIntakeMotor.getPIDController();
+      pivotControl = pivotIntakeMotor.getPIDController();
 
     //Assigning the Absolute Encoder to the pivot motor
-    intakeAbsEnc = pivotIntakeMotor.getAbsoluteEncoder(Type.kDutyCycle);
+      intakeAbsEnc = pivotIntakeMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
     //Assigning the DIO port to our infrared sensor
-    intakeSensor = new DigitalInput(IntakeConstants.irSensorDIOPort);
+      intakeSensor = new DigitalInput(IntakeConstants.irSensorDIOPort);
 
     //Resetting the motors to factory default and clears sticky faults
-    pivotIntakeMotor.restoreFactoryDefaults();
-    intakeMotor.restoreFactoryDefaults();
-    transferMotor.restoreFactoryDefaults();
+      pivotIntakeMotor.restoreFactoryDefaults();
+      intakeMotor.restoreFactoryDefaults();
+      transferMotor.restoreFactoryDefaults();
 
-    pivotIntakeMotor.clearFaults();
-    intakeMotor.clearFaults();
-    transferMotor.clearFaults();
+      pivotIntakeMotor.clearFaults();
+      intakeMotor.clearFaults();
+      transferMotor.clearFaults();
 
     //Configuring the pivotIntakeMotor, Intake Motor, Transfer Motor
-    pivotIntakeMotor.setIdleMode(IdleMode.kCoast);//Don't let the motor move much even when robot is disabled
-    pivotIntakeMotor.setSmartCurrentLimit(20);//Sets the amount of amps the motor should at max take (Units:amps)
+      pivotIntakeMotor.setIdleMode(IdleMode.kCoast);//Don't let the motor move much even when robot is disabled
+      pivotIntakeMotor.setSmartCurrentLimit(IntakeConstants.pivotMotorCurrentLimit);//Sets the amount of amps the motor should at max take (Units:amps)
 
-    intakeMotor.setIdleMode(IdleMode.kCoast);//Don't let the motor move much even when robot is disabled
-    intakeMotor.setSmartCurrentLimit(40);//Sets the amount of amps the motor should at max take (Units:amps)
+      intakeMotor.setIdleMode(IdleMode.kCoast);//Don't let the motor move much even when robot is disabled
+      intakeMotor.setSmartCurrentLimit(IntakeConstants.intakeMotorCurrentLimit);//Sets the amount of amps the motor should at max take (Units:amps)
 
-    transferMotor.setIdleMode(IdleMode.kCoast);
-    transferMotor.setSmartCurrentLimit(30);
+      transferMotor.setIdleMode(IdleMode.kCoast);
+      transferMotor.setSmartCurrentLimit(IntakeConstants.transferMotorCurrentLimit);
 
     //Configuring the PID Controller
-    pivotControl.setP(IntakeConstants.kP);//Sets the P gain (Starting power to reach set position closely)
-    pivotControl.setI(IntakeConstants.kI);//Sets the I gain (Error compensation power to reach the exact position)
-    pivotControl.setD(IntakeConstants.kD);//Sets the D gain (Stop power (Basically helps with smoother stop of mechanism))
-    pivotControl.setFeedbackDevice(intakeAbsEnc);//Sets the encoder we want the PID to follow 
+      pivotControl.setP(IntakeConstants.kP);//Sets the P gain (Starting power to reach set position closely)
+      pivotControl.setI(IntakeConstants.kI);//Sets the I gain (Error compensation power to reach the exact position)
+      pivotControl.setD(IntakeConstants.kD);//Sets the D gain (Stop power (Basically helps with smoother stop of mechanism))
+      pivotControl.setFeedbackDevice(intakeAbsEnc);//Sets the encoder we want the PID to follow 
 
     //Configuring Absolute Encoder
-    intakeAbsEnc.setPositionConversionFactor(360);
-    intakeAbsEnc.setInverted(false);
+      intakeAbsEnc.setPositionConversionFactor(360);
+      intakeAbsEnc.setInverted(false);
 
     //Burns flash to finish configuring the motors (Basically saying to set the configurations)
-    pivotIntakeMotor.burnFlash();
-    intakeMotor.burnFlash();
-    transferMotor.burnFlash();
+      pivotIntakeMotor.burnFlash();
+      intakeMotor.burnFlash();
+      transferMotor.burnFlash();
   }
 
   /**
@@ -121,22 +122,27 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   //Gets the angle of the intake
-  public double getPivotAngle(){
-    return intakeAbsEnc.getPosition();
-  }
+    public double getPivotAngle(){
+      return intakeAbsEnc.getPosition();
+    }
 
   //Gets the sensors feedback as to if it detects something or not
-  public boolean getIRSensor(){
-    return intakeSensor.get();
-  }
+    public boolean getIRSensor(){
+      return intakeSensor.get();
+    }
 
-  public void setIntakeAngle(double angle){
-    pivotControl.setReference(angle, ControlType.kPosition);
-  }
+  //Sets the angle of the intake mechanism
+    public void setIntakeAngle(double angle){
+      pivotControl.setReference(angle, ControlType.kPosition);
+    }
 
   //Sets the intake speed for intaking and outtaking
-  public void setIntakeSpeed(double speed){
-    intakeMotor.set(IntakeConstants.intakeSpeed);
-    transferMotor.set(IntakeConstants.transferSpeed);
-  }
+    public void setIntakeSpeed(double speed){
+      intakeMotor.set(speed);
+    }
+
+  //Sets the speed for the transfer mechanism connected to the intake to do the transfer process and reverse transfer process
+    public void setTransferSpeed(double speed){
+      transferMotor.set(speed);
+    }
 }

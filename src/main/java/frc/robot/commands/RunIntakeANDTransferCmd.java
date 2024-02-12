@@ -9,19 +9,26 @@ import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class RunIntakeCmd extends Command {
+public class RunIntakeANDTransferCmd extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  //Creating a private subsystem that we will be using for this command
   private final IntakeSubsystem intakeSubsystem;
-  private final double intakePos;
+
+  //Creating private speeds that will be used in this command only to set the speeds of the motors on the intake
+  private double intakeSpeed, transferSpeed;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public RunIntakeCmd(IntakeSubsystem intakeSubsystem, double intakePos) {
+  public RunIntakeANDTransferCmd(IntakeSubsystem intakeSubsystem, double intakeSpeed, double transferSpeed) {
+    //Assigning the class vairables to the parameters variables
     this.intakeSubsystem = intakeSubsystem;
-    this.intakePos = intakePos;
+
+    this.intakeSpeed = intakeSpeed;
+    this.transferSpeed = transferSpeed;
+    
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.intakeSubsystem);
   }
@@ -42,8 +49,9 @@ public class RunIntakeCmd extends Command {
     //   intakeSubsystem.setIntakeAngle(IntakeConstants.restPos);
     //   intakeSubsystem.setIntakeSpeed(0);
     // }
-    intakeSubsystem.setIntakeAngle(intakePos);
-    intakeSubsystem.setIntakeSpeed(IntakeConstants.intakeSpeed);
+    intakeSubsystem.setIntakeAngle(IntakeConstants.groundIntakePos);
+    intakeSubsystem.setIntakeSpeed(intakeSpeed);
+    intakeSubsystem.setTransferSpeed(transferSpeed);
   }
 
   // Called once the command ends or is interrupted.

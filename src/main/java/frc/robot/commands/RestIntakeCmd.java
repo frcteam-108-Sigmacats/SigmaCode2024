@@ -9,10 +9,13 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class RestIntakeCmd extends Command {
+  //Creates the private subsystem that this command will be using
   private IntakeSubsystem intakeSubsystem;
   /** Creates a new RestIntakeCmd. */
   public RestIntakeCmd(IntakeSubsystem intakeSubsystem) {
+    //Assigning the private variable in class to the parameters variable
     this.intakeSubsystem = intakeSubsystem;
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.intakeSubsystem);
   }
@@ -24,6 +27,7 @@ public class RestIntakeCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //Keeps the intake at rest position running the rollers at 0%
     intakeSubsystem.setIntakeAngle(IntakeConstants.restPos);
     intakeSubsystem.setIntakeSpeed(0);
   }

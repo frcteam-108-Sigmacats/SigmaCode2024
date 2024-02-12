@@ -8,7 +8,7 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.IntakeRollersRest;
 import frc.robot.commands.RestIntakeCmd;
-import frc.robot.commands.RunIntakeCmd;
+import frc.robot.commands.RunIntakeANDTransferCmd;
 import frc.robot.commands.RunOuttakeCmd;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,12 +39,6 @@ public class RobotContainer {
 
     // Configure the trigger bindings
     configureBindings();
-
-    //When y is pressed intake runs to pick up from ground
-    dRTrigger.whileTrue(new RunIntakeCmd(intakeSubsystem, IntakeConstants.groundIntakePos));
-    dRTrigger.whileFalse(new RestIntakeCmd(intakeSubsystem));
-    dLTrigger.whileTrue(new RunOuttakeCmd(intakeSubsystem, IntakeConstants.groundIntakePos));
-    dLTrigger.whileFalse(new RestIntakeCmd(intakeSubsystem));
   }
 
   /**
