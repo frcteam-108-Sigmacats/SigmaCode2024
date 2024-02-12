@@ -21,22 +21,23 @@ import frc.robot.Constants.ShooterMechConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
   //Instantiating the motors in the intake mechanism
-  private CANSparkMax shooterPivotMotor;
+    private CANSparkMax shooterPivotMotor;
+
   //Motors for running the flywheels
-  private CANSparkFlex shooterLeftMotor;
-  private CANSparkFlex shooterRightMotor;
+    private CANSparkFlex shooterLeftMotor;
+    private CANSparkFlex shooterRightMotor;
 
   //Motor for running index rollers
-  private CANSparkFlex indexMotor;
+    private CANSparkFlex indexMotor;
 
   //Instantiate the shooter pivot absolute encoder
-  private AbsoluteEncoder shooterPivotAbsEnc;
+    private AbsoluteEncoder shooterPivotAbsEnc;
 
   //Instantiate PID Controller for shooter pivot
-  private SparkPIDController pivotControl;
+    private SparkPIDController pivotControl;
 
   //Instantiate Infrared Sensor that will be on the transfer mechanism
-  private DigitalInput transferSensor;
+    private DigitalInput transferSensor;
 
   /** Creates a new ExampleSubsystem. */
   public ShooterSubsystem() {

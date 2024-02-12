@@ -18,35 +18,35 @@ public final class Constants {
   }
   public static class ShooterMechConstants{
     //ID for index motor
-    public static final int indexMotorID = 11;
+      public static final int indexMotorID = 11;
 
     //Speed to run index motor
-    public static final double indexMotorSpeed = 1.0; //Change when robot is with software
+      public static final double indexMotorSpeed = 1.0; //Change when robot is with software
 
     //IDs for the flywheel motors
-    public static final int shooterLeftMotorID = 12;
-    public static final int shooterRightMotorID = 13;
+      public static final int shooterLeftMotorID = 12;
+      public static final int shooterRightMotorID = 13;
 
     //ID for shooter pivot motor
-    public static final int shooterPivotMotorID = 14;
+      public static final int shooterPivotMotorID = 14;
 
     //Current Limits for all motors in the shooter mechanism
-    public static final int flywheelCurrentLimit = 40;//Units in amps
-    public static final int pivotCurrentLimit = 30;//Units in amps
-    public static final int indexCurrentLimit = 20;//Units in amps
+      public static final int flywheelCurrentLimit = 40;//Units in amps
+      public static final int pivotCurrentLimit = 30;//Units in amps
+      public static final int indexCurrentLimit = 20;//Units in amps
 
     //Pivot angles
-    public static final double restPos = 0; //Change later when the robot is in software
+      public static final double restPos = 0; //Change later when the robot is in software
 
     //PID gains for Pivot Controller
-    public static final double kP = 0.07;//Change later when robot is with software
-    public static final double kI = 0.0;//Change later when robot is with software
-    public static final double kD = 0.0;//Change later when robot is with software
+      public static final double kP = 0.07;//Change later when robot is with software
+      public static final double kI = 0.0;//Change later when robot is with software
+      public static final double kD = 0.0;//Change later when robot is with software
 
     //Port number for Shooter Sensor
-    public static final int transferSensorID = 2;
+      public static final int transferSensorID = 2;
 
     //Should the right side of the flywheel motors need to be inverted to spin the same direction as the left side of the flywheel motor
-    public static boolean rightFlywheelInverted = true;
+      public static boolean rightFlywheelInverted = true;
   }
 }
