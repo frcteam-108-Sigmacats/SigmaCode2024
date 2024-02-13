@@ -5,10 +5,12 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.ShooterMechConstants;
 import frc.robot.commands.SetAngleAndFlywheelSpeeds;
 import frc.robot.commands.SetFlyWheelSpeeds;
 import frc.robot.commands.SetIndexRollerSpeeds;
 import frc.robot.commands.SetPivotAngle;
+import frc.robot.commands.ShooterTransfer;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -34,7 +36,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-
+    kA.whileTrue(new ShooterTransfer(shooterSub, ShooterMechConstants.indexTransferSpeed, ShooterMechConstants.flywheelTransferSpeed));
+    kA.whileFalse(new ShooterTransfer(shooterSub, 0, 0));
   }
 
   /**

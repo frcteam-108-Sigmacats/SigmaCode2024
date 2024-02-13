@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ShooterMechConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class SetFlyWheelSpeeds extends Command {
@@ -34,7 +35,7 @@ public class SetFlyWheelSpeeds extends Command {
     counter++;
     shooterSub.setFlyWheelSpeeds(speed);
     if(counter >= 150){
-      shooterSub.setIndexRollerSpeed();
+      shooterSub.setIndexRollerSpeed(ShooterMechConstants.indexShootSpeed);
     }
   }
 
@@ -42,7 +43,7 @@ public class SetFlyWheelSpeeds extends Command {
   @Override
   public void end(boolean interrupted) {
     shooterSub.setFlyWheelSpeeds(0);
-    shooterSub.setIndexRollerSpeed();
+    shooterSub.setIndexRollerSpeed(0);
   }
 
   // Returns true when the command should end.
