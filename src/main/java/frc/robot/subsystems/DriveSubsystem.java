@@ -39,7 +39,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   private SlewRateLimiter driveLimit = new SlewRateLimiter(5);
   private SlewRateLimiter turnLimit = new SlewRateLimiter(5);
-  private SlewRateLimiter rotLimit = new SlewRateLimiter(5.0);
+  private SlewRateLimiter rotLimit = new SlewRateLimiter(5);
 
   private MAXSwerveModule[] modules = {frontLeft, frontRight, backLeft, backRight};
 
