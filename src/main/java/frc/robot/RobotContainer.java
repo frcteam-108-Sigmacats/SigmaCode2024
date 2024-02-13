@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
+<<<<<<< HEAD
 import frc.robot.commands.DriveJoystick;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.commands.IntakeRollersRest;
@@ -14,6 +15,8 @@ import frc.robot.commands.RunIntakeANDTransferCmd;
 import frc.robot.commands.RunOuttakeANDReverseTransferCmd;
 import frc.robot.commands.RunOuttakeCmd;
 import frc.robot.subsystems.IntakeSubsystem;
+=======
+>>>>>>> 36b416b247750d18a4b63059041131bebf8f92a2
 import frc.robot.Constants.ShooterMechConstants;
 import frc.robot.commands.SetAngleAndFlywheelSpeeds;
 import frc.robot.commands.SetFlyWheelSpeeds;
@@ -66,6 +69,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 <<<<<<< HEAD
+<<<<<<< HEAD
     dRTrigger.whileTrue(new RunIntakeANDTransferCmd(intakeSubsystem, IntakeConstants.intakeSpeed, IntakeConstants.transferSpeed));
     dRTrigger.whileFalse(new RestIntakeCmd(intakeSubsystem));
     dLTrigger.whileTrue(new RunOuttakeANDReverseTransferCmd(intakeSubsystem, 
@@ -75,6 +79,10 @@ public class RobotContainer {
     kA.whileTrue(new ShooterTransfer(shooterSub, ShooterMechConstants.indexTransferSpeed, ShooterMechConstants.flywheelTransferSpeed));
     kA.whileFalse(new ShooterTransfer(shooterSub, 0, 0));
 >>>>>>> Shooter
+=======
+    kA.whileTrue(new ShooterTransfer(shooterSub, ShooterMechConstants.indexTransferSpeed, ShooterMechConstants.flywheelTransferSpeed));
+    kA.whileFalse(new ShooterTransfer(shooterSub, 0, 0));
+>>>>>>> 36b416b247750d18a4b63059041131bebf8f92a2
   }
 
   /**
