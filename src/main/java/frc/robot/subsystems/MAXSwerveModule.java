@@ -53,17 +53,18 @@ public class MAXSwerveModule extends SubsystemBase {
     driveEncoder = driveMotor.getEncoder();
     turnEncoder = turnMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
+    driveEncoder.setPositionConversionFactor(ModuleConstants.kDrivingEncoderPositionFactor);
+    driveEncoder.setVelocityConversionFactor(ModuleConstants.kDrivingEncoderVelocityFactor);
+
+    turnEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderPositionFactor);
+    turnEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderVelocityFactor);
+
     drivePIDControl = driveMotor.getPIDController();
     turnPIDControl = turnMotor.getPIDController();
     drivePIDControl.setFeedbackDevice(driveEncoder);
     turnPIDControl.setFeedbackDevice(turnEncoder);
 
     //Applying Motor Conversions
-    driveEncoder.setPositionConversionFactor(ModuleConstants.kDrivingEncoderPositionFactor);
-    driveEncoder.setVelocityConversionFactor(ModuleConstants.kDrivingEncoderVelocityFactor);
-
-    turnEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderPositionFactor);
-    turnEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderVelocityFactor);
 
     //Setting inversion for Absolute Encoder
     turnEncoder.setInverted(ModuleConstants.turningEncoderInverted);
@@ -93,7 +94,7 @@ public class MAXSwerveModule extends SubsystemBase {
 
     //Setting up Idle mode and Current Limit. Needed to not overpower the motors and burn it
     driveMotor.setIdleMode(IdleMode.kBrake);
-    turnMotor.setIdleMode(IdleMode.kBrake);
+    turnMotor.setIdleMode(IdleMode.kCoast);
     driveMotor.setSmartCurrentLimit(ModuleConstants.kDrivingMotorCurrentLimit);
     turnMotor.setSmartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit);
 
@@ -102,7 +103,7 @@ public class MAXSwerveModule extends SubsystemBase {
     turnMotor.burnFlash();
 
     angleOffset = moduleAngleOffset;
-    desiredState.angle = new Rotation2d(turnEncoder.getPosition());
+    desiredState.angle = Rotation2d.fromRadians(turnEncoder.getPosition());
     driveEncoder.setPosition(0);
   }
 

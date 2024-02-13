@@ -75,7 +75,7 @@ public final class Constants {
       public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
       public static final double kDrivingMinOutput = -1;
       public static final double kDrivingMaxOutput = 1;
-      public static final double kTurningP = 1;
+      public static final double kTurningP = 1.0;
       public static final double kTurningI = 0;
       public static final double kTurningD = 0;
       public static final double kTurningFF = 0;
@@ -90,21 +90,29 @@ public final class Constants {
       public static final int fLeftDriveMotorID = 1;
       public static final int fLeftTurnMotorID = 2;
       public static final double fLeftAngOffset = -Math.PI / 2;
+      public static final boolean fLDriveInvert = false;
+      public static final boolean fLTurnInvert = false;
 
     //Front Right Module
       public static final int fRightDriveMotorID = 3;
       public static final int fRightTurnMotorID = 4;
       public static final double fRightAngOffset = 0;
+      public static final boolean fRDriveInvert = false;
+      public static final boolean fRTurnInvert = false;
 
     //Back Left Module
       public static final int bLeftDriveMotorID = 5;
       public static final int bLeftTurnMotorID = 6;
-      public static final double bLeftAngOffset = Math.PI;
+      public static final double bLeftAngOffset = 0;
+      public static final boolean bLDriveInvert = true;
+      public static final boolean bLTurnInvert = false;
 
     //Back Right Module
       public static final int bRightDriveMotorID = 7;
       public static final int bRightTurnMotorID = 8;
-      public static final double bRightAngOffset = Math.PI / 2;
+      public static final double bRightAngOffset = -Math.PI / 2;
+      public static final boolean bRDriveInvert = true;
+      public static final boolean bRTurnInvert = false;
 
   }
   public static class OperatorConstants {
