@@ -9,6 +9,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.IntakeRollersRest;
 import frc.robot.commands.RestIntakeCmd;
 import frc.robot.commands.RunIntakeANDTransferCmd;
+import frc.robot.commands.RunOuttakeANDReverseTransferCmd;
 import frc.robot.commands.RunOuttakeCmd;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,6 +40,11 @@ public class RobotContainer {
 
     // Configure the trigger bindings
     configureBindings();
+    dRTrigger.whileTrue(new RunIntakeANDTransferCmd(intakeSubsystem, IntakeConstants.intakeSpeed, IntakeConstants.transferSpeed));
+    dRTrigger.whileFalse(new RestIntakeCmd(intakeSubsystem));
+    dLTrigger.whileTrue(new RunOuttakeANDReverseTransferCmd(intakeSubsystem, 
+    IntakeConstants.outtakeSpeed, IntakeConstants.reverseTransferSpeed));
+    dLTrigger.whileFalse(new RestIntakeCmd(intakeSubsystem));
   }
 
   /**

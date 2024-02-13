@@ -30,6 +30,7 @@ public class RestIntakeCmd extends Command {
     //Keeps the intake at rest position running the rollers at 0%
     intakeSubsystem.setIntakeAngle(IntakeConstants.restPos);
     intakeSubsystem.setIntakeSpeed(0);
+    intakeSubsystem.setTransferSpeed(0);
   }
 
   // Called once the command ends or is interrupted.
