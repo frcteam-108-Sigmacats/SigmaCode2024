@@ -53,20 +53,7 @@ public class MAXSwerveModule extends SubsystemBase {
       driveEncoder = driveMotor.getEncoder();
       turnEncoder = turnMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
-<<<<<<< HEAD
-    driveEncoder.setPositionConversionFactor(ModuleConstants.kDrivingEncoderPositionFactor);
-    driveEncoder.setVelocityConversionFactor(ModuleConstants.kDrivingEncoderVelocityFactor);
 
-    turnEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderPositionFactor);
-    turnEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderVelocityFactor);
-
-    drivePIDControl = driveMotor.getPIDController();
-    turnPIDControl = turnMotor.getPIDController();
-    drivePIDControl.setFeedbackDevice(driveEncoder);
-    turnPIDControl.setFeedbackDevice(turnEncoder);
-
-    //Applying Motor Conversions
-=======
       drivePIDControl = driveMotor.getPIDController();
       turnPIDControl = turnMotor.getPIDController();
       drivePIDControl.setFeedbackDevice(driveEncoder);
@@ -78,8 +65,6 @@ public class MAXSwerveModule extends SubsystemBase {
 
       turnEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderPositionFactor);
       turnEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderVelocityFactor);
->>>>>>> 53c1d4543f5438979b76b3606b5f790b71eb37dd
-
     //Setting inversion for Absolute Encoder
       turnEncoder.setInverted(ModuleConstants.turningEncoderInverted);
 
@@ -107,31 +92,18 @@ public class MAXSwerveModule extends SubsystemBase {
           ModuleConstants.kTurningMaxOutput);
 
     //Setting up Idle mode and Current Limit. Needed to not overpower the motors and burn it
-<<<<<<< HEAD
     driveMotor.setIdleMode(IdleMode.kBrake);
     turnMotor.setIdleMode(IdleMode.kCoast);
     driveMotor.setSmartCurrentLimit(ModuleConstants.kDrivingMotorCurrentLimit);
     turnMotor.setSmartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit);
-=======
-      driveMotor.setIdleMode(IdleMode.kCoast);
-      turnMotor.setIdleMode(IdleMode.kBrake);
-      driveMotor.setSmartCurrentLimit(ModuleConstants.kDrivingMotorCurrentLimit);
-      turnMotor.setSmartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit);
->>>>>>> 53c1d4543f5438979b76b3606b5f790b71eb37dd
 
     //Burn flash to save configurations of the Speed Controllers
       driveMotor.burnFlash();
       turnMotor.burnFlash();
 
-<<<<<<< HEAD
     angleOffset = moduleAngleOffset;
     desiredState.angle = Rotation2d.fromRadians(turnEncoder.getPosition());
     driveEncoder.setPosition(0);
-=======
-      angleOffset = moduleAngleOffset;
-      desiredState.angle = new Rotation2d(turnEncoder.getPosition());
-      driveEncoder.setPosition(0);
->>>>>>> 53c1d4543f5438979b76b3606b5f790b71eb37dd
   }
 
 
