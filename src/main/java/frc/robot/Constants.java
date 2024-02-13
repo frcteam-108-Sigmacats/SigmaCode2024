@@ -19,13 +19,13 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
   public static final class ChassisConstants{
     //Max Drive and Turn Speed Restrictions
-    public static final double kMaxSpeedMPS = 12;
-    public static final double kMaxAngularSpeed = 2 * Math.PI;
+      public static final double kMaxSpeedMPS = 12;
+      public static final double kMaxAngularSpeed = 2 * Math.PI;
 
     //Distance between the centers of the left wheels and right wheels
-    public static final double kTrackWidth = Units.inchesToMeters(22.4375);
+      public static final double kTrackWidth = Units.inchesToMeters(22.4375);
     //Distance between the centers of the front wheels and back wheels
-    public static final double kWheelBase = Units.inchesToMeters(22.4375);
+      public static final double kWheelBase = Units.inchesToMeters(22.4375);
 
     public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
       new Translation2d(kWheelBase / 2.0, kTrackWidth / 2.0), 
@@ -34,10 +34,10 @@ public final class Constants {
       new Translation2d(-kWheelBase / 2.0, -kTrackWidth / 2.0));
 
     //Is Gyro inverted
-    public static final boolean gyroReversed = false;
+      public static final boolean gyroReversed = false;
 
     //Used to prevent stick drift
-    public static double deadband = 0.15;
+      public static double deadband = 0.15;
   }
   public static class ModuleConstants{
     //Driving Pinion Teeth
@@ -69,13 +69,18 @@ public final class Constants {
       public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
     
     //PID Set Up for Drive and Turn Motors
-      public static final double kDrivingP = 0.04;
-      public static final double kDrivingI = 0;
-      public static final double kDrivingD = 0;
+      public static final double kDrivingP = 0.04;//Change when robot is with software
+      public static final double kDrivingI = 0;//Change when robot is with software
+      public static final double kDrivingD = 0;//Change when robot is with software
       public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
       public static final double kDrivingMinOutput = -1;
       public static final double kDrivingMaxOutput = 1;
+<<<<<<< HEAD
       public static final double kTurningP = 1.0;
+=======
+
+      public static final double kTurningP = 1;
+>>>>>>> 53c1d4543f5438979b76b3606b5f790b71eb37dd
       public static final double kTurningI = 0;
       public static final double kTurningD = 0;
       public static final double kTurningFF = 0;
