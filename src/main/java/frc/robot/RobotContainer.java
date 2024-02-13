@@ -4,9 +4,19 @@
 
 package frc.robot;
 
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
+<<<<<<< HEAD
 import frc.robot.commands.DriveJoystick;
 import frc.robot.subsystems.DriveSubsystem;
+=======
+import frc.robot.commands.IntakeRollersRest;
+import frc.robot.commands.RestIntakeCmd;
+import frc.robot.commands.RunIntakeANDTransferCmd;
+import frc.robot.commands.RunOuttakeANDReverseTransferCmd;
+import frc.robot.commands.RunOuttakeCmd;
+import frc.robot.subsystems.IntakeSubsystem;
+>>>>>>> Intake
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -19,18 +29,39 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+<<<<<<< HEAD
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController =
+=======
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+
+  //Instantiating the controllers buttons
+  private Trigger dRTrigger, dLTrigger;
+
+  // Replace with CommandPS4Controller or CommandJoystick if needed
+  private final CommandXboxController driver =
+>>>>>>> Intake
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+<<<<<<< HEAD
     boolean fieldRelative = true;
     driveSubsystem.setDefaultCommand(new DriveJoystick(driveSubsystem, driveController, fieldRelative));
+=======
+    //Intake does not move from rest position
+    // intakeSubsystem.setDefaultCommand(new RestIntakeCmd(intakeSubsystem));
+
+>>>>>>> Intake
     // Configure the trigger bindings
     configureBindings();
+    dRTrigger.whileTrue(new RunIntakeANDTransferCmd(intakeSubsystem, IntakeConstants.intakeSpeed, IntakeConstants.transferSpeed));
+    dRTrigger.whileFalse(new RestIntakeCmd(intakeSubsystem));
+    dLTrigger.whileTrue(new RunOuttakeANDReverseTransferCmd(intakeSubsystem, 
+    IntakeConstants.outtakeSpeed, IntakeConstants.reverseTransferSpeed));
+    dLTrigger.whileFalse(new RestIntakeCmd(intakeSubsystem));
   }
 
   /**
@@ -43,7 +74,16 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+<<<<<<< HEAD
    
+=======
+    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // cancelling on release.
+    dRTrigger = driver.rightTrigger();
+    dLTrigger = driver.leftTrigger();
+>>>>>>> Intake
   }
 
   /**
