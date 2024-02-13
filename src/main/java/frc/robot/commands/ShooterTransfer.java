@@ -4,15 +4,19 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ShooterMechConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class SetIndexRollerSpeeds extends Command {
+public class ShooterTransfer extends Command {
   private ShooterSubsystem shooterSub;
-
-  /** Creates a new SetIndexRollerSpeeds. */
-  public SetIndexRollerSpeeds(ShooterSubsystem shooterSub) {
+  private double indexSpeed, flywheelSpeed;
+  /** Creates a new ShooterTransfer. */
+  public ShooterTransfer(ShooterSubsystem shooterSub, double indexSpeed, double flywheelSpeed) {
     this.shooterSub = shooterSub;
+    this.indexSpeed = indexSpeed;
+    this.flywheelSpeed = flywheelSpeed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSub);
   }
@@ -24,7 +28,9 @@ public class SetIndexRollerSpeeds extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // shooterSub.setIndexRollerSpeed();
+    shooterSub.setPivotAngle(ShooterMechConstants.restPos);
+    shooterSub.setIndexRollerSpeed(indexSpeed);
+    shooterSub.setFlyWheelSpeeds(flywheelSpeed);
   }
 
   // Called once the command ends or is interrupted.
