@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import frc.robot.commands.DriveJoystick;
 import frc.robot.subsystems.DriveSubsystem;
 =======
@@ -17,6 +18,15 @@ import frc.robot.commands.RunOuttakeANDReverseTransferCmd;
 import frc.robot.commands.RunOuttakeCmd;
 import frc.robot.subsystems.IntakeSubsystem;
 >>>>>>> Intake
+=======
+import frc.robot.Constants.ShooterMechConstants;
+import frc.robot.commands.SetAngleAndFlywheelSpeeds;
+import frc.robot.commands.SetFlyWheelSpeeds;
+import frc.robot.commands.SetIndexRollerSpeeds;
+import frc.robot.commands.SetPivotAngle;
+import frc.robot.commands.ShooterTransfer;
+import frc.robot.subsystems.ShooterSubsystem;
+>>>>>>> Shooter
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -30,7 +40,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 <<<<<<< HEAD
+<<<<<<< HEAD
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+=======
+  private final ShooterSubsystem shooterSub = new ShooterSubsystem();
+>>>>>>> Shooter
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController =
@@ -45,6 +59,8 @@ public class RobotContainer {
 >>>>>>> Intake
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
+  private Trigger kA, kB;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 <<<<<<< HEAD
@@ -57,11 +73,16 @@ public class RobotContainer {
 >>>>>>> Intake
     // Configure the trigger bindings
     configureBindings();
+<<<<<<< HEAD
     dRTrigger.whileTrue(new RunIntakeANDTransferCmd(intakeSubsystem, IntakeConstants.intakeSpeed, IntakeConstants.transferSpeed));
     dRTrigger.whileFalse(new RestIntakeCmd(intakeSubsystem));
     dLTrigger.whileTrue(new RunOuttakeANDReverseTransferCmd(intakeSubsystem, 
     IntakeConstants.outtakeSpeed, IntakeConstants.reverseTransferSpeed));
     dLTrigger.whileFalse(new RestIntakeCmd(intakeSubsystem));
+=======
+    kA.whileTrue(new ShooterTransfer(shooterSub, ShooterMechConstants.indexTransferSpeed, ShooterMechConstants.flywheelTransferSpeed));
+    kA.whileFalse(new ShooterTransfer(shooterSub, 0, 0));
+>>>>>>> Shooter
   }
 
   /**
@@ -81,9 +102,14 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
+<<<<<<< HEAD
     dRTrigger = driver.rightTrigger();
     dLTrigger = driver.leftTrigger();
 >>>>>>> Intake
+=======
+    kA = m_driverController.a();
+    kB = m_driverController.b();
+>>>>>>> Shooter
   }
 
   /**
