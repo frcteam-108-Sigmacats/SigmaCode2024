@@ -6,27 +6,25 @@ package frc.robot;
 
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
-<<<<<<< HEAD
-<<<<<<< HEAD
 import frc.robot.commands.DriveJoystick;
+import frc.robot.commands.IntakeANDTransferCmd;
+import frc.robot.commands.StopTransferANDIntake;
 import frc.robot.subsystems.DriveSubsystem;
-=======
-import frc.robot.commands.IntakeRollersRest;
-import frc.robot.commands.RestIntakeCmd;
-import frc.robot.commands.RunIntakeANDTransferCmd;
-import frc.robot.commands.RunOuttakeANDReverseTransferCmd;
-import frc.robot.commands.RunOuttakeCmd;
 import frc.robot.subsystems.IntakeSubsystem;
->>>>>>> Intake
-=======
 import frc.robot.Constants.ShooterMechConstants;
-import frc.robot.commands.SetAngleAndFlywheelSpeeds;
-import frc.robot.commands.SetFlyWheelSpeeds;
-import frc.robot.commands.SetIndexRollerSpeeds;
-import frc.robot.commands.SetPivotAngle;
-import frc.robot.commands.ShooterTransfer;
+import frc.robot.commands.IntakeCmd.IntakeRollersRest;
+import frc.robot.commands.IntakeCmd.RestIntakeCmd;
+import frc.robot.commands.IntakeCmd.RunIntakeANDTransferCmd;
+import frc.robot.commands.IntakeCmd.RunOuttakeANDReverseTransferCmd;
+import frc.robot.commands.IntakeCmd.TestIntakePivot;
+import frc.robot.commands.ShooterCmd.SetAngleAndFlywheelSpeeds;
+import frc.robot.commands.ShooterCmd.SetFlyWheelSpeeds;
+import frc.robot.commands.ShooterCmd.SetIndexRollerSpeeds;
+import frc.robot.commands.ShooterCmd.ShooterTransfer;
 import frc.robot.subsystems.ShooterSubsystem;
->>>>>>> Shooter
+
+import java.sql.DriverAction;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -39,50 +37,39 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-<<<<<<< HEAD
-<<<<<<< HEAD
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-=======
+
   private final ShooterSubsystem shooterSub = new ShooterSubsystem();
->>>>>>> Shooter
+
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController driveController =
-=======
-  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final CommandXboxController driveController = new 
+  CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   //Instantiating the controllers buttons
   private Trigger dRTrigger, dLTrigger;
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController driver =
->>>>>>> Intake
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
-
-  private Trigger kA, kB;
+  private Trigger kA, kB, dPadUp, dPadDown;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-<<<<<<< HEAD
     boolean fieldRelative = true;
     driveSubsystem.setDefaultCommand(new DriveJoystick(driveSubsystem, driveController, fieldRelative));
-=======
     //Intake does not move from rest position
-    // intakeSubsystem.setDefaultCommand(new RestIntakeCmd(intakeSubsystem));
+    //intakeSubsystem.setDefaultCommand(new RestIntakeCmd(intakeSubsystem));
 
->>>>>>> Intake
     // Configure the trigger bindings
     configureBindings();
-<<<<<<< HEAD
-    dRTrigger.whileTrue(new RunIntakeANDTransferCmd(intakeSubsystem, IntakeConstants.intakeSpeed, IntakeConstants.transferSpeed));
-    dRTrigger.whileFalse(new RestIntakeCmd(intakeSubsystem));
-    dLTrigger.whileTrue(new RunOuttakeANDReverseTransferCmd(intakeSubsystem, 
-    IntakeConstants.outtakeSpeed, IntakeConstants.reverseTransferSpeed));
-    dLTrigger.whileFalse(new RestIntakeCmd(intakeSubsystem));
-=======
-    kA.whileTrue(new ShooterTransfer(shooterSub, ShooterMechConstants.indexTransferSpeed, ShooterMechConstants.flywheelTransferSpeed));
-    kA.whileFalse(new ShooterTransfer(shooterSub, 0, 0));
->>>>>>> Shooter
+    dRTrigger.whileTrue(new IntakeANDTransferCmd(intakeSubsystem, shooterSub));
+    dRTrigger.whileFalse(new StopTransferANDIntake(intakeSubsystem, shooterSub));
+    dLTrigger.whileTrue(new SetAngleAndFlywheelSpeeds(shooterSub, ShooterMechConstants.restPos, ShooterMechConstants.flywheelShootSpeed));
+    dLTrigger.whileFalse(new SetAngleAndFlywheelSpeeds(shooterSub, ShooterMechConstants.restPos, 0));
+    // kA.onTrue(new RestIntakeCmd(intakeSubsystem));
+    dPadDown.whileTrue(new TestIntakePivot(intakeSubsystem, -0.5));
+    dPadDown.whileFalse(new TestIntakePivot(intakeSubsystem, 0));
+    dPadUp.whileTrue(new TestIntakePivot(intakeSubsystem, 0.5));
+    dPadUp.whileFalse(new TestIntakePivot(intakeSubsystem, 0));
   }
 
   /**
@@ -95,21 +82,16 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-<<<<<<< HEAD
-   
-=======
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-<<<<<<< HEAD
-    dRTrigger = driver.rightTrigger();
-    dLTrigger = driver.leftTrigger();
->>>>>>> Intake
-=======
-    kA = m_driverController.a();
-    kB = m_driverController.b();
->>>>>>> Shooter
+    dRTrigger = driveController.rightTrigger();
+    dLTrigger = driveController.leftTrigger();
+    kA = driveController.a();
+    kB = driveController.b();
+    dPadUp = driveController.povUp();
+    dPadDown = driveController.povDown();
   }
 
   /**

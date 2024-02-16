@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private CANSparkMax pivotIntakeMotor;
     private CANSparkMax intakeMotor;
 
-    private CANSparkFlex transferMotor;
+    private CANSparkMax transferMotor;
 
   //Instantiating PID Controller for controlling intake pivot
     private SparkPIDController pivotControl;
@@ -40,7 +40,7 @@ public class IntakeSubsystem extends SubsystemBase {
     //Assigning the motors their IDs
       pivotIntakeMotor = new CANSparkMax(IntakeConstants.pivotMotorID, MotorType.kBrushless);
       intakeMotor = new CANSparkMax(IntakeConstants.intakeMotorID, MotorType.kBrushless);
-      transferMotor = new CANSparkFlex(IntakeConstants.transferMotorID, MotorType.kBrushless);
+      transferMotor = new CANSparkMax(IntakeConstants.transferMotorID, MotorType.kBrushless);
 
     //Assigning the PID Controller to the pivot motor built in speed controller
       pivotControl = pivotIntakeMotor.getPIDController();
@@ -134,6 +134,9 @@ public class IntakeSubsystem extends SubsystemBase {
   //Sets the angle of the intake mechanism
     public void setIntakeAngle(double angle){
       pivotControl.setReference(angle, ControlType.kPosition);
+    }
+    public void testIntakePivot(double speed){
+      pivotIntakeMotor.set(speed);
     }
 
   //Sets the intake speed for intaking and outtaking
