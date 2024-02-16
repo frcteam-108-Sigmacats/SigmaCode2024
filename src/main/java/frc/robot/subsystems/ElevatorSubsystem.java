@@ -35,15 +35,15 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatePositionControl = leftElevatorMotor.getPIDController();
 
     //Assign encoder to left motor's built in encoder
-    elevateEnc = leftElevatorMotor.getEncoder();
+    // elevateEnc = leftElevatorMotor.getEncoder();
 
-    //Set PID gains to the PID Controller
-    elevatePositionControl.setP(ElevatorConstants.kP);
-    elevatePositionControl.setI(ElevatorConstants.kI);
-    elevatePositionControl.setD(ElevatorConstants.kD);
-    elevatePositionControl.setFeedbackDevice(elevateEnc);
+    // //Set PID gains to the PID Controller
+    // elevatePositionControl.setP(ElevatorConstants.kP);
+    // elevatePositionControl.setI(ElevatorConstants.kI);
+    // elevatePositionControl.setD(ElevatorConstants.kD);
+    // elevatePositionControl.setFeedbackDevice(elevateEnc);
 
-    elevateEnc.setPositionConversionFactor(ElevatorConstants.positionConversion);
+    // elevateEnc.setPositionConversionFactor(ElevatorConstants.positionConversion);
 
     //Configure motors
     leftElevatorMotor.setIdleMode(IdleMode.kBrake);
@@ -56,7 +56,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     leftElevatorMotor.burnFlash();
     rightElevatorMotor.burnFlash();
 
-    elevateEnc.setPosition(0);
+    // elevateEnc.setPosition(0);
   }
 
   /**
@@ -92,11 +92,15 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
-  public double getElevatorPosition(){
-    return elevateEnc.getPosition();
-  }
-  public void setElevatorPosition(double position){
-    elevatePositionControl.setReference(position, ControlType.kPosition);
-    rightElevatorMotor.follow(leftElevatorMotor, ElevatorConstants.invertRightMotor);
+  // public double getElevatorPosition(){
+  //   return elevateEnc.getPosition();
+  // }
+  // public void setElevatorPosition(double position){
+  //   elevatePositionControl.setReference(position, ControlType.kPosition);
+  //   rightElevatorMotor.follow(leftElevatorMotor, ElevatorConstants.invertRightMotor);
+  // }
+  public void setElevatorSpeed(double speed){
+    leftElevatorMotor.set(speed);
+    rightElevatorMotor.follow(leftElevatorMotor, true);
   }
 }
