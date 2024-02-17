@@ -5,6 +5,7 @@
 package frc.robot.commands.IntakeCmd;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ChassisConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 
@@ -33,13 +34,12 @@ public class RunOuttakeANDReverseTransferCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intakeSub.setIntakeAngle(IntakeConstants.groundIntakePos);
-    
-    //If the shooter angle is close to the desired position run outtake functions
-    if(Math.abs(IntakeConstants.groundIntakePos - intakeSub.getPivotAngle()) <= 5){
-      intakeSub.setIntakeSpeed(intakeSpeed);
-      intakeSub.setTransferSpeed(transferSpeed);
-    }
+    intakeSub.setIntakeAngle(IntakeConstants.restPos);
+    intakeSub.setIntakeSpeed(intakeSpeed);
+    intakeSub.setTransferSpeed(transferSpeed);
+    // if(intakeSub.getIRSensor() == false){
+    //   ChassisConstants.isThereGamePiece = false;
+    // }
   }
 
   // Called once the command ends or is interrupted.
@@ -49,6 +49,12 @@ public class RunOuttakeANDReverseTransferCmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // if(ChassisConstants.isThereGamePiece == false){
+    //   return true;
+    // }
+    // else{
+    //   return false;
+    // }
     return false;
   }
 }

@@ -4,6 +4,7 @@
 
 package frc.robot.commands.IntakeCmd;
 
+import frc.robot.Constants.ChassisConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,6 +17,10 @@ public class RunIntakeANDTransferCmd extends Command {
 
   //Creating private speeds that will be used in this command only to set the speeds of the motors on the intake
   private double intakeSpeed, transferSpeed;
+
+  private int counter;
+
+  private boolean isThereGamePiece, finish;
 
   /**
    * Creates a new ExampleCommand.
@@ -35,7 +40,11 @@ public class RunIntakeANDTransferCmd extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    counter = 0;
+    isThereGamePiece = false;
+    finish = false;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -49,9 +58,25 @@ public class RunIntakeANDTransferCmd extends Command {
     //   intakeSubsystem.setIntakeAngle(IntakeConstants.restPos);
     //   intakeSubsystem.setIntakeSpeed(0);
     // }
+    if(isThereGamePiece == false){
+      if(intakeSubsystem.getIRSensor()){
+        isThereGamePiece = true;
+      }
+    }
+    else{
+      counter++;
+    }
+
     intakeSubsystem.setIntakeAngle(IntakeConstants.groundIntakePos);
     intakeSubsystem.setIntakeSpeed(intakeSpeed);
     intakeSubsystem.setTransferSpeed(transferSpeed);
+
+    // if(counter >= 8){
+    //   finish = true;
+    // }
+    if(intakeSubsystem.getIRSensor() == true){
+      finish = true;
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -61,9 +86,6 @@ public class RunIntakeANDTransferCmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // if(intakeSubsystem.getIRSensor()){
-    //   return true;
-    // }
-    return false;
+      return finish;
   }
 }

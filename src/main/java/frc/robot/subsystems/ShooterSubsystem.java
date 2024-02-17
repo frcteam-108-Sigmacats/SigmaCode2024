@@ -14,8 +14,11 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.ShooterMechConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -34,8 +37,6 @@ public class ShooterSubsystem extends SubsystemBase {
   //Instantiate PID Controller for shooter pivot
   private SparkPIDController pivotControl;
 
-  //Instantiate Infrared Sensor
-  private DigitalInput shooterSensor;
 
   /** Creates a new ExampleSubsystem. */
   public ShooterSubsystem() {
@@ -49,9 +50,6 @@ public class ShooterSubsystem extends SubsystemBase {
     //Assinging ID to Index Motor
     indexMotor = new CANSparkFlex(ShooterMechConstants.indexMotorID, MotorType.kBrushless);
 
-    //Assinging the port number for the infrared sensor
-    shooterSensor = new DigitalInput(ShooterMechConstants.shootSensorID);
-
     //Resetting the motors
     shooterPivotMotor.restoreFactoryDefaults();
     
@@ -62,6 +60,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     //Assinging the absolute encoder to the pivot motor
     shooterPivotAbsEnc = shooterPivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
+    shooterPivotAbsEnc.setPositionConversionFactor(360);
+    shooterPivotAbsEnc.setInverted(true);
 
     //Assinging pivot controller to the pivot motor built in PID controller
     pivotControl = shooterPivotMotor.getPIDController();
@@ -74,20 +74,29 @@ public class ShooterSubsystem extends SubsystemBase {
 
     //Configuring flywheel motors
     shooterLeftMotor.setSmartCurrentLimit(ShooterMechConstants.flywheelCurrentLimit);//Units are in amps
-    shooterLeftMotor.setIdleMode(IdleMode.kCoast);
+    shooterLeftMotor.setIdleMode(IdleMode.kBrake);
 
     shooterRightMotor.setSmartCurrentLimit(ShooterMechConstants.flywheelCurrentLimit);//Units are in amps
-    shooterRightMotor.setIdleMode(IdleMode.kCoast);
+    shooterRightMotor.setIdleMode(IdleMode.kBrake);
 
     //Configuring pivot motor
     shooterPivotMotor.setSmartCurrentLimit(ShooterMechConstants.pivotCurrentLimit);//Units are in amps
-    shooterPivotMotor.setIdleMode(IdleMode.kCoast);
+    shooterPivotMotor.setIdleMode(IdleMode.kBrake);
 
     //Configure Pivot PID Controller
+    // Enable PID wrap around for the turning motor. This will allow the PID
+    // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
+    // to 10 degrees will go through 0 rather than the other direction which is a
+    // longer route.
+      pivotControl.setPositionPIDWrappingEnabled(true);
+      pivotControl.setPositionPIDWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
+      pivotControl.setPositionPIDWrappingMaxInput(360);
     pivotControl.setP(ShooterMechConstants.kP);
     pivotControl.setI(ShooterMechConstants.kI);
     pivotControl.setD(ShooterMechConstants.kD);
     pivotControl.setFeedbackDevice(shooterPivotAbsEnc);
+    pivotControl.setOutputRange(ModuleConstants.kTurningMinOutput,
+    ModuleConstants.kTurningMaxOutput);
 
     //Burn flash on motors
     indexMotor.burnFlash();
@@ -125,6 +134,7 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Shooter Angle", getPivotAngle());
   }
 
   @Override
@@ -136,16 +146,12 @@ public class ShooterSubsystem extends SubsystemBase {
     return shooterPivotAbsEnc.getPosition();
   }
 
-  public boolean getIRSensor(){
-    return shooterSensor.get();
-  }
-
   public void setPivotAngle(double angle){
     pivotControl.setReference(angle, ControlType.kPosition);
   }
   public void setFlyWheelSpeeds(double speed){
     shooterLeftMotor.set(speed);
-    shooterRightMotor.follow(shooterLeftMotor, ShooterMechConstants.rightFlywheelInverted);
+    shooterRightMotor.set(-speed);
   }
   public void setIndexRollerSpeed(double speed){
     indexMotor.set(speed);

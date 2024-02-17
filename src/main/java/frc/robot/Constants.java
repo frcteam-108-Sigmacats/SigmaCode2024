@@ -127,27 +127,27 @@ public final class Constants {
     public static final int transferMotorID = 17;
 
     //Current Limits for the motors on the intake/transfer mechanism
-    public static final int pivotMotorCurrentLimit = 30; //Units in amps
+    public static final int pivotMotorCurrentLimit = 10; //Units in amps
     public static final int intakeMotorCurrentLimit = 20; //Units in amps
     public static final int transferMotorCurrentLimit = 20; //Units in amps
 
     //PID gains for pivot control
-    public static final double kP = 0.01;//change when given the robot
+    public static final double kP = 0.015;//change when given the robot
     public static final double kI = 0.0000006;//change when given the robot
     public static final double kD = 0.0;//change when given the robot
 
     //DIO port number for laser sensor that will be mounted to the intake
-    public static final int irSensorDIOPort = 0;//might have to change
+    public static final int irSensorDIOPort = 7;
 
     //Values for the intake angle's
-    public static final double restPos = 1;//The rest position which will also be the handoff position
-    public static final double groundIntakePos = 142;//The position where we will intake from the ground (Find value first)
+    public static final double restPos = 25;//The rest position which will also be the handoff position
+    public static final double groundIntakePos = 143;//The position where we will intake from the ground (Find value first)
     public static final double sourceZonePos = 0;//The position where we will intake a note coming from the source zone that is not the ground (Find value first)
 
 
     //The speeds for intaking, outtaking
-    public static final double intakeSpeed = -0.75; //Change speed when robot is done
-    public static final double transferSpeed = -0.5; //Change speed when robot is done
+    public static final double intakeSpeed = -1.0; //Change speed when robot is done
+    public static final double transferSpeed = -0.25; //Change speed when robot is done
     public static final double outtakeSpeed = 0.75; //Change speed when robot is done
     public static final double reverseTransferSpeed = 0.5; //Change speed when robot is done
   }
@@ -169,6 +169,7 @@ public final class Constants {
 
     //Pivot angles
     public static final double restPos = 1; //Change later when the robot is in software
+    public static final double ampPos = 93;
 
     //PID gains for Pivot Controller
     public static final double kP = 0.01;//Change later when robot is with software
@@ -182,10 +183,10 @@ public final class Constants {
     public static boolean rightFlywheelInverted = true;
 
     //Speeds for the motors
-    public static final double indexTransferSpeed = -0.1;
+    public static final double indexTransferSpeed = -0.33;
     public static final double indexShootSpeed = -1.0;
 
     public static final double flywheelTransferSpeed = 0.1;
-    public static final double flywheelShootSpeed = -0.5;
+    public static final double flywheelShootSpeed = -0.75;
   }
 }

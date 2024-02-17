@@ -8,6 +8,7 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveJoystick;
 import frc.robot.commands.IntakeANDTransferCmd;
+import frc.robot.commands.OuttakeANDTransferCmd;
 import frc.robot.commands.StopTransferANDIntake;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -17,6 +18,8 @@ import frc.robot.commands.IntakeCmd.RestIntakeCmd;
 import frc.robot.commands.IntakeCmd.RunIntakeANDTransferCmd;
 import frc.robot.commands.IntakeCmd.RunOuttakeANDReverseTransferCmd;
 import frc.robot.commands.IntakeCmd.TestIntakePivot;
+import frc.robot.commands.ShooterCmd.AmpShoot;
+import frc.robot.commands.ShooterCmd.RestShooter;
 import frc.robot.commands.ShooterCmd.SetAngleAndFlywheelSpeeds;
 import frc.robot.commands.ShooterCmd.SetFlyWheelSpeeds;
 import frc.robot.commands.ShooterCmd.SetIndexRollerSpeeds;
@@ -48,7 +51,7 @@ public class RobotContainer {
   CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   //Instantiating the controllers buttons
-  private Trigger dRTrigger, dLTrigger;
+  private Trigger dRTrigger, dLTrigger, dLBumper, dRBumper;
 
   private Trigger kA, kB, dPadUp, dPadDown;
 
@@ -57,19 +60,24 @@ public class RobotContainer {
     boolean fieldRelative = true;
     driveSubsystem.setDefaultCommand(new DriveJoystick(driveSubsystem, driveController, fieldRelative));
     //Intake does not move from rest position
-    //intakeSubsystem.setDefaultCommand(new RestIntakeCmd(intakeSubsystem));
+    intakeSubsystem.setDefaultCommand(new RestIntakeCmd(intakeSubsystem));
+    shooterSub.setDefaultCommand(new RestShooter(shooterSub));
 
     // Configure the trigger bindings
     configureBindings();
     dRTrigger.whileTrue(new IntakeANDTransferCmd(intakeSubsystem, shooterSub));
     dRTrigger.whileFalse(new StopTransferANDIntake(intakeSubsystem, shooterSub));
-    dLTrigger.whileTrue(new SetAngleAndFlywheelSpeeds(shooterSub, ShooterMechConstants.restPos, ShooterMechConstants.flywheelShootSpeed));
-    dLTrigger.whileFalse(new SetAngleAndFlywheelSpeeds(shooterSub, ShooterMechConstants.restPos, 0));
-    // kA.onTrue(new RestIntakeCmd(intakeSubsystem));
-    dPadDown.whileTrue(new TestIntakePivot(intakeSubsystem, -0.5));
-    dPadDown.whileFalse(new TestIntakePivot(intakeSubsystem, 0));
-    dPadUp.whileTrue(new TestIntakePivot(intakeSubsystem, 0.5));
-    dPadUp.whileFalse(new TestIntakePivot(intakeSubsystem, 0));
+    dLTrigger.whileTrue(new SetAngleAndFlywheelSpeeds(shooterSub, intakeSubsystem, ShooterMechConstants.restPos, ShooterMechConstants.flywheelShootSpeed));
+    dLTrigger.whileFalse(new SetAngleAndFlywheelSpeeds(shooterSub, intakeSubsystem, ShooterMechConstants.restPos, 0));
+    dLBumper.whileTrue(new OuttakeANDTransferCmd(intakeSubsystem, shooterSub, IntakeConstants.outtakeSpeed, IntakeConstants.reverseTransferSpeed, -ShooterMechConstants.indexTransferSpeed, -ShooterMechConstants.flywheelShootSpeed));
+    dLBumper.whileFalse(new StopTransferANDIntake(intakeSubsystem, shooterSub));
+    dRBumper.whileTrue(new AmpShoot(shooterSub));
+    dRBumper.whileFalse(new RestShooter(shooterSub));
+    
+    // dPadDown.whileTrue(new TestIntakePivot(intakeSubsystem, -0.5));
+    // dPadDown.whileFalse(new TestIntakePivot(intakeSubsystem, 0));
+    // dPadUp.whileTrue(new TestIntakePivot(intakeSubsystem, 0.5));
+    // dPadUp.whileFalse(new TestIntakePivot(intakeSubsystem, 0));
   }
 
   /**
@@ -88,6 +96,8 @@ public class RobotContainer {
     // cancelling on release.
     dRTrigger = driveController.rightTrigger();
     dLTrigger = driveController.leftTrigger();
+    dLBumper = driveController.leftBumper();
+    dRBumper = driveController.rightBumper();
     kA = driveController.a();
     kB = driveController.b();
     dPadUp = driveController.povUp();

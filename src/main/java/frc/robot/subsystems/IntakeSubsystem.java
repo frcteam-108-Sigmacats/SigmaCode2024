@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.ModuleConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
   //Instantiating pivot motor, intake motor, and transfer motor
@@ -70,11 +71,21 @@ public class IntakeSubsystem extends SubsystemBase {
       transferMotor.setIdleMode(IdleMode.kCoast);
       transferMotor.setSmartCurrentLimit(IntakeConstants.transferMotorCurrentLimit);
 
+
+    // Enable PID wrap around for the turning motor. This will allow the PID
+    // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
+    // to 10 degrees will go through 0 rather than the other direction which is a
+    // longer route.
+      pivotControl.setPositionPIDWrappingEnabled(true);
+      pivotControl.setPositionPIDWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
+      pivotControl.setPositionPIDWrappingMaxInput(360);
     //Configuring the PID Controller
       pivotControl.setP(IntakeConstants.kP);//Sets the P gain (Starting power to reach set position closely)
       pivotControl.setI(IntakeConstants.kI);//Sets the I gain (Error compensation power to reach the exact position)
       pivotControl.setD(IntakeConstants.kD);//Sets the D gain (Stop power (Basically helps with smoother stop of mechanism))
       pivotControl.setFeedbackDevice(intakeAbsEnc);//Sets the encoder we want the PID to follow 
+      pivotControl.setOutputRange(ModuleConstants.kTurningMinOutput,
+      ModuleConstants.kTurningMaxOutput);
 
     //Configuring Absolute Encoder
       intakeAbsEnc.setPositionConversionFactor(360);
@@ -114,6 +125,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Intake Angle", getPivotAngle());
+    SmartDashboard.putBoolean("Infrared Sensor reading:", getIRSensor());
   }
 
   @Override
@@ -128,7 +140,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
   //Gets the sensors feedback as to if it detects something or not
     public boolean getIRSensor(){
-      return intakeSensor.get();
+      //The sensor was reading the note as false so it had to be inverted
+      return !intakeSensor.get();
     }
 
   //Sets the angle of the intake mechanism

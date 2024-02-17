@@ -5,6 +5,7 @@
 package frc.robot.commands.ShooterCmd;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -12,9 +13,9 @@ import frc.robot.subsystems.ShooterSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SetAngleAndFlywheelSpeeds extends SequentialCommandGroup {
   /** Creates a new SetAngleAndFlywheelSpeeds. */
-  public SetAngleAndFlywheelSpeeds(ShooterSubsystem shooter, double pivotAngle, double speed) {
+  public SetAngleAndFlywheelSpeeds(ShooterSubsystem shooter, IntakeSubsystem intakeSub, double pivotAngle, double speed) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new SetPivotAngle(shooter, pivotAngle), new SetFlyWheelSpeeds(shooter, speed));
+    addCommands(new SetPivotAngle(shooter, pivotAngle), new SetFlyWheelSpeeds(shooter, intakeSub,speed));
   }
 }

@@ -5,23 +5,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.ShooterMechConstants;
-import frc.robot.commands.IntakeCmd.RunIntakeANDTransferCmd;
-import frc.robot.commands.ShooterCmd.ShooterTransfer;
+import frc.robot.commands.IntakeCmd.RunOuttakeANDReverseTransferCmd;
+import frc.robot.commands.ShooterCmd.ReverseShooterTransfer;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class IntakeANDTransferCmd extends ParallelCommandGroup {
-  /** Creates a new IntakeANDTransferCmd. */
-  public IntakeANDTransferCmd(IntakeSubsystem intakeSub, ShooterSubsystem shooterSub) {
+public class OuttakeANDTransferCmd extends ParallelCommandGroup {
+  /** Creates a new OuttakeANDTransferCmd. */
+  public OuttakeANDTransferCmd(IntakeSubsystem intakeSub, ShooterSubsystem shooterSub, double outtakeSpeed, double reverseTransferSpeed, double indexSpeed, double flywheelSpeed) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new RunIntakeANDTransferCmd(intakeSub, IntakeConstants.intakeSpeed,
-     IntakeConstants.transferSpeed), new ShooterTransfer(shooterSub, intakeSub, 
-     ShooterMechConstants.indexTransferSpeed, ShooterMechConstants.flywheelTransferSpeed));
+    addCommands(new RunOuttakeANDReverseTransferCmd(intakeSub, outtakeSpeed, reverseTransferSpeed), new ReverseShooterTransfer(shooterSub, intakeSub, indexSpeed, flywheelSpeed));
   }
 }
