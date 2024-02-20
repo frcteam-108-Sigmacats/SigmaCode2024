@@ -69,16 +69,19 @@ public final class Constants {
       public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
     
     //PID Set Up for Drive and Turn Motors
-      public static final double kDrivingP = 0.02;//Change when robot is with software
-      public static final double kDrivingI = 0;//Change when robot is with software
-      public static final double kDrivingD = 0;//Change when robot is with software
+      public static final double kDrivingP = 0.02;
+      public static final double kDrivingI = 0;
+      public static final double kDrivingD = 0;
       public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
+
       public static final double kDrivingMinOutput = -1;
       public static final double kDrivingMaxOutput = 1;
+
       public static final double kTurningP = 1.0;
       public static final double kTurningI = 0;
       public static final double kTurningD = 0;
       public static final double kTurningFF = 0;
+
       public static final double kTurningMinOutput = -1;
       public static final double kTurningMaxOutput = 1;
 
@@ -90,33 +93,26 @@ public final class Constants {
       public static final int fLeftDriveMotorID = 1;
       public static final int fLeftTurnMotorID = 2;
       public static final double fLeftAngOffset = -Math.PI / 2;
-      public static final boolean fLDriveInvert = false;
-      public static final boolean fLTurnInvert = false;
 
     //Front Right Module
       public static final int fRightDriveMotorID = 3;
       public static final int fRightTurnMotorID = 4;
       public static final double fRightAngOffset = 0;
-      public static final boolean fRDriveInvert = false;
-      public static final boolean fRTurnInvert = false;
 
     //Back Left Module
       public static final int bLeftDriveMotorID = 5;
       public static final int bLeftTurnMotorID = 6;
       public static final double bLeftAngOffset = 0;
-      public static final boolean bLDriveInvert = true;
-      public static final boolean bLTurnInvert = false;
 
     //Back Right Module
       public static final int bRightDriveMotorID = 7;
       public static final int bRightTurnMotorID = 8;
       public static final double bRightAngOffset = -Math.PI / 2;
-      public static final boolean bRDriveInvert = true;
-      public static final boolean bRTurnInvert = false;
 
   }
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
   }
   public static class IntakeConstants{
     //IDs for the motors on the intake mechanism
@@ -132,9 +128,9 @@ public final class Constants {
     public static final int transferMotorCurrentLimit = 20; //Units in amps
 
     //PID gains for pivot control
-    public static final double kP = 0.015;//change when given the robot
-    public static final double kI = 0.0000006;//change when given the robot
-    public static final double kD = 0.0;//change when given the robot
+    public static final double kP = 0.015;//Try to make the intake pivot faster
+    public static final double kI = 0.0000006;//Try to make the intake pivot faster
+    public static final double kD = 0.0;
 
     //DIO port number for laser sensor that will be mounted to the intake
     public static final int irSensorDIOPort = 7;
@@ -142,14 +138,12 @@ public final class Constants {
     //Values for the intake angle's
     public static final double restPos = 25;//The rest position which will also be the handoff position
     public static final double groundIntakePos = 143;//The position where we will intake from the ground (Find value first)
-    public static final double sourceZonePos = 0;//The position where we will intake a note coming from the source zone that is not the ground (Find value first)
-
 
     //The speeds for intaking, outtaking
-    public static final double intakeSpeed = -1.0; //Change speed when robot is done
-    public static final double transferSpeed = -0.25; //Change speed when robot is done
-    public static final double outtakeSpeed = 0.75; //Change speed when robot is done
-    public static final double reverseTransferSpeed = 0.5; //Change speed when robot is done
+    public static final double intakeSpeed = -1.0; //Keep at -100% unless needed to change (negative is to suck in the note and positive is to spit out if motor is not inverted)
+    public static final double transferSpeed = -0.25; //Keep at -25% unless needed to change (negative is to suck in the note and positive is to spit out if motor is not inverted)
+    public static final double outtakeSpeed = 0.75; //(negative is to suck in the note and positive is to spit out if motor is not inverted)
+    public static final double reverseTransferSpeed = 0.5; //(negative is to suck in the note and positive is to spit out if motor is not inverted)
   }
   public static class ShooterMechConstants{
     //ID for index motor
@@ -163,28 +157,25 @@ public final class Constants {
     public static final int shooterPivotMotorID = 14;
 
     //Limits for the motors on the shooter mechanism Units:Amps
-    public static final int indexCurrentLimit = 40;
+    public static final int indexCurrentLimit = 40;//Needs to be at 40 to be able to run the indexer pipes properly
     public static final int pivotCurrentLimit = 30;
     public static final int flywheelCurrentLimit = 40;
 
     //Pivot angles
-    public static final double restPos = 1; //Change later when the robot is in software
+    public static final double restPos = 1; 
     public static final double ampPos = 93;
 
     //PID gains for Pivot Controller
-    public static final double kP = 0.01;//Change later when robot is with software
-    public static final double kI = 0.0;//Change later when robot is with software
-    public static final double kD = 0.0;//Change later when robot is with software
-
-    //Port number for Shooter Sensor
-    public static final int shootSensorID = 2;
+    public static final double kP = 0.01;//Try to make the pivot faster
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
 
     //Should the right side of the flywheel motors need to be inverted to spin the same direction as the left side of the flywheel motor
     public static boolean rightFlywheelInverted = true;
 
     //Speeds for the motors
-    public static final double indexTransferSpeed = -0.33;
-    public static final double indexShootSpeed = -1.0;
+    public static final double indexTransferSpeed = -0.33;//Keep at -33% for automatic intake (negative to suck in the note and positive to spit out unless the motor is inverted)
+    public static final double indexShootSpeed = -1.0;//(negative to suck in the note and positive to spit out unless the motor is inverted)
 
     public static final double flywheelTransferSpeed = 0.1;
     public static final double flywheelShootSpeed = -0.75;
@@ -195,7 +186,7 @@ public final class Constants {
     public static final int rightElevatorMotorID = 16;
 
     //PID gains for position control of elevator
-    public static final double kP = 0.0;//Change when robot is with software
+    public static final double kP = 0.001;//Change when robot is with software
     public static final double kI = 0.0;//Change when robot is with software
     public static final double kD = 0.0;//Change when robot is with software
 

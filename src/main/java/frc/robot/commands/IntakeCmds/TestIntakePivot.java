@@ -2,26 +2,22 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.ShooterCmd;
+package frc.robot.commands.IntakeCmds;
 
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ShooterMechConstants;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 
-public class ReverseShooterTransfer extends Command {
-  private ShooterSubsystem shooterSub;
+public class TestIntakePivot extends Command {
   private IntakeSubsystem intakeSub;
-  private double indexSpeed, flywheelSpeed;
-  private int counter;
-  /** Creates a new ReverseShooterTransfer. */
-  public ReverseShooterTransfer(ShooterSubsystem shooterSub, IntakeSubsystem intakeSub, double indexSpeed, double flywheelSpeed) {
-    this.shooterSub = shooterSub;
-    this.indexSpeed = indexSpeed;
-    this.flywheelSpeed = flywheelSpeed;
+
+  private double speed;
+  /** Creates a new TestIntakePivot. */
+  public TestIntakePivot(IntakeSubsystem intakeSub, double speed) {
     this.intakeSub = intakeSub;
+    this.speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooterSub);
+    addRequirements(intakeSub);
   }
 
   // Called when the command is initially scheduled.
@@ -31,14 +27,14 @@ public class ReverseShooterTransfer extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterSub.setPivotAngle(ShooterMechConstants.restPos);
-    shooterSub.setFlyWheelSpeeds(flywheelSpeed);
-    shooterSub.setIndexRollerSpeed(indexSpeed);
+    intakeSub.testIntakePivot(speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    intakeSub.testIntakePivot(0);
+  }
 
   // Returns true when the command should end.
   @Override

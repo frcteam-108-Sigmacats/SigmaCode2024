@@ -1,18 +1,18 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
-package frc.robot.commands.ShooterCmd;
+package frc.robot.commands.ShooterCmds;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ShooterMechConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class RestShooter extends Command {
-  private ShooterSubsystem shooterSub;
-  /** Creates a new RestShooter. */
-  public RestShooter(ShooterSubsystem shooterSub) {
+/** An example command that uses an example subsystem. */
+public class SetPivotAngle extends Command {
+  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  private final ShooterSubsystem shooterSub;
+
+  private double pivotAngle;
+
+  public SetPivotAngle(ShooterSubsystem shooterSub, double pivotAngle) {
     this.shooterSub = shooterSub;
+    this.pivotAngle = pivotAngle;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSub);
   }
@@ -24,9 +24,7 @@ public class RestShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterSub.setFlyWheelSpeeds(0);
-    shooterSub.setIndexRollerSpeed(0);
-    shooterSub.setPivotAngle(ShooterMechConstants.restPos);
+    shooterSub.setPivotAngle(pivotAngle);
   }
 
   // Called once the command ends or is interrupted.
@@ -36,6 +34,13 @@ public class RestShooter extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    //add this after testing each mechanism
+    // if(shooterSubsystem.getIRSensor()){ 
+    //   return true;
+    // }
+    if(Math.abs(pivotAngle - shooterSub.getPivotAngle()) <= 1){
+      return true;
+    }
     return false;
   }
 }

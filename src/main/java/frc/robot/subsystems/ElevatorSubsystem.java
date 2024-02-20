@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
@@ -86,15 +87,20 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Elevator Position", getElevatorPosition());//Getting the encoder count for setting position
   }
 
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+
+  //Getting the position of the elevator based on the motor's built in encoder
   public double getElevatorPosition(){
     return elevateEnc.getPosition();
   }
+
+  //Setting the position of the elevator based on the motor's built in encoder
   public void setElevatorPosition(double position){
     elevatePositionControl.setReference(position, ControlType.kPosition);
     rightElevatorMotor.follow(leftElevatorMotor, ElevatorConstants.invertRightMotor);
