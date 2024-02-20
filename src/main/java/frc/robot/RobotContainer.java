@@ -28,6 +28,9 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 import java.sql.DriverAction;
 
+import frc.robot.commands.Autos;
+import frc.robot.commands.SetElevatorPosition;
+import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -45,6 +48,7 @@ public class RobotContainer {
   private final ShooterSubsystem shooterSub = new ShooterSubsystem();
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final ElevatorSubsystem m_exampleSubsystem = new ElevatorSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController = new 

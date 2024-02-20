@@ -189,4 +189,25 @@ public final class Constants {
     public static final double flywheelTransferSpeed = 0.1;
     public static final double flywheelShootSpeed = -0.75;
   }
+  public static class ElevatorConstants{
+    //IDs for elevator motors
+    public static final int leftElevatorMotorID = 15;
+    public static final int rightElevatorMotorID = 16;
+
+    //PID gains for position control of elevator
+    public static final double kP = 0.0;//Change when robot is with software
+    public static final double kI = 0.0;//Change when robot is with software
+    public static final double kD = 0.0;//Change when robot is with software
+
+    //Conversion for position of elevator
+
+    //Gear ratio of the gearbox connected to the NEO motors
+    public static double elevatorGearRatio = 100.0 / 1.0;
+
+    public static double positionConversion;
+
+    //Do we need to invert the motor direction to have the right motor follow the left motor
+    public static boolean invertRightMotor = false;
+  }
+  
 }
