@@ -29,6 +29,7 @@ import frc.robot.commands.ControllerCmds.IntakeANDTransferCmd;
 import frc.robot.commands.ControllerCmds.OuttakeANDTransferCmd;
 import frc.robot.commands.ControllerCmds.StopTransferANDIntake;
 import frc.robot.commands.ElevatorCmds.SetElevatorPosition;
+import frc.robot.commands.ElevatorCmds.SetElevatorSpeed;
 import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -47,7 +48,7 @@ public class RobotContainer {
   private final ShooterSubsystem shooterSub = new ShooterSubsystem();
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  private final ElevatorSubsystem m_exampleSubsystem = new ElevatorSubsystem();
+  private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController = new 
@@ -70,17 +71,17 @@ public class RobotContainer {
     configureBindings();
     dRTrigger.whileTrue(new IntakeANDTransferCmd(intakeSubsystem, shooterSub));
     dRTrigger.whileFalse(new StopTransferANDIntake(intakeSubsystem, shooterSub));
-    dLTrigger.whileTrue(new SetAngleAndFlywheelSpeeds(shooterSub, intakeSubsystem, ShooterMechConstants.restPos, ShooterMechConstants.flywheelShootSpeed));
-    dLTrigger.whileFalse(new SetAngleAndFlywheelSpeeds(shooterSub, intakeSubsystem, ShooterMechConstants.restPos, 0));
+    dLTrigger.whileTrue(new SetAngleAndFlywheelSpeeds(shooterSub, intakeSubsystem, ShooterMechConstants.restPos, ShooterMechConstants.flywheelShootSpeed, ShooterMechConstants.indexShootSpeed));
+    //dLTrigger.whileFalse(new SetAngleAndFlywheelSpeeds(shooterSub, intakeSubsystem, ShooterMechConstants.restPos, 0, 0));
     dLBumper.whileTrue(new OuttakeANDTransferCmd(intakeSubsystem, shooterSub, IntakeConstants.outtakeSpeed, IntakeConstants.reverseTransferSpeed, -ShooterMechConstants.indexTransferSpeed, -ShooterMechConstants.flywheelShootSpeed));
     dLBumper.whileFalse(new StopTransferANDIntake(intakeSubsystem, shooterSub));
     dRBumper.whileTrue(new AmpShoot(shooterSub));
     dRBumper.whileFalse(new RestShooter(shooterSub));
     
-    // dPadDown.whileTrue(new TestIntakePivot(intakeSubsystem, -0.5));
-    // dPadDown.whileFalse(new TestIntakePivot(intakeSubsystem, 0));
-    // dPadUp.whileTrue(new TestIntakePivot(intakeSubsystem, 0.5));
-    // dPadUp.whileFalse(new TestIntakePivot(intakeSubsystem, 0));
+    dPadDown.whileTrue(new SetElevatorSpeed(elevatorSubsystem, 0.1));
+    dPadDown.whileFalse(new SetElevatorSpeed(elevatorSubsystem, 0));
+    dPadUp.whileTrue(new SetElevatorPosition(elevatorSubsystem, 28));
+    dPadUp.whileFalse(new SetElevatorPosition(elevatorSubsystem, 0));
   }
 
   /**

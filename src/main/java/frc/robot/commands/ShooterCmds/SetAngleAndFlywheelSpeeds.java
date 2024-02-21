@@ -13,9 +13,9 @@ import frc.robot.subsystems.ShooterSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SetAngleAndFlywheelSpeeds extends SequentialCommandGroup {
   /** Creates a new SetAngleAndFlywheelSpeeds. */
-  public SetAngleAndFlywheelSpeeds(ShooterSubsystem shooter, IntakeSubsystem intakeSub, double pivotAngle, double speed) {
+  public SetAngleAndFlywheelSpeeds(ShooterSubsystem shooter, IntakeSubsystem intakeSub, double pivotAngle, double flywheelSpeed, double indexSpeed) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new SetPivotAngle(shooter, pivotAngle), new SetFlyWheelSpeeds(shooter, intakeSub,speed));
+    addCommands(new SetPivotAngle(shooter, pivotAngle), new SetFlyWheelSpeeds(shooter, intakeSub, flywheelSpeed, indexSpeed));
   }
 }

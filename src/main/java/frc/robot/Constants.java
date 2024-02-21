@@ -20,7 +20,7 @@ public final class Constants {
   public static final class ChassisConstants{
     //Max Drive and Turn Speed Restrictions
       public static final double kMaxSpeedMPS = 12;
-      public static final double kMaxAngularSpeed = 2 * Math.PI;
+      public static final double kMaxAngularSpeed = 4 * Math.PI;
 
     //Distance between the centers of the left wheels and right wheels
       public static final double kTrackWidth = Units.inchesToMeters(22.4375);
@@ -133,7 +133,7 @@ public final class Constants {
     public static final double kD = 0.0;
 
     //DIO port number for laser sensor that will be mounted to the intake
-    public static final int irSensorDIOPort = 7;
+    public static final int irSensorDIOPort = 0;
 
     //Values for the intake angle's
     public static final double restPos = 25;//The rest position which will also be the handoff position
@@ -163,7 +163,7 @@ public final class Constants {
 
     //Pivot angles
     public static final double restPos = 1; 
-    public static final double ampPos = 93;
+    public static final double ampPos = 100;
 
     //PID gains for Pivot Controller
     public static final double kP = 0.01;//Try to make the pivot faster
@@ -186,7 +186,7 @@ public final class Constants {
     public static final int rightElevatorMotorID = 16;
 
     //PID gains for position control of elevator
-    public static final double kP = 0.001;//Change when robot is with software
+    public static final double kP = 0.03;//Change when robot is with software
     public static final double kI = 0.0;//Change when robot is with software
     public static final double kD = 0.0;//Change when robot is with software
 

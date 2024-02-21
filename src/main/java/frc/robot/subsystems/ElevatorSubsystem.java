@@ -44,8 +44,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatePositionControl.setD(ElevatorConstants.kD);
     elevatePositionControl.setFeedbackDevice(elevateEnc);
 
-    elevateEnc.setPositionConversionFactor(ElevatorConstants.positionConversion);
-
     //Configure motors
     leftElevatorMotor.setIdleMode(IdleMode.kBrake);
     leftElevatorMotor.setSmartCurrentLimit(40);//Units in amps
@@ -104,5 +102,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void setElevatorPosition(double position){
     elevatePositionControl.setReference(position, ControlType.kPosition);
     rightElevatorMotor.follow(leftElevatorMotor, ElevatorConstants.invertRightMotor);
+  }
+  
+  //Moving elevator based on speeds
+  public void setElevatorSpeed(double speed){
+    leftElevatorMotor.set(speed);
   }
 }

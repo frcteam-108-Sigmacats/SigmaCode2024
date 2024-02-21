@@ -38,7 +38,7 @@ public class SetPivotAngle extends Command {
     // if(shooterSubsystem.getIRSensor()){ 
     //   return true;
     // }
-    if(Math.abs(pivotAngle - shooterSub.getPivotAngle()) <= 1){
+    if(Math.abs(pivotAngle - shooterSub.getPivotAngle()) <= 1 || shooterSub.getPivotAngle() >= 350){
       return true;
     }
     return false;

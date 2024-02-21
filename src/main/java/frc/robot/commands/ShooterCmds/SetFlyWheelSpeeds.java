@@ -14,17 +14,18 @@ public class SetFlyWheelSpeeds extends Command {
   private ShooterSubsystem shooterSub;
   private IntakeSubsystem intakeSub;
 
-  private double speed;
+  private double flywheelSpeed, indexSpeed;
 
   private int counter;
 
   private boolean finish;
   /** Creates a new SetFlyWheelSpeeds. */
-  public SetFlyWheelSpeeds(ShooterSubsystem shooterSub, IntakeSubsystem intakeSub, double speed) {
+  public SetFlyWheelSpeeds(ShooterSubsystem shooterSub, IntakeSubsystem intakeSub, double flywheelSpeed, double indexSpeed) {
     this.shooterSub = shooterSub;
     this.intakeSub = intakeSub;
 
-    this.speed = speed;
+    this.flywheelSpeed = flywheelSpeed;
+    this.indexSpeed = indexSpeed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSub);
   }
@@ -40,15 +41,16 @@ public class SetFlyWheelSpeeds extends Command {
   @Override
   public void execute() {
     counter++;
-    shooterSub.setFlyWheelSpeeds(speed);
+    shooterSub.setFlyWheelSpeeds(flywheelSpeed);
+    System.out.println("Shooter running");
 
-    if(counter >= 150){
-      shooterSub.setIndexRollerSpeed(ShooterMechConstants.indexShootSpeed);
+    if(counter >= 100){
+      shooterSub.setIndexRollerSpeed(indexSpeed);
     }
     else{
       shooterSub.setIndexRollerSpeed(0);
     }
-    if(counter >= 170){
+    if(counter >= 105){
       finish = true;
     }
   }
@@ -56,8 +58,8 @@ public class SetFlyWheelSpeeds extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterSub.setFlyWheelSpeeds(0);
-    shooterSub.setIndexRollerSpeed(0);
+    // shooterSub.setFlyWheelSpeeds(0);
+    // shooterSub.setIndexRollerSpeed(0);
   }
 
   // Returns true when the command should end.
