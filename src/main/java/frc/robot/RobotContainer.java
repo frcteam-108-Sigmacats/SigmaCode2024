@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
+<<<<<<< HEAD
 import frc.robot.commands.IntakeCmds.IntakeRollersRest;
 import frc.robot.commands.IntakeCmds.RestIntakeCmd;
 import frc.robot.commands.IntakeCmds.RunIntakeANDTransferCmd;
@@ -31,6 +32,8 @@ import frc.robot.commands.ControllerCmds.StopTransferANDIntake;
 import frc.robot.commands.ElevatorCmds.SetElevatorPosition;
 import frc.robot.commands.ElevatorCmds.SetElevatorSpeed;
 import frc.robot.subsystems.ElevatorSubsystem;
+=======
+>>>>>>> Vision
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -42,8 +45,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final DriveSubsystem driveSubsystem = new DriveSubsystem();
 
   private final ShooterSubsystem shooterSub = new ShooterSubsystem();
 
