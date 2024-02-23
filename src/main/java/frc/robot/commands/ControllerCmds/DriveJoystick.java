@@ -59,8 +59,8 @@ public class DriveJoystick extends Command {
     double rotAxis = -driver.getRightX();
 
     //If the joystick is less than the deadband set to 0 otherwise run the joystick at the value (Prevents Stick drift)
-    yAxis = (Math.abs(yAxis) < ChassisConstants.deadband ? 0 : yAxis * 0.3);
-    xAxis = (Math.abs(xAxis) < ChassisConstants.deadband ? 0 : xAxis * 0.3);
+    yAxis = (Math.abs(yAxis) < ChassisConstants.deadband ? 0 : yAxis * 0.6);
+    xAxis = (Math.abs(xAxis) < ChassisConstants.deadband ? 0 : xAxis * 0.6);
     rotAxis = (Math.abs(rotAxis) < ChassisConstants.deadband ? 0 : (rotAxis * 10));
 
     translation = new Translation2d(yAxis, xAxis).times(ChassisConstants.kMaxSpeedMPS);

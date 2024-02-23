@@ -6,13 +6,13 @@ package frc.robot;
 
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
-<<<<<<< HEAD
 import frc.robot.commands.IntakeCmds.IntakeRollersRest;
 import frc.robot.commands.IntakeCmds.RestIntakeCmd;
 import frc.robot.commands.IntakeCmds.RunIntakeANDTransferCmd;
 import frc.robot.commands.IntakeCmds.RunOuttakeANDReverseTransferCmd;
 import frc.robot.commands.IntakeCmds.TestIntakePivot;
 import frc.robot.commands.ShooterCmds.AmpShoot;
+import frc.robot.commands.ShooterCmds.AutoShooter;
 import frc.robot.commands.ShooterCmds.RestShooter;
 import frc.robot.commands.ShooterCmds.SetAngleAndFlywheelSpeeds;
 import frc.robot.commands.ShooterCmds.SetFlyWheelSpeeds;
@@ -22,9 +22,14 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.Constants.ShooterMechConstants;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.Vision;
 
 import java.sql.DriverAction;
 
+import frc.robot.commands.ControllerCmds.AmpShootWElevator;
+import frc.robot.commands.ControllerCmds.AutoAlignNote;
+import frc.robot.commands.ControllerCmds.AutoAlignTag;
+import frc.robot.commands.ControllerCmds.AutoShooterWithAlign;
 import frc.robot.commands.ControllerCmds.DriveJoystick;
 import frc.robot.commands.ControllerCmds.IntakeANDTransferCmd;
 import frc.robot.commands.ControllerCmds.OuttakeANDTransferCmd;
@@ -32,9 +37,10 @@ import frc.robot.commands.ControllerCmds.StopTransferANDIntake;
 import frc.robot.commands.ElevatorCmds.SetElevatorPosition;
 import frc.robot.commands.ElevatorCmds.SetElevatorSpeed;
 import frc.robot.subsystems.ElevatorSubsystem;
-=======
->>>>>>> Vision
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -46,10 +52,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
 
+  private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final ShooterSubsystem shooterSub = new ShooterSubsystem();
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+
+  private final Vision visionSub = new Vision();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController = new 
@@ -72,17 +81,28 @@ public class RobotContainer {
     configureBindings();
     dRTrigger.whileTrue(new IntakeANDTransferCmd(intakeSubsystem, shooterSub));
     dRTrigger.whileFalse(new StopTransferANDIntake(intakeSubsystem, shooterSub));
-    dLTrigger.whileTrue(new SetAngleAndFlywheelSpeeds(shooterSub, intakeSubsystem, ShooterMechConstants.restPos, ShooterMechConstants.flywheelShootSpeed, ShooterMechConstants.indexShootSpeed));
-    //dLTrigger.whileFalse(new SetAngleAndFlywheelSpeeds(shooterSub, intakeSubsystem, ShooterMechConstants.restPos, 0, 0));
+    // dLTrigger.whileTrue(new SetAngleAndFlywheelSpeeds(shooterSub, intakeSubsystem, ShooterMechConstants.restPos, ShooterMechConstants.flywheelShootSpeed, ShooterMechConstants.indexShootSpeed));
+    // dLTrigger.whileFalse(new SetAngleAndFlywheelSpeeds(shooterSub, intakeSubsystem, ShooterMechConstants.restPos, 0, 0));
+    // dLTrigger.whileTrue(new AutoShooter(shooterSub, visionSub));
+    // dLTrigger.whileFalse(new RestShooter(shooterSub));
+    dLTrigger.whileTrue(new AutoShooterWithAlign(driveSubsystem, visionSub, shooterSub, intakeSubsystem, driveController, fieldRelative));
+    dLTrigger.whileFalse(new RestShooter(shooterSub));
     dLBumper.whileTrue(new OuttakeANDTransferCmd(intakeSubsystem, shooterSub, IntakeConstants.outtakeSpeed, IntakeConstants.reverseTransferSpeed, -ShooterMechConstants.indexTransferSpeed, -ShooterMechConstants.flywheelShootSpeed));
     dLBumper.whileFalse(new StopTransferANDIntake(intakeSubsystem, shooterSub));
-    dRBumper.whileTrue(new AmpShoot(shooterSub));
-    dRBumper.whileFalse(new RestShooter(shooterSub));
+    dRBumper.whileTrue(new AmpShootWElevator(elevatorSubsystem, shooterSub));
+    dRBumper.whileFalse(new ParallelCommandGroup(new RestShooter(shooterSub), new SetElevatorPosition(elevatorSubsystem, 5)));
+    // kA.whileTrue(new AutoAlignNote(driveSubsystem, visionSub, driveController, fieldRelative));
+    // kA.whileFalse(new DriveJoystick(driveSubsystem, driveController, fieldRelative));
+    kA.onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
+    // kB.whileTrue(new AutoAlignTag(driveSubsystem, visionSub, driveController, fieldRelative));
+    // kB.whileFalse(new DriveJoystick(driveSubsystem, driveController, fieldRelative));
     
-    dPadDown.whileTrue(new SetElevatorSpeed(elevatorSubsystem, 0.1));
+    dPadDown.whileTrue(new SetElevatorSpeed(elevatorSubsystem, -1.0));
     dPadDown.whileFalse(new SetElevatorSpeed(elevatorSubsystem, 0));
-    dPadUp.whileTrue(new SetElevatorPosition(elevatorSubsystem, 28));
-    dPadUp.whileFalse(new SetElevatorPosition(elevatorSubsystem, 0));
+    dPadUp.whileTrue(new SetElevatorSpeed(elevatorSubsystem, 0.3));
+    dPadUp.whileFalse(new SetElevatorSpeed(elevatorSubsystem, 0));
+    // dPadUp.whileTrue(new SetElevatorPosition(elevatorSubsystem, 58));
+    // dPadDown.whileTrue(new SetElevatorPosition(elevatorSubsystem, 5));
   }
 
   /**

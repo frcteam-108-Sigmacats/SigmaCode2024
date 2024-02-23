@@ -44,13 +44,13 @@ public class SetFlyWheelSpeeds extends Command {
     shooterSub.setFlyWheelSpeeds(flywheelSpeed);
     System.out.println("Shooter running");
 
-    if(counter >= 100){
+    if(counter >= 150){
       shooterSub.setIndexRollerSpeed(indexSpeed);
     }
     else{
       shooterSub.setIndexRollerSpeed(0);
     }
-    if(counter >= 105){
+    if(counter >= 165){
       finish = true;
     }
   }

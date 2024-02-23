@@ -47,7 +47,7 @@ public final class Constants {
       public static final boolean turningEncoderInverted = true;
 
     //Calculations for Drive Motor Conversion factors and feed forward
-      public static final double kFreeSpeedRPM = 5676;
+      public static final double kFreeSpeedRPM = 6784;
       public static final double kDrivingMotorFreeSpeedRPS = kFreeSpeedRPM / 60;
 
       public static final double kWheelDiameterMeters = Units.inchesToMeters(3);
@@ -114,7 +114,6 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
   }
-<<<<<<< HEAD
   public static class IntakeConstants{
     //IDs for the motors on the intake mechanism
     public static final int pivotMotorID = 9;
@@ -129,8 +128,8 @@ public final class Constants {
     public static final int transferMotorCurrentLimit = 20; //Units in amps
 
     //PID gains for pivot control
-    public static final double kP = 0.015;//Try to make the intake pivot faster
-    public static final double kI = 0.0000006;//Try to make the intake pivot faster
+    public static final double kP = 0.02;//Try to make the intake pivot faster
+    public static final double kI = 0.0;//Try to make the intake pivot faster
     public static final double kD = 0.0;
 
     //DIO port number for laser sensor that will be mounted to the intake
@@ -138,7 +137,7 @@ public final class Constants {
 
     //Values for the intake angle's
     public static final double restPos = 25;//The rest position which will also be the handoff position
-    public static final double groundIntakePos = 143;//The position where we will intake from the ground (Find value first)
+    public static final double groundIntakePos = 150;//The position where we will intake from the ground (Find value first)
 
     //The speeds for intaking, outtaking
     public static final double intakeSpeed = -1.0; //Keep at -100% unless needed to change (negative is to suck in the note and positive is to spit out if motor is not inverted)
@@ -163,23 +162,34 @@ public final class Constants {
     public static final int flywheelCurrentLimit = 40;
 
     //Pivot angles
-    public static final double restPos = 1; 
+    public static final double restPos = 0; 
     public static final double ampPos = 100;
 
     //PID gains for Pivot Controller
-    public static final double kP = 0.01;//Try to make the pivot faster
-    public static final double kI = 0.0;
-    public static final double kD = 0.0;
+    public static final double pivotP = 0.04;//Try to make the pivot faster
+    public static final double pivotI = 0.000006;
+    public static final double pivotD = 0;
+
+    //PID gains for Speed Control
+    public static final double speedP = 0.01;
+    public static final double speedI = 0.0;
+    public static final double speedD = 0.0;
 
     //Should the right side of the flywheel motors need to be inverted to spin the same direction as the left side of the flywheel motor
     public static boolean rightFlywheelInverted = true;
 
     //Speeds for the motors
-    public static final double indexTransferSpeed = -0.33;//Keep at -33% for automatic intake (negative to suck in the note and positive to spit out unless the motor is inverted)
+    public static final double indexTransferSpeed = -0.25;//Keep at -33% for automatic intake (negative to suck in the note and positive to spit out unless the motor is inverted)
     public static final double indexShootSpeed = -1.0;//(negative to suck in the note and positive to spit out unless the motor is inverted)
 
     public static final double flywheelTransferSpeed = 0.1;
-    public static final double flywheelShootSpeed = -0.75;
+    public static final double flywheelShootSpeed = -1.0;
+
+    public static final double minDistInches = 28;
+    public static final double maxDistInches = 131.0;
+    public static final double[] distSetPoints = {28, 50, 68, 71, 76, 81, 91, 101, 110, 116};
+    public static final double[] angleSetPoints = {12, 19, 21, 22, 24, 28, 30, 30, 32, 34};
+    public static final double maxDegrees = 30;
   }
   public static class ElevatorConstants{
     //IDs for elevator motors
@@ -187,8 +197,8 @@ public final class Constants {
     public static final int rightElevatorMotorID = 16;
 
     //PID gains for position control of elevator
-    public static final double kP = 0.03;//Change when robot is with software
-    public static final double kI = 0.0;//Change when robot is with software
+    public static final double kP = 0.02;//Change when robot is with software
+    public static final double kI = 0;//Change when robot is with software
     public static final double kD = 0.0;//Change when robot is with software
 
     //Conversion for position of elevator
@@ -198,11 +208,12 @@ public final class Constants {
 
     public static double positionConversion;
 
+    public static double ampPos = 28;
+
     //Do we need to invert the motor direction to have the right motor follow the left motor
     public static boolean invertRightMotor = false;
   }
-  
-=======
+
   //Class for limelight using AI Object Detection
   public static class LimelightNoteConstants{
     //How many degrees back is your limelight rotated from perfectly vertical
@@ -218,13 +229,12 @@ public final class Constants {
   //Class for limelight using AprilTag
   public static class LimelightSpeakerConstants{
     //How many degrees back is your limelight rotated from perfectly vertical
-    public static final double limelightMountAngleDegrees = 0; //Change later when it is on the robot
+    public static final double limelightMountAngleDegrees = 45; //Change later when it is on the robot
 
     //Distance between the center of the limelight's lens to the floor
-    public static final double limelightLensHeightInches = 0;
+    public static final double limelightLensHeightInches = 6.5;
 
     //Distance form the target to the floor
     public static final double goalHeightInches = 77.625; 
   }
->>>>>>> Vision
 }

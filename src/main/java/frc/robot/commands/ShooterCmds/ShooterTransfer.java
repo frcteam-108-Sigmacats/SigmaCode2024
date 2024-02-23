@@ -38,7 +38,7 @@ public class ShooterTransfer extends Command {
   @Override
   public void execute() {
     shooterSub.setPivotAngle(ShooterMechConstants.restPos);
-    shooterSub.setFlyWheelSpeeds(flywheelSpeed);
+    shooterSub.setFlyWheelSpeeds(-0.3);
     shooterSub.setIndexRollerSpeed(indexSpeed);
     // if(ChassisConstants.isThereGamePiece == true && intakeSub.getIRSensor() == false){
     //   shooterSub.setIndexRollerSpeed(-indexSpeed);

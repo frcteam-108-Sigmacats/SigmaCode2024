@@ -42,13 +42,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatePositionControl.setP(ElevatorConstants.kP);
     elevatePositionControl.setI(ElevatorConstants.kI);
     elevatePositionControl.setD(ElevatorConstants.kD);
+    elevatePositionControl.setOutputRange(-0.2, 0.7);
     elevatePositionControl.setFeedbackDevice(elevateEnc);
 
     //Configure motors
-    leftElevatorMotor.setIdleMode(IdleMode.kBrake);
+    leftElevatorMotor.setIdleMode(IdleMode.kCoast);
     leftElevatorMotor.setSmartCurrentLimit(40);//Units in amps
 
-    rightElevatorMotor.setIdleMode(IdleMode.kBrake);
+    rightElevatorMotor.setIdleMode(IdleMode.kCoast);
     rightElevatorMotor.setSmartCurrentLimit(40);//Units in amps
 
     //Burn flash to save configuration of motors
@@ -100,6 +101,15 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   //Setting the position of the elevator based on the motor's built in encoder
   public void setElevatorPosition(double position){
+    // if(getElevatorPosition() < position && position >= 5){
+    //   setElevatorSpeed(0.3);
+    // }
+    // else if(getElevatorPosition() > position && position <=5){
+    //   setElevatorSpeed(-0.3);
+    // }
+    // else{
+    //   setElevatorSpeed(0);
+    // }
     elevatePositionControl.setReference(position, ControlType.kPosition);
     rightElevatorMotor.follow(leftElevatorMotor, ElevatorConstants.invertRightMotor);
   }
@@ -107,5 +117,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   //Moving elevator based on speeds
   public void setElevatorSpeed(double speed){
     leftElevatorMotor.set(speed);
+    rightElevatorMotor.set(speed);
   }
 }

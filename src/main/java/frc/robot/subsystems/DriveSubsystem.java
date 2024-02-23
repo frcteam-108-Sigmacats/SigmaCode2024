@@ -38,8 +38,8 @@ public class DriveSubsystem extends SubsystemBase {
   //Creating the gyroscope that tracks the robots angles in all axis's
     private final Pigeon2 gyro = new Pigeon2(1);
 
-  private SlewRateLimiter driveLimit = new SlewRateLimiter(5);
-  private SlewRateLimiter turnLimit = new SlewRateLimiter(5);
+  private SlewRateLimiter driveLimit = new SlewRateLimiter(20);
+  private SlewRateLimiter turnLimit = new SlewRateLimiter(20);
   private SlewRateLimiter rotLimit = new SlewRateLimiter(10);
 
   //Creating an array of the modules made

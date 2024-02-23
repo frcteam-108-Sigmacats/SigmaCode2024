@@ -34,7 +34,12 @@ public class SetElevatorPosition extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevatorSub.setElevatorPosition(position);
+    if(position >= 10 && Math.abs(position - elevatorSub.getElevatorPosition()) <= 2){
+      elevatorSub.setElevatorSpeed(0.04);
+    }
+    else{
+      elevatorSub.setElevatorPosition(position);
+    }
   }
 
   // Called once the command ends or is interrupted.
