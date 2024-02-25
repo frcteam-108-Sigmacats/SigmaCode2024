@@ -32,25 +32,30 @@ public class ElevatorSubsystem extends SubsystemBase {
     leftElevatorMotor = new CANSparkMax(ElevatorConstants.leftElevatorMotorID, MotorType.kBrushless);
     rightElevatorMotor = new CANSparkMax(ElevatorConstants.rightElevatorMotorID, MotorType.kBrushless);
 
+    leftElevatorMotor.restoreFactoryDefaults();
+    rightElevatorMotor.restoreFactoryDefaults();
+
     //Assign PID controller to left motor
     elevatePositionControl = leftElevatorMotor.getPIDController();
 
     //Assign encoder to left motor's built in encoder
-    elevateEnc = leftElevatorMotor.getEncoder();
+    elevateEnc = leftElevatorMotor.getAlternateEncoder(8192);
 
     //Set PID gains to the PID Controller
     elevatePositionControl.setP(ElevatorConstants.kP);
     elevatePositionControl.setI(ElevatorConstants.kI);
     elevatePositionControl.setD(ElevatorConstants.kD);
-    elevatePositionControl.setOutputRange(-0.2, 0.7);
+    elevatePositionControl.setOutputRange(-0.98, 1.0);
     elevatePositionControl.setFeedbackDevice(elevateEnc);
 
     //Configure motors
-    leftElevatorMotor.setIdleMode(IdleMode.kCoast);
+    leftElevatorMotor.setIdleMode(IdleMode.kBrake);
     leftElevatorMotor.setSmartCurrentLimit(40);//Units in amps
+    leftElevatorMotor.setInverted(true);
 
-    rightElevatorMotor.setIdleMode(IdleMode.kCoast);
+    rightElevatorMotor.setIdleMode(IdleMode.kBrake);
     rightElevatorMotor.setSmartCurrentLimit(40);//Units in amps
+    rightElevatorMotor.follow(leftElevatorMotor, ElevatorConstants.invertRightMotor);
 
     //Burn flash to save configuration of motors
     leftElevatorMotor.burnFlash();
@@ -111,7 +116,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     //   setElevatorSpeed(0);
     // }
     elevatePositionControl.setReference(position, ControlType.kPosition);
-    rightElevatorMotor.follow(leftElevatorMotor, ElevatorConstants.invertRightMotor);
   }
   
   //Moving elevator based on speeds

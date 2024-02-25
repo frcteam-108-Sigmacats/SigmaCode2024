@@ -27,6 +27,9 @@ public final class Constants {
     //Distance between the centers of the front wheels and back wheels
       public static final double kWheelBase = Units.inchesToMeters(22.4375);
 
+    public static Translation2d frontL = new Translation2d(kWheelBase / 2.0, kTrackWidth / 2.0);
+    public static double flModuleNorm = frontL.getNorm();
+
     public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
       new Translation2d(kWheelBase / 2.0, kTrackWidth / 2.0), 
       new Translation2d(kWheelBase / 2.0, -kTrackWidth / 2.0),
@@ -136,8 +139,8 @@ public final class Constants {
     public static final int irSensorDIOPort = 0;
 
     //Values for the intake angle's
-    public static final double restPos = 25;//The rest position which will also be the handoff position
-    public static final double groundIntakePos = 150;//The position where we will intake from the ground (Find value first)
+    public static final double restPos = 0;//Switch to 25 later//The rest position which will also be the handoff position
+    public static final double groundIntakePos = 144;//The position where we will intake from the ground (Find value first)
 
     //The speeds for intaking, outtaking
     public static final double intakeSpeed = -1.0; //Keep at -100% unless needed to change (negative is to suck in the note and positive is to spit out if motor is not inverted)
@@ -162,12 +165,12 @@ public final class Constants {
     public static final int flywheelCurrentLimit = 40;
 
     //Pivot angles
-    public static final double restPos = 0; 
+    public static final double restPos = 110; //Switch to 1 later
     public static final double ampPos = 100;
 
     //PID gains for Pivot Controller
-    public static final double pivotP = 0.04;//Try to make the pivot faster
-    public static final double pivotI = 0.000006;
+    public static final double pivotP = 0.05;//Try to make the pivot faster
+    public static final double pivotI = 0.000008;
     public static final double pivotD = 0;
 
     //PID gains for Speed Control
@@ -187,8 +190,8 @@ public final class Constants {
 
     public static final double minDistInches = 28;
     public static final double maxDistInches = 131.0;
-    public static final double[] distSetPoints = {28, 50, 68, 71, 76, 81, 91, 101, 110, 116};
-    public static final double[] angleSetPoints = {12, 19, 21, 22, 24, 28, 30, 30, 32, 34};
+    public static final double[] distSetPoints = {32  , 50, 66  , 71, 76, 81, 91, 101, 110};
+    public static final double[] angleSetPoints = {9.8, 18, 19.2, 24, 26, 28, 30, 32, 33};
     public static final double maxDegrees = 30;
   }
   public static class ElevatorConstants{
@@ -197,7 +200,7 @@ public final class Constants {
     public static final int rightElevatorMotorID = 16;
 
     //PID gains for position control of elevator
-    public static final double kP = 0.02;//Change when robot is with software
+    public static final double kP = 0.7;//Change when robot is with software
     public static final double kI = 0;//Change when robot is with software
     public static final double kD = 0.0;//Change when robot is with software
 
@@ -208,10 +211,10 @@ public final class Constants {
 
     public static double positionConversion;
 
-    public static double ampPos = 28;
+    public static double ampPos = 1;
 
     //Do we need to invert the motor direction to have the right motor follow the left motor
-    public static boolean invertRightMotor = false;
+    public static boolean invertRightMotor = true;
   }
 
   //Class for limelight using AI Object Detection

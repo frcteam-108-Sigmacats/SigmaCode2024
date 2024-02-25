@@ -20,12 +20,18 @@ import frc.robot.commands.ShooterCmds.SetIndexRollerSpeeds;
 import frc.robot.commands.ShooterCmds.ShooterTransfer;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDs;
 import frc.robot.Constants.ShooterMechConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Vision;
 
 import java.sql.DriverAction;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathPlannerPath;
+
+import frc.robot.commands.SetLEDS;
 import frc.robot.commands.ControllerCmds.AmpShootWElevator;
 import frc.robot.commands.ControllerCmds.AutoAlignNote;
 import frc.robot.commands.ControllerCmds.AutoAlignTag;
@@ -37,6 +43,8 @@ import frc.robot.commands.ControllerCmds.StopTransferANDIntake;
 import frc.robot.commands.ElevatorCmds.SetElevatorPosition;
 import frc.robot.commands.ElevatorCmds.SetElevatorSpeed;
 import frc.robot.subsystems.ElevatorSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -60,6 +68,10 @@ public class RobotContainer {
 
   private final Vision visionSub = new Vision();
 
+  private final LEDs ledSubsystem = new LEDs();
+
+  private SendableChooser<Command> chooser = new SendableChooser<>();
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController = new 
   CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -76,9 +88,11 @@ public class RobotContainer {
     //Intake does not move from rest position
     intakeSubsystem.setDefaultCommand(new RestIntakeCmd(intakeSubsystem));
     shooterSub.setDefaultCommand(new RestShooter(shooterSub));
+    ledSubsystem.setDefaultCommand(new SetLEDS(ledSubsystem, intakeSubsystem));
 
     // Configure the trigger bindings
     configureBindings();
+    makeAuto();
     dRTrigger.whileTrue(new IntakeANDTransferCmd(intakeSubsystem, shooterSub));
     dRTrigger.whileFalse(new StopTransferANDIntake(intakeSubsystem, shooterSub));
     // dLTrigger.whileTrue(new SetAngleAndFlywheelSpeeds(shooterSub, intakeSubsystem, ShooterMechConstants.restPos, ShooterMechConstants.flywheelShootSpeed, ShooterMechConstants.indexShootSpeed));
@@ -90,19 +104,20 @@ public class RobotContainer {
     dLBumper.whileTrue(new OuttakeANDTransferCmd(intakeSubsystem, shooterSub, IntakeConstants.outtakeSpeed, IntakeConstants.reverseTransferSpeed, -ShooterMechConstants.indexTransferSpeed, -ShooterMechConstants.flywheelShootSpeed));
     dLBumper.whileFalse(new StopTransferANDIntake(intakeSubsystem, shooterSub));
     dRBumper.whileTrue(new AmpShootWElevator(elevatorSubsystem, shooterSub));
-    dRBumper.whileFalse(new ParallelCommandGroup(new RestShooter(shooterSub), new SetElevatorPosition(elevatorSubsystem, 5)));
+    // dRBumper.whileTrue(new AmpShoot(shooterSub));
+    dRBumper.whileFalse(new ParallelCommandGroup(new RestShooter(shooterSub), new SetElevatorPosition(elevatorSubsystem, 0)));
     // kA.whileTrue(new AutoAlignNote(driveSubsystem, visionSub, driveController, fieldRelative));
     // kA.whileFalse(new DriveJoystick(driveSubsystem, driveController, fieldRelative));
     kA.onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
     // kB.whileTrue(new AutoAlignTag(driveSubsystem, visionSub, driveController, fieldRelative));
     // kB.whileFalse(new DriveJoystick(driveSubsystem, driveController, fieldRelative));
     
-    dPadDown.whileTrue(new SetElevatorSpeed(elevatorSubsystem, -1.0));
-    dPadDown.whileFalse(new SetElevatorSpeed(elevatorSubsystem, 0));
-    dPadUp.whileTrue(new SetElevatorSpeed(elevatorSubsystem, 0.3));
-    dPadUp.whileFalse(new SetElevatorSpeed(elevatorSubsystem, 0));
-    // dPadUp.whileTrue(new SetElevatorPosition(elevatorSubsystem, 58));
-    // dPadDown.whileTrue(new SetElevatorPosition(elevatorSubsystem, 5));
+    // dPadDown.whileTrue(new SetElevatorSpeed(elevatorSubsystem, -0.3));
+    // dPadDown.whileFalse(new SetElevatorSpeed(elevatorSubsystem, 0));
+    // dPadUp.whileTrue(new SetElevatorSpeed(elevatorSubsystem, 0.3));
+    // dPadUp.whileFalse(new SetElevatorSpeed(elevatorSubsystem, 0));
+    dPadUp.whileTrue(new SetElevatorPosition(elevatorSubsystem, 1.99));
+    dPadDown.whileTrue(new SetElevatorPosition(elevatorSubsystem, 0.05));
   }
 
   /**
@@ -129,6 +144,34 @@ public class RobotContainer {
     dPadDown = driveController.povDown();
   }
 
+  public void makeAuto(){
+    NamedCommands.registerCommand("RestShooter", new RestShooter(shooterSub));
+    NamedCommands.registerCommand("RunIntake", new IntakeANDTransferCmd(intakeSubsystem, shooterSub));
+    NamedCommands.registerCommand("AutoShooter", new AutoShooterWithAlign(driveSubsystem, visionSub, shooterSub, intakeSubsystem, driveController, false));
+    NamedCommands.registerCommand("RestIntake", new RestIntakeCmd(intakeSubsystem));
+
+    PathPlannerPath sourceZonePath = PathPlannerPath.fromPathFile("SourceZonePath1");
+    PathPlannerPath middlePath = PathPlannerPath.fromPathFile("MiddlePath1");
+
+    Command sourceZoneAuto = new SequentialCommandGroup(new InstantCommand(() -> 
+    driveSubsystem.resetOdometry(sourceZonePath.flipPath().getPreviewStartingHolonomicPose())), 
+    AutoBuilder.buildAuto("SourceZoneAuto"));
+
+    Command middleAuto = new SequentialCommandGroup(new 
+    InstantCommand(() -> 
+    driveSubsystem.resetOdometry(middlePath.flipPath().getPreviewStartingHolonomicPose())), 
+    AutoBuilder.buildAuto("MiddleAuto"));
+
+    Command testPath = new SequentialCommandGroup(new InstantCommand(() -> driveSubsystem.resetOdometry(sourceZonePath.flipPath().getPreviewStartingHolonomicPose())), AutoBuilder.followPath(sourceZonePath));
+
+    chooser.setDefaultOption("Nothing", null);
+    chooser.addOption("SourceZoneAuto", sourceZoneAuto);
+    chooser.addOption("Middle Auto", middleAuto);
+    chooser.addOption("Testing Path Follow", testPath);
+
+    SmartDashboard.putData(chooser);
+
+  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -136,6 +179,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return chooser.getSelected();
   }
 }

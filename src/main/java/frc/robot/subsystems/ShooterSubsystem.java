@@ -174,7 +174,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
   public void setFlyWheelSpeeds(double speed){
     shooterLeftMotor.set(speed);
-    shooterRightMotor.set(-speed);
+    shooterRightMotor.set((-speed) - 0.15);
   }
   public void setFlyWheelVelocity(double rpm){
     speedControl.setReference(rpm, ControlType.kVelocity);

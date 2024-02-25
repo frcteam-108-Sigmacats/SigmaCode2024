@@ -44,6 +44,7 @@ public class RunIntakeANDTransferCmd extends Command {
     counter = 0;
     isThereGamePiece = false;
     finish = false;
+    // System.out.println("Intake Starting");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -70,11 +71,13 @@ public class RunIntakeANDTransferCmd extends Command {
     intakeSubsystem.setIntakeAngle(IntakeConstants.groundIntakePos);
     intakeSubsystem.setIntakeSpeed(intakeSpeed);
     intakeSubsystem.setTransferSpeed(transferSpeed);
+    // System.out.println("Intake is running");
 
     // if(counter >= 8){
     //   finish = true;
     // }
     if(intakeSubsystem.getIRSensor() == true){
+      // System.out.println("Intake is Exiting");
       finish = true;
     }
   }

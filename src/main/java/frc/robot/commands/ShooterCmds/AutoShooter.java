@@ -40,6 +40,7 @@ public class AutoShooter extends Command {
   public void initialize() {
     finish = false;
     counter = 0;
+    System.out.println("Auto Shoot is starting");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -49,7 +50,11 @@ public class AutoShooter extends Command {
     for(int i = 0; i < ShooterMechConstants.distSetPoints.length; i++){
       if(i != ShooterMechConstants.distSetPoints.length - 1){
         if(currentDist >= ShooterMechConstants.distSetPoints[i] && currentDist <= ShooterMechConstants.distSetPoints[i + 1]){
-          pivotAngle = ShooterMechConstants.angleSetPoints[i];
+          double secondPoint = ShooterMechConstants.distSetPoints[i + 1];
+          double firstPoint = ShooterMechConstants.distSetPoints[i];
+          double firstPointAngle = ShooterMechConstants.angleSetPoints[i];
+          double secondPointAngle = ShooterMechConstants.angleSetPoints[i+1];
+          pivotAngle = (((currentDist - firstPoint) / (secondPoint - firstPoint)) * (secondPointAngle - firstPointAngle)) + firstPointAngle;
           break;
         }
       }
@@ -58,28 +63,30 @@ public class AutoShooter extends Command {
         break;
       }
     }
-    if(currentDist >= 0 && currentDist <= 76){
+    if(currentDist >= 0 && currentDist <= 71){
       speed = -0.55;
     }
-    else if(currentDist >= 76 && currentDist <= 97){
-      speed = -0.75;
-    }
-    else if(currentDist >= 97 && currentDist <= 113){
+    else if(currentDist > 71 && currentDist <= 97){
       speed = -0.8;
     }
-    else if(currentDist >= 113 && currentDist <= 116){
+    else if(currentDist > 97 && currentDist <= 109){
+      speed = -0.8;
+    }
+    else if(currentDist > 110 && currentDist <= 116){
       speed = -1.0;
     }
     else{
       speed = -1.0;
     }
+    System.out.println("Auto Shooter is running");
     counter++;
     shooterSub.setPivotAngle(pivotAngle);
     shooterSub.setFlyWheelSpeeds(speed);
-    if(counter >= 50){
+    if(counter >= 50 && pivotAngle - shooterSub.getPivotAngle() <= 1.0 && pivotAngle - shooterSub.getPivotAngle() >= 0){
       shooterSub.setIndexRollerSpeed(ShooterMechConstants.indexShootSpeed);
     }
     if(!intakeSub.getIRSensor()){
+      System.out.println("Auto Shooter is ending");
       finish = true;
     }
   }

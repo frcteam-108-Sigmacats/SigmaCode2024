@@ -23,7 +23,7 @@ public class AutoAlignTag extends Command {
 
   private CommandXboxController driveController;
 
-  private PIDController alignPID = new PIDController(0.03, 0, 0);
+  private PIDController alignPID = new PIDController(0.02, 0, 0);
 
   private double xAxis, yAxis, rotation;
 

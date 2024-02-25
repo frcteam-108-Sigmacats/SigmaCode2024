@@ -84,7 +84,7 @@ public class IntakeSubsystem extends SubsystemBase {
       pivotControl.setI(IntakeConstants.kI);//Sets the I gain (Error compensation power to reach the exact position)
       pivotControl.setD(IntakeConstants.kD);//Sets the D gain (Stop power (Basically helps with smoother stop of mechanism))
       pivotControl.setFeedbackDevice(intakeAbsEnc);//Sets the encoder we want the PID to follow 
-      pivotControl.setOutputRange(ModuleConstants.kTurningMinOutput,
+      pivotControl.setOutputRange(-0.5,
       ModuleConstants.kTurningMaxOutput);
 
     //Configuring Absolute Encoder
