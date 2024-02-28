@@ -40,7 +40,6 @@ public class AutoShooter extends Command {
   public void initialize() {
     finish = false;
     counter = 0;
-    System.out.println("Auto Shoot is starting");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -82,7 +81,7 @@ public class AutoShooter extends Command {
     counter++;
     shooterSub.setPivotAngle(pivotAngle);
     shooterSub.setFlyWheelSpeeds(speed);
-    if(counter >= 50 && pivotAngle - shooterSub.getPivotAngle() <= 1.0 && pivotAngle - shooterSub.getPivotAngle() >= 0){
+    if(counter >= 50 && Math.abs(pivotAngle - shooterSub.getPivotAngle()) <= 0.5 /*&& pivotAngle - shooterSub.getPivotAngle() >= 0*/){
       shooterSub.setIndexRollerSpeed(ShooterMechConstants.indexShootSpeed);
     }
     if(!intakeSub.getIRSensor()){

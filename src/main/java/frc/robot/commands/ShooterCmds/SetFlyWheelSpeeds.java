@@ -42,15 +42,15 @@ public class SetFlyWheelSpeeds extends Command {
   public void execute() {
     counter++;
     shooterSub.setFlyWheelSpeeds(flywheelSpeed);
-    System.out.println("Shooter running");
+    //System.out.println("Shooter running");
 
-    if(counter >= 150){
+    if(counter >= 50){
       shooterSub.setIndexRollerSpeed(indexSpeed);
     }
     else{
       shooterSub.setIndexRollerSpeed(0);
     }
-    if(counter >= 165){
+    if(!intakeSub.getIRSensor()){
       finish = true;
     }
   }

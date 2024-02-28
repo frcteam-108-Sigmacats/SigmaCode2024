@@ -139,7 +139,7 @@ public final class Constants {
     public static final int irSensorDIOPort = 0;
 
     //Values for the intake angle's
-    public static final double restPos = 0;//Switch to 25 later//The rest position which will also be the handoff position
+    public static final double restPos = 25;//Switch to 25 later//The rest position which will also be the handoff position
     public static final double groundIntakePos = 144;//The position where we will intake from the ground (Find value first)
 
     //The speeds for intaking, outtaking
@@ -165,8 +165,9 @@ public final class Constants {
     public static final int flywheelCurrentLimit = 40;
 
     //Pivot angles
-    public static final double restPos = 110; //Switch to 1 later
+    public static final double restPos = 0; //Switch to 1 later
     public static final double ampPos = 100;
+    public static final double climbPos = 110;
 
     //PID gains for Pivot Controller
     public static final double pivotP = 0.05;//Try to make the pivot faster
@@ -184,9 +185,11 @@ public final class Constants {
     //Speeds for the motors
     public static final double indexTransferSpeed = -0.25;//Keep at -33% for automatic intake (negative to suck in the note and positive to spit out unless the motor is inverted)
     public static final double indexShootSpeed = -1.0;//(negative to suck in the note and positive to spit out unless the motor is inverted)
+    public static final double indexOuttakeSpeed = 0.25;
 
     public static final double flywheelTransferSpeed = 0.1;
     public static final double flywheelShootSpeed = -1.0;
+    public static final double flywheelOuttakeSpeed = 1.0;
 
     public static final double minDistInches = 28;
     public static final double maxDistInches = 131.0;
@@ -211,7 +214,14 @@ public final class Constants {
 
     public static double positionConversion;
 
-    public static double ampPos = 1;
+    //Positions for Elevator
+    public static final double ampPos = 1;
+    public static final double climbUpPos = 1.99;
+    public static final double climbDownPos = 0.05;
+
+    //Speeds for Elevator
+    public static final double climbUpSpeed = 0.3;
+    public static final double climbDownSpeed = -0.3;
 
     //Do we need to invert the motor direction to have the right motor follow the left motor
     public static boolean invertRightMotor = true;

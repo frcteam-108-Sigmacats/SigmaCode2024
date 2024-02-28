@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.IntakeCmds.IntakeRollersRest;
@@ -11,12 +12,15 @@ import frc.robot.commands.IntakeCmds.RestIntakeCmd;
 import frc.robot.commands.IntakeCmds.RunIntakeANDTransferCmd;
 import frc.robot.commands.IntakeCmds.RunOuttakeANDReverseTransferCmd;
 import frc.robot.commands.IntakeCmds.TestIntakePivot;
+import frc.robot.commands.LEDs.SetLEDS;
 import frc.robot.commands.ShooterCmds.AmpShoot;
 import frc.robot.commands.ShooterCmds.AutoShooter;
 import frc.robot.commands.ShooterCmds.RestShooter;
+import frc.robot.commands.ShooterCmds.ReverseShooterTransfer;
 import frc.robot.commands.ShooterCmds.SetAngleAndFlywheelSpeeds;
 import frc.robot.commands.ShooterCmds.SetFlyWheelSpeeds;
 import frc.robot.commands.ShooterCmds.SetIndexRollerSpeeds;
+import frc.robot.commands.ShooterCmds.SetShooterPivotSpeed;
 import frc.robot.commands.ShooterCmds.ShooterTransfer;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -24,14 +28,17 @@ import frc.robot.subsystems.LEDs;
 import frc.robot.Constants.ShooterMechConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Vision;
+import pabeles.concurrency.ConcurrencyOps.NewInstance;
 
 import java.sql.DriverAction;
+
+import org.opencv.features2d.ORB;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
 
-import frc.robot.commands.SetLEDS;
+import frc.robot.commands.ClimbingCmd;
 import frc.robot.commands.ControllerCmds.AmpShootWElevator;
 import frc.robot.commands.ControllerCmds.AutoAlignNote;
 import frc.robot.commands.ControllerCmds.AutoAlignTag;
@@ -42,6 +49,7 @@ import frc.robot.commands.ControllerCmds.OuttakeANDTransferCmd;
 import frc.robot.commands.ControllerCmds.StopTransferANDIntake;
 import frc.robot.commands.ElevatorCmds.SetElevatorPosition;
 import frc.robot.commands.ElevatorCmds.SetElevatorSpeed;
+import frc.robot.commands.ElevatorCmds.SetServoSpeed;
 import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -76,10 +84,18 @@ public class RobotContainer {
   private final CommandXboxController driveController = new 
   CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-  //Instantiating the controllers buttons
+  private final CommandXboxController operatorController = new 
+  CommandXboxController(OperatorConstants.kOperatorControllerPort);
+
+  //Instantiating the controllers buttons for driver
   private Trigger dRTrigger, dLTrigger, dLBumper, dRBumper;
 
-  private Trigger kA, kB, dPadUp, dPadDown;
+  private Trigger dBA, dBB, dPadUp, dPadDown;
+
+  //Instantiating the controller buttons for operator
+  private Trigger oLTrigger, oRTrigger, oLBumper, oRBumper;
+
+  private Trigger oBA, oBY, oPadUp, oPadDown, oPadLeft, oPadRight;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -93,31 +109,83 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
     makeAuto();
-    dRTrigger.whileTrue(new IntakeANDTransferCmd(intakeSubsystem, shooterSub));
-    dRTrigger.whileFalse(new StopTransferANDIntake(intakeSubsystem, shooterSub));
+    //Driver Commands
+      //Driver Trigger Commands
+        dRTrigger.whileTrue(new AutoShooterWithAlign(driveSubsystem, visionSub, shooterSub, intakeSubsystem, driveController, fieldRelative));
+        dRTrigger.whileFalse(new RestShooter(shooterSub));
+
+        dLTrigger.whileTrue(new IntakeANDTransferCmd(intakeSubsystem, shooterSub));
+        dLTrigger.whileFalse(new RestIntakeCmd(intakeSubsystem));
+      
+      //Driver Bumper Commands
+        dLBumper.whileTrue(new OuttakeANDTransferCmd(intakeSubsystem, shooterSub, IntakeConstants.outtakeSpeed, IntakeConstants.reverseTransferSpeed, ShooterMechConstants.indexOuttakeSpeed, ShooterMechConstants.flywheelOuttakeSpeed));
+        dLBumper.whileFalse(new StopTransferANDIntake(intakeSubsystem, shooterSub));
+
+        dRBumper.whileTrue(new AmpShootWElevator(elevatorSubsystem, shooterSub));
+        dRBumper.whileFalse(new ParallelCommandGroup(new RestShooter(shooterSub), new SetElevatorPosition(elevatorSubsystem, 0)));
+
+      //Driver Button Commands
+        dBA.onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
+
+        dBB.whileTrue(new AutoAlignTag(driveSubsystem, visionSub, intakeSubsystem, driveController, fieldRelative));
+        dBB.whileFalse(new DriveJoystick(driveSubsystem, driveController, fieldRelative));
+
+      //Operator Commands
+        //Operator Trigger Commands
+          oLTrigger.whileTrue(new SetFlyWheelSpeeds(shooterSub, intakeSubsystem, ShooterMechConstants.flywheelShootSpeed, ShooterMechConstants.indexShootSpeed));
+          oLTrigger.whileFalse(new RestShooter(shooterSub));
+
+          oRTrigger.whileTrue(new ReverseShooterTransfer(shooterSub, intakeSubsystem, ShooterMechConstants.indexOuttakeSpeed, ShooterMechConstants.flywheelOuttakeSpeed));
+          oRTrigger.whileFalse(new RestShooter(shooterSub));
+
+        //Operator Bumper Commands
+          oLBumper.whileTrue(new ClimbingCmd(elevatorSubsystem, shooterSub, ElevatorConstants.climbUpPos));
+          
+          oRBumper.whileTrue(new ClimbingCmd(elevatorSubsystem, shooterSub, ElevatorConstants.climbDownPos));
+
+        //Operator Button Commands
+          oBY.whileTrue(new SetElevatorSpeed(elevatorSubsystem, 0.1));//Test later
+          oBY.whileFalse(new SetElevatorSpeed(elevatorSubsystem, 0));//Test later
+
+          oBA.whileTrue(new SetElevatorSpeed(elevatorSubsystem, -0.1));//Test later
+          oBA.whileFalse(new SetElevatorSpeed(elevatorSubsystem, 0));//Test later
+
+        //Operator POV Commands
+        oPadUp.whileTrue(new SetShooterPivotSpeed(shooterSub, 0.1));
+        oPadUp.whileFalse(new SetShooterPivotSpeed(shooterSub, 0));
+
+        oPadDown.whileTrue(new SetShooterPivotSpeed(shooterSub, -0.1));
+        oPadDown.whileFalse(new SetShooterPivotSpeed(shooterSub, 0));
+
+        oPadRight.whileTrue(new TestIntakePivot(intakeSubsystem, 0.1));
+        oPadRight.whileFalse(new TestIntakePivot(intakeSubsystem, 0));
+
+        oPadLeft.whileTrue(new TestIntakePivot(intakeSubsystem, -0.1));
+        oPadLeft.whileFalse(new TestIntakePivot(intakeSubsystem, 0));
+    // dRTrigger.whileTrue(new IntakeANDTransferCmd(intakeSubsystem, shooterSub));
+    // dRTrigger.whileFalse(new StopTransferANDIntake(intakeSubsystem, shooterSub));
     // dLTrigger.whileTrue(new SetAngleAndFlywheelSpeeds(shooterSub, intakeSubsystem, ShooterMechConstants.restPos, ShooterMechConstants.flywheelShootSpeed, ShooterMechConstants.indexShootSpeed));
     // dLTrigger.whileFalse(new SetAngleAndFlywheelSpeeds(shooterSub, intakeSubsystem, ShooterMechConstants.restPos, 0, 0));
     // dLTrigger.whileTrue(new AutoShooter(shooterSub, visionSub));
     // dLTrigger.whileFalse(new RestShooter(shooterSub));
-    dLTrigger.whileTrue(new AutoShooterWithAlign(driveSubsystem, visionSub, shooterSub, intakeSubsystem, driveController, fieldRelative));
-    dLTrigger.whileFalse(new RestShooter(shooterSub));
-    dLBumper.whileTrue(new OuttakeANDTransferCmd(intakeSubsystem, shooterSub, IntakeConstants.outtakeSpeed, IntakeConstants.reverseTransferSpeed, -ShooterMechConstants.indexTransferSpeed, -ShooterMechConstants.flywheelShootSpeed));
-    dLBumper.whileFalse(new StopTransferANDIntake(intakeSubsystem, shooterSub));
-    dRBumper.whileTrue(new AmpShootWElevator(elevatorSubsystem, shooterSub));
+    // dLTrigger.whileTrue(new AutoShooterWithAlign(driveSubsystem, visionSub, shooterSub, intakeSubsystem, driveController, fieldRelative));
+    // dLTrigger.whileFalse(new RestShooter(shooterSub));
+    // dLBumper.whileTrue(new OuttakeANDTransferCmd(intakeSubsystem, shooterSub, IntakeConstants.outtakeSpeed, IntakeConstants.reverseTransferSpeed, -ShooterMechConstants.indexTransferSpeed, -ShooterMechConstants.flywheelShootSpeed));
+    // dLBumper.whileFalse(new StopTransferANDIntake(intakeSubsystem, shooterSub));
     // dRBumper.whileTrue(new AmpShoot(shooterSub));
-    dRBumper.whileFalse(new ParallelCommandGroup(new RestShooter(shooterSub), new SetElevatorPosition(elevatorSubsystem, 0)));
     // kA.whileTrue(new AutoAlignNote(driveSubsystem, visionSub, driveController, fieldRelative));
     // kA.whileFalse(new DriveJoystick(driveSubsystem, driveController, fieldRelative));
-    kA.onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
     // kB.whileTrue(new AutoAlignTag(driveSubsystem, visionSub, driveController, fieldRelative));
     // kB.whileFalse(new DriveJoystick(driveSubsystem, driveController, fieldRelative));
+    // kB.whileTrue(new SetServoSpeed(elevatorSubsystem, -0.01));
+    // kB.whileFalse(new SetServoSpeed(elevatorSubsystem, 0));
     
     // dPadDown.whileTrue(new SetElevatorSpeed(elevatorSubsystem, -0.3));
     // dPadDown.whileFalse(new SetElevatorSpeed(elevatorSubsystem, 0));
     // dPadUp.whileTrue(new SetElevatorSpeed(elevatorSubsystem, 0.3));
     // dPadUp.whileFalse(new SetElevatorSpeed(elevatorSubsystem, 0));
-    dPadUp.whileTrue(new SetElevatorPosition(elevatorSubsystem, 1.99));
-    dPadDown.whileTrue(new SetElevatorPosition(elevatorSubsystem, 0.05));
+    // dPadUp.whileTrue(new SetElevatorPosition(elevatorSubsystem, 1.99));
+    // dPadDown.whileTrue(new SetElevatorPosition(elevatorSubsystem, 0.05));
   }
 
   /**
@@ -136,12 +204,29 @@ public class RobotContainer {
     // cancelling on release.
     dRTrigger = driveController.rightTrigger();
     dLTrigger = driveController.leftTrigger();
+
     dLBumper = driveController.leftBumper();
     dRBumper = driveController.rightBumper();
-    kA = driveController.a();
-    kB = driveController.b();
+
+    dBA = driveController.a();
+    dBB = driveController.b();
+
     dPadUp = driveController.povUp();
     dPadDown = driveController.povDown();
+
+    oLTrigger = operatorController.leftTrigger();
+    oRTrigger = operatorController.rightTrigger();
+
+    oLBumper = operatorController.leftBumper();
+    oRBumper = operatorController.rightBumper();
+
+    oBA = operatorController.a();
+    oBY = operatorController.y();
+
+    oPadUp = operatorController.povUp();
+    oPadDown = operatorController.povDown();
+    oPadLeft = operatorController.povLeft();
+    oPadRight = operatorController.povRight();
   }
 
   public void makeAuto(){

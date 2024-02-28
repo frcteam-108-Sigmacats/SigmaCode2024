@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.LEDs;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -28,7 +28,12 @@ public class SetLEDS extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ledSub.setLEDColor(0.2);
+    if(intakeSub.getIRSensor()){
+      ledSub.setLEDColor(0.07);
+    }
+    else{
+      ledSub.setLEDColor(-0.25);
+    }
   }
 
   // Called once the command ends or is interrupted.

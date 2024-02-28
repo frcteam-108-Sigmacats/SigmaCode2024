@@ -172,6 +172,11 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setPivotAngle(double angle){
     pivotControl.setReference(angle, ControlType.kPosition);
   }
+
+  public void setPivotSpeed(double speed){
+    shooterPivotMotor.set(speed);
+  }
+  
   public void setFlyWheelSpeeds(double speed){
     shooterLeftMotor.set(speed);
     shooterRightMotor.set((-speed) - 0.15);

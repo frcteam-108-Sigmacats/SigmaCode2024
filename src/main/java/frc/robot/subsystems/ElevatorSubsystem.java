@@ -11,6 +11,8 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.PWM;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,6 +22,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   //Instatiating elevator motors
   private CANSparkMax leftElevatorMotor;
   private CANSparkMax rightElevatorMotor;
+
+  private PWM leftStaticHook, rightStaticHook;
 
   //Instantiating PID Controller for position control on elevator
   private SparkPIDController elevatePositionControl;
@@ -31,6 +35,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     //Assign the IDs for the elevator motors
     leftElevatorMotor = new CANSparkMax(ElevatorConstants.leftElevatorMotorID, MotorType.kBrushless);
     rightElevatorMotor = new CANSparkMax(ElevatorConstants.rightElevatorMotorID, MotorType.kBrushless);
+
+    leftStaticHook = new PWM(1);
+    rightStaticHook = new PWM(2);
 
     leftElevatorMotor.restoreFactoryDefaults();
     rightElevatorMotor.restoreFactoryDefaults();
@@ -47,7 +54,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatePositionControl.setD(ElevatorConstants.kD);
     elevatePositionControl.setOutputRange(-0.98, 1.0);
     elevatePositionControl.setFeedbackDevice(elevateEnc);
-
     //Configure motors
     leftElevatorMotor.setIdleMode(IdleMode.kBrake);
     leftElevatorMotor.setSmartCurrentLimit(40);//Units in amps
@@ -92,6 +98,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Elevator Position", getElevatorPosition());//Getting the encoder count for setting position
+    SmartDashboard.putNumber("Get Left Hook Angle", leftStaticHook.getPosition());
+    SmartDashboard.putNumber("Get Right Hook Angle", rightStaticHook.getPosition());
   }
 
   @Override
@@ -122,5 +130,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void setElevatorSpeed(double speed){
     leftElevatorMotor.set(speed);
     rightElevatorMotor.set(speed);
+  }
+  public void setServoSpeed(double speed){
+    leftStaticHook.setSpeed(speed);
+    rightStaticHook.setSpeed(-speed);
   }
 }
