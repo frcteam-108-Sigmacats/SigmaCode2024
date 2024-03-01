@@ -25,12 +25,13 @@ public class AutoShooter extends Command {
 
   private double speed = 0;
 
-  private boolean finish;
+  private boolean finish, runIndex;
   /** Creates a new AutoPivotShooter. */
-  public AutoShooter(ShooterSubsystem shooterSub, Vision visionSub, IntakeSubsystem intakeSub) {
+  public AutoShooter(ShooterSubsystem shooterSub, Vision visionSub, IntakeSubsystem intakeSub, boolean runIndex) {
     this.shooterSub = shooterSub;
     this.visionSub = visionSub;
     this.intakeSub = intakeSub;
+    this.runIndex = runIndex;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSub);
   }
@@ -81,8 +82,14 @@ public class AutoShooter extends Command {
     counter++;
     shooterSub.setPivotAngle(pivotAngle);
     shooterSub.setFlyWheelSpeeds(speed);
-    if(counter >= 50 && Math.abs(pivotAngle - shooterSub.getPivotAngle()) <= 0.5 /*&& pivotAngle - shooterSub.getPivotAngle() >= 0*/){
+    // if(counter >= 50 && Math.abs(pivotAngle - shooterSub.getPivotAngle()) <= 0.5 /*&& pivotAngle - shooterSub.getPivotAngle() >= 0*/){
+    //   shooterSub.setIndexRollerSpeed(ShooterMechConstants.indexShootSpeed);
+    // }
+    if(runIndex){
       shooterSub.setIndexRollerSpeed(ShooterMechConstants.indexShootSpeed);
+    }
+    else{
+      shooterSub.setIndexRollerSpeed(0);
     }
     if(!intakeSub.getIRSensor()){
       System.out.println("Auto Shooter is ending");

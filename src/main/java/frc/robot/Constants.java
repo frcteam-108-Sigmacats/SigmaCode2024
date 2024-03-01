@@ -139,8 +139,8 @@ public final class Constants {
     public static final int irSensorDIOPort = 0;
 
     //Values for the intake angle's
-    public static final double restPos = 25;//Switch to 25 later//The rest position which will also be the handoff position
-    public static final double groundIntakePos = 144;//The position where we will intake from the ground (Find value first)
+    public static final double restPos = 0;//Switch to 25 later//The rest position which will also be the handoff position
+    public static final double groundIntakePos = 133;//The position where we will intake from the ground (Find value first)
 
     //The speeds for intaking, outtaking
     public static final double intakeSpeed = -1.0; //Keep at -100% unless needed to change (negative is to suck in the note and positive is to spit out if motor is not inverted)
@@ -189,6 +189,7 @@ public final class Constants {
 
     public static final double flywheelTransferSpeed = 0.1;
     public static final double flywheelShootSpeed = -1.0;
+    public static final double flywheelAmpShootSpeed = -0.4;
     public static final double flywheelOuttakeSpeed = 1.0;
 
     public static final double minDistInches = 28;

@@ -29,9 +29,9 @@ public class AutoAlignTag extends Command {
 
   private Translation2d translation = new Translation2d();
 
-  private boolean fieldRelative;
+  private boolean fieldRelative, shooterAlign;
   /** Creates a new AutoAlignTag. */
-  public AutoAlignTag(DriveSubsystem driveSub, Vision visionSub, IntakeSubsystem intakeSub, CommandXboxController driveController, boolean fieldRelative) {
+  public AutoAlignTag(DriveSubsystem driveSub, Vision visionSub, IntakeSubsystem intakeSub, CommandXboxController driveController, boolean fieldRelative, boolean shooterAlign) {
     this.driveSub = driveSub;
     this.visionSub = visionSub;
     this.intakeSub = intakeSub;
@@ -39,6 +39,7 @@ public class AutoAlignTag extends Command {
     this.driveController = driveController;
 
     this.fieldRelative = fieldRelative;
+    this.shooterAlign = shooterAlign;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveSub);
   }
@@ -52,9 +53,14 @@ public class AutoAlignTag extends Command {
   public void execute() {
     xAxis = -driveController.getLeftX();
     yAxis = -driveController.getLeftY();
-    if(visionSub.isThereTag()){
-      rotation = alignPID.calculate(visionSub.getAprilTagXOffset(), 0);
-      System.out.println("PID:" + rotation);
+    if(visionSub.isThereTag() && shooterAlign){
+      if(visionSub.doesItSeeSpeaker()){
+        rotation = alignPID.calculate(visionSub.getAprilTagXOffset(), 0);
+        System.out.println("PID:" + rotation);
+      }
+      else{
+        rotation = 0;
+      }
     }
     else{
       rotation = 0;

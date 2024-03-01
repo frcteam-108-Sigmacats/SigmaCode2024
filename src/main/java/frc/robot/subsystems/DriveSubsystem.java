@@ -68,14 +68,14 @@ public class DriveSubsystem extends SubsystemBase {
     this::driveRobotRelative, 
     new HolonomicPathFollowerConfig(new PIDConstants(5.0, 0, 0), 
     new PIDConstants(5.0, 0, 0), 3.0, 
-    ChassisConstants.frontL.getNorm(), new ReplanningConfig()), //() -> {
-      // var alliance = DriverStation.getAlliance();
-      // if(alliance.isPresent()){
-      //   return alliance.get() == DriverStation.Alliance.Red;
-      // }
-      // return false;
-       () -> true
-     /* }*/, this);
+    ChassisConstants.frontL.getNorm(), new ReplanningConfig()), () -> {
+      var alliance = DriverStation.getAlliance();
+      if(alliance.isPresent()){
+        return alliance.get() == DriverStation.Alliance.Red;
+      }
+      return false;
+       //() -> true   
+      }, this);
   }
 
   //Gets the angle of the robots direction

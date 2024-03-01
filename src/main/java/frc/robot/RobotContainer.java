@@ -20,6 +20,7 @@ import frc.robot.commands.ShooterCmds.ReverseShooterTransfer;
 import frc.robot.commands.ShooterCmds.SetAngleAndFlywheelSpeeds;
 import frc.robot.commands.ShooterCmds.SetFlyWheelSpeeds;
 import frc.robot.commands.ShooterCmds.SetIndexRollerSpeeds;
+import frc.robot.commands.ShooterCmds.SetPivotAngle;
 import frc.robot.commands.ShooterCmds.SetShooterPivotSpeed;
 import frc.robot.commands.ShooterCmds.ShooterTransfer;
 import frc.robot.subsystems.DriveSubsystem;
@@ -31,6 +32,7 @@ import frc.robot.subsystems.Vision;
 import pabeles.concurrency.ConcurrencyOps.NewInstance;
 
 import java.sql.DriverAction;
+import java.time.Instant;
 
 import org.opencv.features2d.ORB;
 
@@ -38,7 +40,10 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
 
-import frc.robot.commands.ClimbingCmd;
+import frc.robot.commands.AutonomousAutoShooterWAlign;
+import frc.robot.commands.ClimbDownCmd;
+import frc.robot.commands.ClimbingUpCmd;
+import frc.robot.commands.KeepClimbCmd;
 import frc.robot.commands.ControllerCmds.AmpShootWElevator;
 import frc.robot.commands.ControllerCmds.AutoAlignNote;
 import frc.robot.commands.ControllerCmds.AutoAlignTag;
@@ -95,7 +100,7 @@ public class RobotContainer {
   //Instantiating the controller buttons for operator
   private Trigger oLTrigger, oRTrigger, oLBumper, oRBumper;
 
-  private Trigger oBA, oBY, oPadUp, oPadDown, oPadLeft, oPadRight;
+  private Trigger oBA, oBY, oBX, oPadUp, oPadDown, oPadLeft, oPadRight;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -111,8 +116,9 @@ public class RobotContainer {
     makeAuto();
     //Driver Commands
       //Driver Trigger Commands
-        dRTrigger.whileTrue(new AutoShooterWithAlign(driveSubsystem, visionSub, shooterSub, intakeSubsystem, driveController, fieldRelative));
-        dRTrigger.whileFalse(new RestShooter(shooterSub));
+        dRTrigger.whileTrue(new AutoShooterWithAlign(driveSubsystem, visionSub, shooterSub, intakeSubsystem, driveController, fieldRelative, false, true));
+        // dRTrigger.whileFalse(new RestShooter(shooterSub));
+        dRTrigger.whileFalse(new AutoShooterWithAlign(driveSubsystem, visionSub, shooterSub, intakeSubsystem, driveController, fieldRelative, true, true));
 
         dLTrigger.whileTrue(new IntakeANDTransferCmd(intakeSubsystem, shooterSub));
         dLTrigger.whileFalse(new RestIntakeCmd(intakeSubsystem));
@@ -127,7 +133,7 @@ public class RobotContainer {
       //Driver Button Commands
         dBA.onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
 
-        dBB.whileTrue(new AutoAlignTag(driveSubsystem, visionSub, intakeSubsystem, driveController, fieldRelative));
+        dBB.whileTrue(new AutoAlignTag(driveSubsystem, visionSub, intakeSubsystem, driveController, fieldRelative, false));
         dBB.whileFalse(new DriveJoystick(driveSubsystem, driveController, fieldRelative));
 
       //Operator Commands
@@ -139,9 +145,11 @@ public class RobotContainer {
           oRTrigger.whileFalse(new RestShooter(shooterSub));
 
         //Operator Bumper Commands
-          oLBumper.whileTrue(new ClimbingCmd(elevatorSubsystem, shooterSub, ElevatorConstants.climbUpPos));
+          oLBumper.whileTrue(new ClimbingUpCmd(elevatorSubsystem, shooterSub, ElevatorConstants.climbUpPos));
+          oLBumper.whileFalse(new KeepClimbCmd(elevatorSubsystem, shooterSub, ElevatorConstants.climbUpPos));
           
-          oRBumper.whileTrue(new ClimbingCmd(elevatorSubsystem, shooterSub, ElevatorConstants.climbDownPos));
+          oRBumper.whileTrue(new ClimbDownCmd(elevatorSubsystem, shooterSub));
+          oRBumper.whileFalse(new KeepClimbCmd(elevatorSubsystem, shooterSub, ElevatorConstants.climbDownPos));
 
         //Operator Button Commands
           oBY.whileTrue(new SetElevatorSpeed(elevatorSubsystem, 0.1));//Test later
@@ -149,6 +157,9 @@ public class RobotContainer {
 
           oBA.whileTrue(new SetElevatorSpeed(elevatorSubsystem, -0.1));//Test later
           oBA.whileFalse(new SetElevatorSpeed(elevatorSubsystem, 0));//Test later
+
+          oBX.whileTrue(new ParallelCommandGroup(new SetElevatorPosition(elevatorSubsystem, 0), new SetPivotAngle(shooterSub, ShooterMechConstants.restPos)));
+          oBX.whileFalse(new ParallelCommandGroup(new SetElevatorPosition(elevatorSubsystem, 0), new RestShooter(shooterSub)));
 
         //Operator POV Commands
         oPadUp.whileTrue(new SetShooterPivotSpeed(shooterSub, 0.1));
@@ -222,6 +233,7 @@ public class RobotContainer {
 
     oBA = operatorController.a();
     oBY = operatorController.y();
+    oBX = operatorController.x();
 
     oPadUp = operatorController.povUp();
     oPadDown = operatorController.povDown();
@@ -232,26 +244,36 @@ public class RobotContainer {
   public void makeAuto(){
     NamedCommands.registerCommand("RestShooter", new RestShooter(shooterSub));
     NamedCommands.registerCommand("RunIntake", new IntakeANDTransferCmd(intakeSubsystem, shooterSub));
-    NamedCommands.registerCommand("AutoShooter", new AutoShooterWithAlign(driveSubsystem, visionSub, shooterSub, intakeSubsystem, driveController, false));
+    NamedCommands.registerCommand("AutoShooter", new AutonomousAutoShooterWAlign(driveSubsystem, visionSub, shooterSub, intakeSubsystem, driveController, true));
     NamedCommands.registerCommand("RestIntake", new RestIntakeCmd(intakeSubsystem));
 
     PathPlannerPath sourceZonePath = PathPlannerPath.fromPathFile("SourceZonePath1");
     PathPlannerPath middlePath = PathPlannerPath.fromPathFile("MiddlePath1");
 
-    Command sourceZoneAuto = new SequentialCommandGroup(new InstantCommand(() -> 
+    Command redSourceZoneAuto = new SequentialCommandGroup(new InstantCommand(() -> 
     driveSubsystem.resetOdometry(sourceZonePath.flipPath().getPreviewStartingHolonomicPose())), 
     AutoBuilder.buildAuto("SourceZoneAuto"));
 
-    Command middleAuto = new SequentialCommandGroup(new 
+    Command blueSourceZoneAuto = new SequentialCommandGroup(new InstantCommand(() -> 
+    driveSubsystem.resetOdometry(sourceZonePath.getPreviewStartingHolonomicPose())), 
+    AutoBuilder.buildAuto("SourceZoneAuto"));
+
+    Command redMiddleAuto = new SequentialCommandGroup(new 
     InstantCommand(() -> 
     driveSubsystem.resetOdometry(middlePath.flipPath().getPreviewStartingHolonomicPose())), 
+    AutoBuilder.buildAuto("MiddleAuto"));
+
+    Command blueMiddleAuto = new SequentialCommandGroup(new InstantCommand(() -> 
+    driveSubsystem.resetOdometry(middlePath.getPreviewStartingHolonomicPose())), 
     AutoBuilder.buildAuto("MiddleAuto"));
 
     Command testPath = new SequentialCommandGroup(new InstantCommand(() -> driveSubsystem.resetOdometry(sourceZonePath.flipPath().getPreviewStartingHolonomicPose())), AutoBuilder.followPath(sourceZonePath));
 
     chooser.setDefaultOption("Nothing", null);
-    chooser.addOption("SourceZoneAuto", sourceZoneAuto);
-    chooser.addOption("Middle Auto", middleAuto);
+    chooser.addOption("Red SourceZoneAuto", redSourceZoneAuto);
+    chooser.addOption("Red Middle Auto", redMiddleAuto);
+    chooser.addOption("Blue Middle Auto", blueMiddleAuto);
+    chooser.addOption("Blue Source Zone Path", blueSourceZoneAuto);
     chooser.addOption("Testing Path Follow", testPath);
 
     SmartDashboard.putData(chooser);

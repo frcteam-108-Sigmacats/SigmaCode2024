@@ -74,6 +74,16 @@ public class Vision extends SubsystemBase {
     }
   }
 
+  public boolean doesItSeeSpeaker(){
+    double tagID = aprilTagLimelight.getEntry("tid").getDouble(0.0);
+    if(tagID == 4 || tagID == 7){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
   // //Gets distance from the note to the robot
   // public double getNoteDistanceFromRobot(){
   //   double angleToGoalDegrees = LimelightNoteConstants.limelightMountAngleDegrees + getAIObjectYOffset();

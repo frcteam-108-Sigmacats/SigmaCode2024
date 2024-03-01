@@ -26,7 +26,7 @@ public class AmpShoot extends Command {
   public void execute() {
     shooterSub.setPivotAngle(ShooterMechConstants.ampPos);
     if(Math.abs(ShooterMechConstants.ampPos - shooterSub.getPivotAngle()) <=5 ){
-      shooterSub.setFlyWheelSpeeds(ShooterMechConstants.flywheelShootSpeed);
+      shooterSub.setFlyWheelSpeeds(ShooterMechConstants.flywheelAmpShootSpeed);
       shooterSub.setIndexRollerSpeed(ShooterMechConstants.indexShootSpeed);
     }
   }
