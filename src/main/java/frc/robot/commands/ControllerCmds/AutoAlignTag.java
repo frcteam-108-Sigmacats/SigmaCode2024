@@ -59,11 +59,11 @@ public class AutoAlignTag extends Command {
         System.out.println("PID:" + rotation);
       }
       else{
-        rotation = 0;
+        rotation = (Math.abs(-driveController.getRightX()) < ChassisConstants.deadband ? 0 : (-driveController.getRightX() * 10));
       }
     }
     else{
-      rotation = 0;
+      rotation = (Math.abs(-driveController.getRightX()) < ChassisConstants.deadband ? 0 : (-driveController.getRightX() * 10));
     }
     yAxis = (Math.abs(yAxis) < ChassisConstants.deadband ? 0 : yAxis * 0.3);
     xAxis = (Math.abs(xAxis) < ChassisConstants.deadband ? 0 : xAxis * 0.3);

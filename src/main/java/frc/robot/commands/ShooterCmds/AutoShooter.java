@@ -64,7 +64,7 @@ public class AutoShooter extends Command {
       }
     }
     if(currentDist >= 0 && currentDist <= 71){
-      speed = -0.55;
+      speed = -0.65;
     }
     else if(currentDist > 71 && currentDist <= 97){
       speed = -0.8;

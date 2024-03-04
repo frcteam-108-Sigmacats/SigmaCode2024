@@ -99,7 +99,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Elevator Position", getElevatorPosition());//Getting the encoder count for setting position
     SmartDashboard.putNumber("Get Left Hook Angle", leftStaticHook.getPosition());
-    SmartDashboard.putNumber("Get Right Hook Angle", rightStaticHook.getPosition());
+    SmartDashboard.putNumber("Get Right Hook Angle", rightStaticHook.getPosition());  
+    SmartDashboard.putNumber("Left Elevator Motor:", leftElevatorMotor.get());
+    SmartDashboard.putNumber("Right Motor Speed:", rightElevatorMotor.get());  
   }
 
   @Override

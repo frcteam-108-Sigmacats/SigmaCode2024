@@ -10,16 +10,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ChassisConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Vision;
 
 public class AutoAlignNote extends Command {
   private DriveSubsystem driveSub;
 
+  private IntakeSubsystem intakeSub;
+
   private Vision visionSub;
 
   private CommandXboxController driveController;
 
-  private PIDController alignPID = new PIDController(0.01, 0, 0);
+  private PIDController alignPID = new PIDController(0.1, 0, 0);
 
   private double xAxis, yAxis, rotation;
 
@@ -27,9 +30,10 @@ public class AutoAlignNote extends Command {
 
   private boolean fieldRelative;
   /** Creates a new AutoAlignNote. */
-  public AutoAlignNote(DriveSubsystem driveSub, Vision visionSub, CommandXboxController driveController, boolean fieldRelative) {
+  public AutoAlignNote(DriveSubsystem driveSub, Vision visionSub, IntakeSubsystem intakeSub, CommandXboxController driveController, boolean fieldRelative) {
     this.driveSub = driveSub;
     this.visionSub = visionSub;
+    this.intakeSub = intakeSub;
 
     this.driveController = driveController;
 
@@ -52,7 +56,7 @@ public class AutoAlignNote extends Command {
       rotation = -alignPID.calculate(visionSub.getAIObjectXOffset(), 0);
     }
     else{
-      rotation = 0;
+      rotation = (Math.abs(-driveController.getRightX()) < ChassisConstants.deadband ? 0 : (-driveController.getRightX() * 10));
     }
     yAxis = (Math.abs(yAxis) < ChassisConstants.deadband ? 0 : yAxis * 0.3);
     xAxis = (Math.abs(xAxis) < ChassisConstants.deadband ? 0 : xAxis * 0.3);
@@ -68,6 +72,11 @@ public class AutoAlignNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if(intakeSub.getIRSensor()){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 }

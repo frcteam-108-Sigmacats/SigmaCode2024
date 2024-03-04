@@ -104,7 +104,7 @@ public class ShooterSubsystem extends SubsystemBase {
     pivotControl.setD(ShooterMechConstants.pivotD);
     pivotControl.setFeedbackDevice(shooterPivotAbsEnc);
     pivotControl.setOutputRange(-0.3,
-    0.7);
+    0.5);
 
     speedControl.setP(ShooterMechConstants.speedP);
     speedControl.setI(ShooterMechConstants.speedI);
@@ -176,7 +176,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setPivotSpeed(double speed){
     shooterPivotMotor.set(speed);
   }
-  
+
   public void setFlyWheelSpeeds(double speed){
     shooterLeftMotor.set(speed);
     shooterRightMotor.set((-speed) - 0.15);

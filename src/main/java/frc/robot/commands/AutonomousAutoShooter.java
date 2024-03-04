@@ -79,7 +79,7 @@ public class AutonomousAutoShooter extends Command {
     counter++;
     shooterSub.setPivotAngle(pivotAngle);
     shooterSub.setFlyWheelSpeeds(speed);
-    if(counter >= 50 /*&& pivotAngle - shooterSub.getPivotAngle() >= 0*/){
+    if(counter >= 50 /*&& pivotAngle - shooterSub.getPivotAngle() <= 1*/){
       shooterSub.setIndexRollerSpeed(ShooterMechConstants.indexShootSpeed);
     }
 

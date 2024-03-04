@@ -15,6 +15,7 @@ import frc.robot.commands.IntakeCmds.TestIntakePivot;
 import frc.robot.commands.LEDs.SetLEDS;
 import frc.robot.commands.ShooterCmds.AmpShoot;
 import frc.robot.commands.ShooterCmds.AutoShooter;
+import frc.robot.commands.ShooterCmds.DummyShooter;
 import frc.robot.commands.ShooterCmds.RestShooter;
 import frc.robot.commands.ShooterCmds.ReverseShooterTransfer;
 import frc.robot.commands.ShooterCmds.SetAngleAndFlywheelSpeeds;
@@ -49,6 +50,7 @@ import frc.robot.commands.ControllerCmds.AutoAlignNote;
 import frc.robot.commands.ControllerCmds.AutoAlignTag;
 import frc.robot.commands.ControllerCmds.AutoShooterWithAlign;
 import frc.robot.commands.ControllerCmds.DriveJoystick;
+import frc.robot.commands.ControllerCmds.IntakeANDTransferANDAlignCmd;
 import frc.robot.commands.ControllerCmds.IntakeANDTransferCmd;
 import frc.robot.commands.ControllerCmds.OuttakeANDTransferCmd;
 import frc.robot.commands.ControllerCmds.StopTransferANDIntake;
@@ -95,7 +97,7 @@ public class RobotContainer {
   //Instantiating the controllers buttons for driver
   private Trigger dRTrigger, dLTrigger, dLBumper, dRBumper;
 
-  private Trigger dBA, dBB, dPadUp, dPadDown;
+  private Trigger dBA, dBB, dBY, dPadUp, dPadDown;
 
   //Instantiating the controller buttons for operator
   private Trigger oLTrigger, oRTrigger, oLBumper, oRBumper;
@@ -120,21 +122,26 @@ public class RobotContainer {
         // dRTrigger.whileFalse(new RestShooter(shooterSub));
         dRTrigger.whileFalse(new AutoShooterWithAlign(driveSubsystem, visionSub, shooterSub, intakeSubsystem, driveController, fieldRelative, true, true));
 
-        dLTrigger.whileTrue(new IntakeANDTransferCmd(intakeSubsystem, shooterSub));
+        dLTrigger.whileTrue(new IntakeANDTransferANDAlignCmd(intakeSubsystem, shooterSub, driveSubsystem, visionSub, driveController, fieldRelative));
         dLTrigger.whileFalse(new RestIntakeCmd(intakeSubsystem));
       
       //Driver Bumper Commands
         dLBumper.whileTrue(new OuttakeANDTransferCmd(intakeSubsystem, shooterSub, IntakeConstants.outtakeSpeed, IntakeConstants.reverseTransferSpeed, ShooterMechConstants.indexOuttakeSpeed, ShooterMechConstants.flywheelOuttakeSpeed));
         dLBumper.whileFalse(new StopTransferANDIntake(intakeSubsystem, shooterSub));
 
-        dRBumper.whileTrue(new AmpShootWElevator(elevatorSubsystem, shooterSub));
-        dRBumper.whileFalse(new ParallelCommandGroup(new RestShooter(shooterSub), new SetElevatorPosition(elevatorSubsystem, 0)));
+        // dRBumper.whileTrue(new AmpShootWElevator(elevatorSubsystem, shooterSub));
+        dRBumper.whileTrue(new AmpShoot(shooterSub));
+        dRBumper.whileFalse(new RestShooter(shooterSub));
+        // dRBumper.whileFalse(new ParallelCommandGroup(new RestShooter(shooterSub), new SetElevatorPosition(elevatorSubsystem, 0)));
 
       //Driver Button Commands
         dBA.onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));
 
         dBB.whileTrue(new AutoAlignTag(driveSubsystem, visionSub, intakeSubsystem, driveController, fieldRelative, false));
         dBB.whileFalse(new DriveJoystick(driveSubsystem, driveController, fieldRelative));
+
+        dBY.whileTrue(new DummyShooter(shooterSub, intakeSubsystem, false));
+        dBY.whileFalse(new DummyShooter(shooterSub, intakeSubsystem, true));
 
       //Operator Commands
         //Operator Trigger Commands
@@ -221,6 +228,7 @@ public class RobotContainer {
 
     dBA = driveController.a();
     dBB = driveController.b();
+    dBY = driveController.y();
 
     dPadUp = driveController.povUp();
     dPadDown = driveController.povDown();
@@ -270,7 +278,7 @@ public class RobotContainer {
     Command testPath = new SequentialCommandGroup(new InstantCommand(() -> driveSubsystem.resetOdometry(sourceZonePath.flipPath().getPreviewStartingHolonomicPose())), AutoBuilder.followPath(sourceZonePath));
 
     chooser.setDefaultOption("Nothing", null);
-    chooser.addOption("Red SourceZoneAuto", redSourceZoneAuto);
+    chooser.addOption("Red Source Zone Auto", redSourceZoneAuto);
     chooser.addOption("Red Middle Auto", redMiddleAuto);
     chooser.addOption("Blue Middle Auto", blueMiddleAuto);
     chooser.addOption("Blue Source Zone Path", blueSourceZoneAuto);

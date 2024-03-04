@@ -18,12 +18,12 @@ import frc.robot.subsystems.Vision;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class IntakeANDTransferCmd extends ParallelCommandGroup {
+public class IntakeANDTransferANDAlignCmd extends ParallelCommandGroup {
   /** Creates a new IntakeANDTransferCmd. */
-  public IntakeANDTransferCmd(IntakeSubsystem intakeSub, ShooterSubsystem shooterSub) {
+  public IntakeANDTransferANDAlignCmd(IntakeSubsystem intakeSub, ShooterSubsystem shooterSub, DriveSubsystem driveSub, Vision visionSub, CommandXboxController driverController, boolean fieldRelative) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new RunIntakeANDTransferCmd(intakeSub, IntakeConstants.intakeSpeed,
+    addCommands(new AutoAlignNote(driveSub, visionSub, intakeSub, driverController, fieldRelative), new RunIntakeANDTransferCmd(intakeSub, IntakeConstants.intakeSpeed,
      IntakeConstants.transferSpeed), new ShooterTransfer(shooterSub, intakeSub, 
      ShooterMechConstants.indexTransferSpeed, ShooterMechConstants.flywheelTransferSpeed));
   }
