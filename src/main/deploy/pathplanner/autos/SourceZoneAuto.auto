@@ -2,119 +2,43 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2767919374701306,
-      "y": 3.7933952645156466
+      "x": 1.4421450643849152,
+      "y": 3.1125294478077103
     },
-    "rotation": -58.39249775375112
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "AutoShooter"
+            "pathName": "SourceZonePath1"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SourceZonePath1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunIntake"
-                }
-              }
-            ]
+            "pathName": "SourceZonePath2"
           }
         },
         {
-          "type": "race",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SourceZonePath2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RestShooter"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RestIntake"
-                }
-              }
-            ]
+            "pathName": "SourceZonePath3"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "AutoShooter"
+            "pathName": "SourceZonePath4"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SourceZonePath3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunIntake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SourceZonePath4"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RestShooter"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RestIntake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoShooter"
+            "pathName": "SourceZonePath5"
           }
         }
       ]

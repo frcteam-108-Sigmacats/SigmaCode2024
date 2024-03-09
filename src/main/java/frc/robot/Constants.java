@@ -140,8 +140,8 @@ public final class Constants {
 
     //Values for the intake angle's
     public static final double restPos = 0;//Switch to 25 later//The rest position which will also be the handoff position
-    public static final double groundIntakePos = 132;//The position where we will intake from the ground (Find value first)
-    public static final double shootIntakePos = 15;
+    public static final double groundIntakePos = 135;//The position where we will intake from the ground (Find value first)
+    public static final double shootIntakePos = 27;
 
     //The speeds for intaking, outtaking
     public static final double intakeSpeed = -0.8; //Keep at -100% unless needed to change (negative is to suck in the note and positive is to spit out if motor is not inverted)
@@ -170,6 +170,10 @@ public final class Constants {
     public static final double ampPos = 100;
     public static final double climbPos = 110;
 
+    public static final double podiumPos = 35;
+    public static final double midPos = 25;
+    public static final double subwooferPos = 9;
+
     //PID gains for Pivot Controller
     public static final double pivotP = 0.07;//Try to make the pivot faster
     public static final double pivotI = 0;
@@ -190,13 +194,18 @@ public final class Constants {
 
     public static final double flywheelTransferSpeed = 0.1;
     public static final double flywheelShootSpeed = -1.0;
+    //Speed for shooting at specific positions
+    public static final double subwooferShootSpeed = -0.65;
+    public static final double podiumShootSpeed = -0.8;
+    public static final double farShootSpeed = -0.8;
+
     public static final double flywheelAmpShootSpeed = -0.4;
     public static final double flywheelOuttakeSpeed = 0.5;
 
     public static final double minDistInches = 28;
     public static final double maxDistInches = 131.0;
-    public static final double[] distSetPoints = {32  , 50, 66  , 71, 76, 81, 91, 101, 110};
-    public static final double[] angleSetPoints = {9.8, 19, 22, 25, 27, 28, 30, 31, 33};
+    public static final double[] distSetPoints = {42  , 44, 49, 57  , 59, 67, 74,   78, 88, 104, 105, 110};
+    public static final double[] angleSetPoints = {15, 16, 20, 21,   22,  27, 30.5, 33, 35, 38.5, 39, 40};
     public static final double maxDegrees = 30;
   }
   public static class ElevatorConstants{

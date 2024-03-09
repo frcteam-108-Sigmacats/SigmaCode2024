@@ -4,12 +4,11 @@
 
 package frc.robot.commands.ControllerCmds;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.commands.IntakeCmds.SetIntakeAngle;
-import frc.robot.commands.ShooterCmds.AutoShooter;
+import frc.robot.commands.ShooterCmds.DummyShooter;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -18,11 +17,11 @@ import frc.robot.subsystems.Vision;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoShooterWithAlign extends ParallelRaceGroup {
-  /** Creates a new AutoShooterWithAlign. */
-  public AutoShooterWithAlign(DriveSubsystem driveSub, Vision visionSub, ShooterSubsystem shooterSub, IntakeSubsystem intakeSub, CommandXboxController driveController, boolean fieldRelative, boolean runIndex, boolean shooterAlign) {
+public class DummyShooterWAlign extends ParallelRaceGroup {
+  /** Creates a new DummyShooterWAlign. */
+  public DummyShooterWAlign(ShooterSubsystem shooterSub, Vision visionSub, IntakeSubsystem intakeSub, DriveSubsystem driveSub, boolean runIndex, double shooterPos, double shootSpeed, CommandXboxController driverController, boolean fieldRelative, boolean shooterAlign) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new AutoAlignTag(driveSub, visionSub, intakeSub, driveController, fieldRelative, shooterAlign), new AutoShooter(shooterSub, visionSub, intakeSub, runIndex), new SetIntakeAngle(intakeSub, IntakeConstants.shootIntakePos, runIndex));
+    addCommands(new AutoAlignTag(driveSub, visionSub, intakeSub, driverController, fieldRelative, shooterAlign), new DummyShooter(shooterSub, intakeSub, runIndex, shooterPos, shootSpeed), new SetIntakeAngle(intakeSub, IntakeConstants.shootIntakePos, runIndex));
   }
 }

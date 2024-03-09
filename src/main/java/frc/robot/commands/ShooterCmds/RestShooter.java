@@ -24,7 +24,7 @@ public class RestShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterSub.setFlyWheelSpeeds(-0.4);//switch to -30%
+    shooterSub.setFlyWheelSpeeds(-0.3);//switch to -30%
     shooterSub.setIndexRollerSpeed(0);
     shooterSub.setPivotAngle(ShooterMechConstants.restPos);
   }

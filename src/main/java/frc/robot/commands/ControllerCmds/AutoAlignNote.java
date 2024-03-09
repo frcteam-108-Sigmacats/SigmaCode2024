@@ -6,6 +6,7 @@ package frc.robot.commands.ControllerCmds;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ChassisConstants;
@@ -73,6 +74,7 @@ public class AutoAlignNote extends Command {
   @Override
   public boolean isFinished() {
     if(intakeSub.getIRSensor()){
+      // driveController.getHID().setRumble(RumbleType.kBothRumble, 0.2);
       return true;
     }
     else{

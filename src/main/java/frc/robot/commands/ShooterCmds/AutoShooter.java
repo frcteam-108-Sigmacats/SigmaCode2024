@@ -6,6 +6,7 @@ package frc.robot.commands.ShooterCmds;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ChassisConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.ShooterMechConstants;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -63,6 +64,7 @@ public class AutoShooter extends Command {
         break;
       }
     }
+    // pivotAngle = (-0.0030042 * Math.pow(currentDist, 2)) + (0.8324295 * currentDist) - 15.1666232;
     if(currentDist >= 0 && currentDist <= 71){
       speed = -0.65;
     }

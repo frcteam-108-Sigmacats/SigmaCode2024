@@ -5,16 +5,21 @@
 package frc.robot.commands.IntakeCmds;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.ShooterMechConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class SetIntakeAngle extends Command {
   private IntakeSubsystem intakeSub;
 
   private double intakePos;
+
+  private boolean runIndex;
   /** Creates a new SetIntakeAngle. */
-  public SetIntakeAngle(IntakeSubsystem intakeSub, double intakePos) {
+  public SetIntakeAngle(IntakeSubsystem intakeSub, double intakePos, boolean runIndex) {
     this.intakeSub = intakeSub;
     this.intakePos = intakePos;
+    this.runIndex = runIndex;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intakeSub);
   }
@@ -27,6 +32,12 @@ public class SetIntakeAngle extends Command {
   @Override
   public void execute() {
     intakeSub.setIntakeAngle(intakePos);
+    if(runIndex){
+      intakeSub.setTransferSpeed(IntakeConstants.reverseTransferSpeed);
+    }
+    else{
+      intakeSub.setTransferSpeed(0);
+    }
   }
 
   // Called once the command ends or is interrupted.
