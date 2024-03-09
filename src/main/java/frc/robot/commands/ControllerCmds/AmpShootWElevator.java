@@ -5,20 +5,22 @@
 package frc.robot.commands.ControllerCmds;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.ElevatorCmds.SetElevatorPosition;
 import frc.robot.commands.ShooterCmds.AmpShoot;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AmpShootWElevator extends ParallelCommandGroup {
+public class AmpShootWElevator extends ParallelRaceGroup {
   /** Creates a new AmpShootWElevator. */
-  public AmpShootWElevator(ElevatorSubsystem elevatorSub, ShooterSubsystem shooterSubsystem) {
+  public AmpShootWElevator(ElevatorSubsystem elevatorSub, ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSub, boolean runIndex) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new SetElevatorPosition(elevatorSub, ElevatorConstants.ampPos), new AmpShoot(shooterSubsystem));
+    addCommands(new SetElevatorPosition(elevatorSub, ElevatorConstants.ampPos), new AmpShoot(shooterSubsystem, intakeSub, runIndex));
   }
 }

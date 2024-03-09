@@ -73,10 +73,10 @@ public class AutoShooter extends Command {
       speed = -0.8;
     }
     else if(currentDist > 110 && currentDist <= 116){
-      speed = -1.0;
+      speed = -0.8;
     }
     else{
-      speed = -1.0;
+      speed = -0.8;
     }
     System.out.println("Auto Shooter is running");
     counter++;

@@ -103,8 +103,8 @@ public class ShooterSubsystem extends SubsystemBase {
     pivotControl.setI(ShooterMechConstants.pivotI);
     pivotControl.setD(ShooterMechConstants.pivotD);
     pivotControl.setFeedbackDevice(shooterPivotAbsEnc);
-    pivotControl.setOutputRange(-0.3,
-    0.5);
+    pivotControl.setOutputRange(-0.25,
+    0.3);
 
     speedControl.setP(ShooterMechConstants.speedP);
     speedControl.setI(ShooterMechConstants.speedI);

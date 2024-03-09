@@ -6,6 +6,8 @@ package frc.robot.commands.ControllerCmds;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.commands.IntakeCmds.SetIntakeAngle;
 import frc.robot.commands.ShooterCmds.AutoShooter;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -20,6 +22,6 @@ public class AutoShooterWithAlign extends ParallelCommandGroup {
   public AutoShooterWithAlign(DriveSubsystem driveSub, Vision visionSub, ShooterSubsystem shooterSub, IntakeSubsystem intakeSub, CommandXboxController driveController, boolean fieldRelative, boolean runIndex, boolean shooterAlign) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new AutoAlignTag(driveSub, visionSub, intakeSub, driveController, fieldRelative, shooterAlign), new AutoShooter(shooterSub, visionSub, intakeSub, runIndex));
+    addCommands(new AutoAlignTag(driveSub, visionSub, intakeSub, driveController, fieldRelative, shooterAlign), new AutoShooter(shooterSub, visionSub, intakeSub, runIndex), new SetIntakeAngle(intakeSub, IntakeConstants.shootIntakePos));
   }
 }

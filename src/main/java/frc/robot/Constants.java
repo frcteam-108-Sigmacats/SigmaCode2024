@@ -140,12 +140,13 @@ public final class Constants {
 
     //Values for the intake angle's
     public static final double restPos = 0;//Switch to 25 later//The rest position which will also be the handoff position
-    public static final double groundIntakePos = 126;//The position where we will intake from the ground (Find value first)
+    public static final double groundIntakePos = 132;//The position where we will intake from the ground (Find value first)
+    public static final double shootIntakePos = 15;
 
     //The speeds for intaking, outtaking
     public static final double intakeSpeed = -0.8; //Keep at -100% unless needed to change (negative is to suck in the note and positive is to spit out if motor is not inverted)
     public static final double transferSpeed = -0.35; //Keep at -25% unless needed to change (negative is to suck in the note and positive is to spit out if motor is not inverted)
-    public static final double outtakeSpeed = 0.75; //(negative is to suck in the note and positive is to spit out if motor is not inverted)
+    public static final double outtakeSpeed = 1.0; //(negative is to suck in the note and positive is to spit out if motor is not inverted)
     public static final double reverseTransferSpeed = 0.5; //(negative is to suck in the note and positive is to spit out if motor is not inverted)
   }
   public static class ShooterMechConstants{
@@ -165,14 +166,14 @@ public final class Constants {
     public static final int flywheelCurrentLimit = 40;
 
     //Pivot angles
-    public static final double restPos = 0; //Switch to 1 later
+    public static final double restPos = 0.75; //Switch to 1 later
     public static final double ampPos = 100;
     public static final double climbPos = 110;
 
     //PID gains for Pivot Controller
-    public static final double pivotP = 0.05;//Try to make the pivot faster
-    public static final double pivotI = 0.000008;
-    public static final double pivotD = 0;
+    public static final double pivotP = 0.07;//Try to make the pivot faster
+    public static final double pivotI = 0;
+    public static final double pivotD = 0.001;
 
     //PID gains for Speed Control
     public static final double speedP = 0.01;
@@ -190,12 +191,12 @@ public final class Constants {
     public static final double flywheelTransferSpeed = 0.1;
     public static final double flywheelShootSpeed = -1.0;
     public static final double flywheelAmpShootSpeed = -0.4;
-    public static final double flywheelOuttakeSpeed = 1.0;
+    public static final double flywheelOuttakeSpeed = 0.5;
 
     public static final double minDistInches = 28;
     public static final double maxDistInches = 131.0;
     public static final double[] distSetPoints = {32  , 50, 66  , 71, 76, 81, 91, 101, 110};
-    public static final double[] angleSetPoints = {9.8, 18, 19.2, 24, 26, 28, 30, 32, 33};
+    public static final double[] angleSetPoints = {9.8, 19, 22, 25, 27, 28, 30, 31, 33};
     public static final double maxDegrees = 30;
   }
   public static class ElevatorConstants{

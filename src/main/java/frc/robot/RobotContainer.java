@@ -42,9 +42,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import frc.robot.commands.AutonomousAutoShooterWAlign;
-import frc.robot.commands.ClimbDownCmd;
-import frc.robot.commands.ClimbingUpCmd;
-import frc.robot.commands.KeepClimbCmd;
 import frc.robot.commands.ControllerCmds.AmpShootWElevator;
 import frc.robot.commands.ControllerCmds.AutoAlignNote;
 import frc.robot.commands.ControllerCmds.AutoAlignTag;
@@ -54,6 +51,9 @@ import frc.robot.commands.ControllerCmds.IntakeANDTransferANDAlignCmd;
 import frc.robot.commands.ControllerCmds.IntakeANDTransferCmd;
 import frc.robot.commands.ControllerCmds.OuttakeANDTransferCmd;
 import frc.robot.commands.ControllerCmds.StopTransferANDIntake;
+import frc.robot.commands.ElevatorCmds.ClimbDownCmd;
+import frc.robot.commands.ElevatorCmds.ClimbingUpCmd;
+import frc.robot.commands.ElevatorCmds.KeepClimbCmd;
 import frc.robot.commands.ElevatorCmds.SetElevatorPosition;
 import frc.robot.commands.ElevatorCmds.SetElevatorSpeed;
 import frc.robot.commands.ElevatorCmds.SetServoSpeed;
@@ -112,6 +112,7 @@ public class RobotContainer {
     intakeSubsystem.setDefaultCommand(new RestIntakeCmd(intakeSubsystem));
     shooterSub.setDefaultCommand(new RestShooter(shooterSub));
     ledSubsystem.setDefaultCommand(new SetLEDS(ledSubsystem, intakeSubsystem));
+    elevatorSubsystem.setDefaultCommand(new SetElevatorPosition(elevatorSubsystem, 0));
 
     // Configure the trigger bindings
     configureBindings();
@@ -130,9 +131,9 @@ public class RobotContainer {
         dLBumper.whileFalse(new StopTransferANDIntake(intakeSubsystem, shooterSub));
 
         // dRBumper.whileTrue(new AmpShootWElevator(elevatorSubsystem, shooterSub));
-        dRBumper.whileTrue(new AmpShoot(shooterSub));
-        dRBumper.whileFalse(new RestShooter(shooterSub));
-        // dRBumper.whileFalse(new ParallelCommandGroup(new RestShooter(shooterSub), new SetElevatorPosition(elevatorSubsystem, 0)));
+        dRBumper.whileTrue(new AmpShootWElevator(elevatorSubsystem, shooterSub, intakeSubsystem, false));
+        // dRBumper.whileFalse(new RestShooter(shooterSub));
+        dRBumper.whileFalse(new AmpShootWElevator(elevatorSubsystem, shooterSub, intakeSubsystem, true));
 
       //Driver Button Commands
         dBA.onTrue(new InstantCommand(() -> driveSubsystem.zeroHeading()));

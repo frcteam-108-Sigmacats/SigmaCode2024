@@ -6,13 +6,20 @@ package frc.robot.commands.ShooterCmds;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ShooterMechConstants;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class AmpShoot extends Command {
   private ShooterSubsystem shooterSub;
+
+  private IntakeSubsystem intakeSub;
+
+  private boolean runIndex;
   /** Creates a new AmpShoot. */
-  public AmpShoot(ShooterSubsystem shooterSub) {
+  public AmpShoot(ShooterSubsystem shooterSub, IntakeSubsystem intakeSub, boolean runIndex) {
     this.shooterSub = shooterSub;
+    this.intakeSub = intakeSub;
+    this.runIndex = runIndex;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSub);
   }
@@ -27,7 +34,12 @@ public class AmpShoot extends Command {
     shooterSub.setPivotAngle(ShooterMechConstants.ampPos);
     if(Math.abs(ShooterMechConstants.ampPos - shooterSub.getPivotAngle()) <=5 ){
       shooterSub.setFlyWheelSpeeds(ShooterMechConstants.flywheelAmpShootSpeed);
+    }
+    if(runIndex){
       shooterSub.setIndexRollerSpeed(ShooterMechConstants.indexShootSpeed);
+    }
+    else{
+      shooterSub.setIndexRollerSpeed(0);
     }
   }
 
@@ -38,6 +50,11 @@ public class AmpShoot extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if(!intakeSub.getIRSensor()){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 }

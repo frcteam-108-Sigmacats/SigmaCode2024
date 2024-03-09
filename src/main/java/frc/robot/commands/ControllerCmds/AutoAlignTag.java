@@ -55,7 +55,7 @@ public class AutoAlignTag extends Command {
     yAxis = -driveController.getLeftY();
     if(visionSub.isThereTag() && shooterAlign){
       if(visionSub.doesItSeeSpeaker()){
-        rotation = alignPID.calculate(visionSub.getAprilTagXOffset(), 0);
+        rotation = alignPID.calculate(visionSub.getAprilTagXOffset(), 1.5);
         System.out.println("PID:" + rotation);
       }
       else{
