@@ -43,23 +43,24 @@ public class AutonomousAutoShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      double currentDist = visionSub.getSpeakerDistanceFromRobot();
-    for(int i = 0; i < ShooterMechConstants.distSetPoints.length; i++){
-      if(i != ShooterMechConstants.distSetPoints.length - 1){
-        if(currentDist >= ShooterMechConstants.distSetPoints[i] && currentDist <= ShooterMechConstants.distSetPoints[i + 1]){
-          double secondPoint = ShooterMechConstants.distSetPoints[i + 1];
-          double firstPoint = ShooterMechConstants.distSetPoints[i];
-          double firstPointAngle = ShooterMechConstants.angleSetPoints[i];
-          double secondPointAngle = ShooterMechConstants.angleSetPoints[i+1];
-          pivotAngle = (((currentDist - firstPoint) / (secondPoint - firstPoint)) * (secondPointAngle - firstPointAngle)) + firstPointAngle;
-          break;
-        }
-      }
-      else{
-        pivotAngle = ShooterMechConstants.angleSetPoints[ShooterMechConstants.angleSetPoints.length - 1];
-        break;
-      }
-    }
+    double currentDist = visionSub.getSpeakerDistanceFromRobot();
+    // for(int i = 0; i < ShooterMechConstants.distSetPoints.length; i++){
+    //   if(i != ShooterMechConstants.distSetPoints.length - 1){
+    //     if(currentDist >= ShooterMechConstants.distSetPoints[i] && currentDist <= ShooterMechConstants.distSetPoints[i + 1]){
+    //       double secondPoint = ShooterMechConstants.distSetPoints[i + 1];
+    //       double firstPoint = ShooterMechConstants.distSetPoints[i];
+    //       double firstPointAngle = ShooterMechConstants.angleSetPoints[i];
+    //       double secondPointAngle = ShooterMechConstants.angleSetPoints[i+1];
+    //       pivotAngle = (((currentDist - firstPoint) / (secondPoint - firstPoint)) * (secondPointAngle - firstPointAngle)) + firstPointAngle;
+    //       break;
+    //     }
+    //   }
+    //   else{
+    //     pivotAngle = ShooterMechConstants.angleSetPoints[ShooterMechConstants.angleSetPoints.length - 1];
+    //     break;
+    //   }
+    // }
+    pivotAngle = (-0.0030042 * Math.pow(currentDist, 2)) + (0.8324295 * currentDist) - 15.1666232;
     if(currentDist >= 0 && currentDist <= 71){
       speed = -0.55;
     }
@@ -70,10 +71,10 @@ public class AutonomousAutoShooter extends Command {
       speed = -0.8;
     }
     else if(currentDist > 110 && currentDist <= 116){
-      speed = -1.0;
+      speed = -0.8;
     }
     else{
-      speed = -1.0;
+      speed = -0.8;
     }
     System.out.println("Auto Shooter is running");
     counter++;

@@ -25,7 +25,7 @@ public class AutoAlignTag extends Command {
 
   private PIDController alignPID = new PIDController(0.02, 0, 0);
 
-  private double xAxis, yAxis, rotation;
+  private double xAxis, yAxis, rotation, offset;
 
   private Translation2d translation = new Translation2d();
 
@@ -53,9 +53,17 @@ public class AutoAlignTag extends Command {
   public void execute() {
     xAxis = -driveController.getLeftX();
     yAxis = -driveController.getLeftY();
+    double currentDist = visionSub.getSpeakerDistanceFromRobot();
+
+    if(currentDist <= 90){
+      offset = 0.5;
+    }
+    else{
+      offset = 1.0;
+    }
     if(visionSub.isThereTag() && shooterAlign){
       if(visionSub.doesItSeeSpeaker()){
-        rotation = alignPID.calculate(visionSub.getAprilTagXOffset(), 0.5);
+        rotation = alignPID.calculate(visionSub.getAprilTagXOffset(), offset);
         System.out.println("PID:" + rotation);
       }
       else{

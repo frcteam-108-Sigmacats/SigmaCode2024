@@ -40,7 +40,7 @@ public final class Constants {
       public static final boolean gyroReversed = false;
 
     //Used to prevent stick drift
-      public static double deadband = 0.15;
+      public static double deadband = 0.2;
   }
   public static class ModuleConstants{
     //Driving Pinion Teeth
@@ -170,8 +170,8 @@ public final class Constants {
     public static final double ampPos = 100;
     public static final double climbPos = 110;
 
-    public static final double podiumPos = 35;
-    public static final double midPos = 25;
+    public static final double podiumPos = 37;
+    public static final double midPos = 26;
     public static final double subwooferPos = 9;
 
     //PID gains for Pivot Controller

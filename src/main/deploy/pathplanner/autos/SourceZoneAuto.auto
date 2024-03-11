@@ -18,27 +18,109 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "SourceZonePath2"
+            "name": "AutoShooter"
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "SourceZonePath3"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SourceZonePath2"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "SourceZonePath4"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RestShooter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RestIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SourceZonePath3"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "SourceZonePath5"
+            "name": "AutoShooter"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SourceZonePath4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RestShooter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RestIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SourceZonePath5"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoShooter"
           }
         }
       ]
