@@ -67,7 +67,7 @@ public class DriveSubsystem extends SubsystemBase {
     AutoBuilder.configureHolonomic(this::getPose, this::resetOdometry, this::getSpeeds, 
     this::driveRobotRelative, 
     new HolonomicPathFollowerConfig(new PIDConstants(5.0, 0, 0), 
-    new PIDConstants(5.0, 0, 0), 3.5, 
+    new PIDConstants(5.0, 0, 0), 3.0, 
     ChassisConstants.frontL.getNorm(), new ReplanningConfig()), () -> {
       var alliance = DriverStation.getAlliance();
       if(alliance.isPresent()){

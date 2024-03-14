@@ -53,6 +53,7 @@ public class ShooterTransfer extends Command {
     //   finish = true;
     // }
     if(intakeSub.getIRSensor() == true){
+      // shooterSub.setIndexRollerSpeed(0);
       finish = true;
     }
   }

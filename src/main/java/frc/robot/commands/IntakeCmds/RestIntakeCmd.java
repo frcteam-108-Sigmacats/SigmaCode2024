@@ -38,16 +38,22 @@ public class RestIntakeCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    intakeSubsystem.setIntakeAngle(IntakeConstants.restPos);
+    intakeSubsystem.setTransferSpeed(0);
+    intakeSubsystem.setIntakeSpeed(0);
     //Keeps the intake at rest position running the rollers at 0%
-    // if(counter <= 25){
+    // if(intakeSubsystem.getIRSensor()){
     //   counter++;
+    //   if(counter <= 50){
+    //     intakeSubsystem.setIntakeSpeed(IntakeConstants.outtakeSpeed);
+    //   }
+    //   else{
+    //     intakeSubsystem.setIntakeSpeed(0);
+    //   }
     // }
     // else{
-    //   driveController.getHID().setRumble(RumbleType.kBothRumble, 0);
+    //   intakeSubsystem.setIntakeSpeed(0);
     // }
-    intakeSubsystem.setIntakeAngle(IntakeConstants.restPos);
-    intakeSubsystem.setIntakeSpeed(0);
-    intakeSubsystem.setTransferSpeed(0);
     
   }
 

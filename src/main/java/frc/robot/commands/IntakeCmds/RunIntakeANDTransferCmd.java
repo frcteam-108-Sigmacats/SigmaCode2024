@@ -61,6 +61,8 @@ public class RunIntakeANDTransferCmd extends Command {
     // }
     if(isThereGamePiece == false){
       if(intakeSubsystem.getIRSensor()){
+        intakeSubsystem.setIntakeSpeed(IntakeConstants.outtakeSpeed);
+        intakeSubsystem.setTransferSpeed(IntakeConstants.reverseTransferSpeed);
         isThereGamePiece = true;
       }
     }

@@ -309,10 +309,18 @@ public class RobotContainer {
     driveSubsystem.resetOdometry(middlePath.flipPath().getPreviewStartingHolonomicPose())), 
     AutoBuilder.buildAuto("MiddleAuto"));
 
+    Command redMiddleAutoTest = new SequentialCommandGroup(new InstantCommand(() -> 
+    driveSubsystem.resetOdometry(middlePath.flipPath().getPreviewStartingHolonomicPose())), 
+    AutoBuilder.buildAuto("MiddleAutoTest"));
+
     //Making the blue middle auto
     Command blueMiddleAuto = new SequentialCommandGroup(new InstantCommand(() -> 
     driveSubsystem.resetOdometry(middlePath.getPreviewStartingHolonomicPose())), 
     AutoBuilder.buildAuto("MiddleAuto"));
+
+    Command blueMiddleAutoTest = new SequentialCommandGroup(new InstantCommand(() -> 
+    driveSubsystem.resetOdometry(middlePath.getPreviewStartingHolonomicPose())), 
+    AutoBuilder.buildAuto("MiddleAutoTest"));
 
     //Testing auto
     Command testPath = new SequentialCommandGroup(new InstantCommand(() -> driveSubsystem.resetOdometry(sourceZonePath.flipPath().getPreviewStartingHolonomicPose())), AutoBuilder.followPath(sourceZonePath));
@@ -320,7 +328,9 @@ public class RobotContainer {
     //Making a multiple choice selection for auto to choose from 
     chooser.setDefaultOption("Nothing", null);
     chooser.addOption("Red Source Zone Auto", redSourceZoneAuto);
+    chooser.addOption("Red Middle Auto Test", redMiddleAutoTest);
     chooser.addOption("Red Middle Auto", redMiddleAuto);
+    chooser.addOption("Blue Middle Auto Test", blueMiddleAutoTest);
     chooser.addOption("Blue Middle Auto", blueMiddleAuto);
     chooser.addOption("Blue Source Zone Path", blueSourceZoneAuto);
     chooser.addOption("Testing Path Follow", testPath);
