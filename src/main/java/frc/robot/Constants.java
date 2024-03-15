@@ -127,11 +127,11 @@ public final class Constants {
 
     //Current Limits for the motors on the intake/transfer mechanism
     public static final int pivotMotorCurrentLimit = 10; //Units in amps
-    public static final int intakeMotorCurrentLimit = 20; //Units in amps
+    public static final int intakeMotorCurrentLimit = 30; //Units in amps
     public static final int transferMotorCurrentLimit = 20; //Units in amps
 
     //PID gains for pivot control
-    public static final double kP = 0.02;//Try to make the intake pivot faster
+    public static final double kP = 0.014;//Try to make the intake pivot faster
     public static final double kI = 0.0;//Try to make the intake pivot faster
     public static final double kD = 0.0;
 
@@ -140,8 +140,8 @@ public final class Constants {
 
     //Values for the intake angle's
     public static final double restPos = 0;//Switch to 25 later//The rest position which will also be the handoff position
-    public static final double groundIntakePos = 135;//The position where we will intake from the ground (Find value first)
-    public static final double shootIntakePos = 27;
+    public static final double groundIntakePos = 137;//The position where we will intake from the ground (Find value first)
+    public static final double shootIntakePos = 33;
 
     //The speeds for intaking, outtaking
     public static final double intakeSpeed = -0.8; //Keep at -100% unless needed to change (negative is to suck in the note and positive is to spit out if motor is not inverted)
