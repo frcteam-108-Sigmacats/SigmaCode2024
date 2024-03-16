@@ -141,7 +141,7 @@ public final class Constants {
     //Values for the intake angle's
     public static final double restPos = 0;//Switch to 25 later//The rest position which will also be the handoff position
     public static final double groundIntakePos = 137;//The position where we will intake from the ground (Find value first)
-    public static final double shootIntakePos = 33;
+    public static final double shootIntakePos = 35;
 
     //The speeds for intaking, outtaking
     public static final double intakeSpeed = -0.8; //Keep at -100% unless needed to change (negative is to suck in the note and positive is to spit out if motor is not inverted)

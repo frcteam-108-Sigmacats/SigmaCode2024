@@ -49,6 +49,7 @@ public class SetFlyWheelSpeeds extends Command {
     }
     else{
       shooterSub.setIndexRollerSpeed(0);
+      // System.out.println("Indexers at 0");
     }
     if(!intakeSub.getIRSensor()){
       finish = true;

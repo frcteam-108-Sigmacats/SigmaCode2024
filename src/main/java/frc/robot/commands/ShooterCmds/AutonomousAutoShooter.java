@@ -76,7 +76,7 @@ public class AutonomousAutoShooter extends Command {
     else{
       speed = -0.8;
     }
-    System.out.println("Auto Shooter is running");
+    // System.out.println("Auto Shooter is running");
     counter++;
     shooterSub.setPivotAngle(pivotAngle);
     shooterSub.setFlyWheelSpeeds(speed);
@@ -85,7 +85,7 @@ public class AutonomousAutoShooter extends Command {
     }
 
     if(!intakeSub.getIRSensor()){
-      System.out.println("Auto Shooter is ending");
+      // System.out.println("Auto Shooter is ending");
       finish = true;
     }
   }

@@ -42,6 +42,7 @@ public class DummyShooter extends Command {
     }
     else{
       shooterSub.setIndexRollerSpeed(0);
+      // System.out.println("Indexers at 0");
     }
   }
 

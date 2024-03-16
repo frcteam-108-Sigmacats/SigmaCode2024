@@ -92,6 +92,7 @@ public class AutoShooter extends Command {
     }
     else{
       shooterSub.setIndexRollerSpeed(0);
+      // System.out.println("Indexers at 0");
     }
     if(!intakeSub.getIRSensor()){
       System.out.println("Auto Shooter is ending");

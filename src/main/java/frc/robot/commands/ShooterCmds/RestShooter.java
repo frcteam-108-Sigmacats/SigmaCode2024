@@ -27,6 +27,7 @@ public class RestShooter extends Command {
     shooterSub.setFlyWheelSpeeds(-0.3);//switch to -30%
     shooterSub.setIndexRollerSpeed(0);
     shooterSub.setPivotAngle(ShooterMechConstants.restPos);
+    // System.out.println("Shooter at rest position");
   }
 
   // Called once the command ends or is interrupted.

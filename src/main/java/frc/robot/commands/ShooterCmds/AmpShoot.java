@@ -40,7 +40,9 @@ public class AmpShoot extends Command {
     }
     else{
       shooterSub.setIndexRollerSpeed(0);
+      // System.out.println("Indexers at 0");
     }
+
   }
 
   // Called once the command ends or is interrupted.
