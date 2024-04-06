@@ -23,6 +23,6 @@ public class StopTransferANDIntake extends ParallelCommandGroup {
   public StopTransferANDIntake(IntakeSubsystem intakeSub, ShooterSubsystem shooterSub, CommandXboxController driveController) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new RestIntakeCmd(intakeSub, driveController), new RestShooter(shooterSub));
+    addCommands(new RestIntakeCmd(intakeSub, driveController), new RestShooter(shooterSub, intakeSub));
   }
 }

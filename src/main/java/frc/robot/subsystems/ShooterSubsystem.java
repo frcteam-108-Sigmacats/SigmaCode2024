@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.FaultID;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ChassisConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.ShooterMechConstants;
@@ -34,10 +36,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
   //Instantiate the shooter pivot absolute encoder and relative encoder for speed reading
   private AbsoluteEncoder shooterPivotAbsEnc;
-  private RelativeEncoder shooterSpeedRelEnc;
+  private RelativeEncoder leftShooterSpeedRelEnc, rightShooterSpeedRelEnc;
 
   //Instantiate PID Controller for shooter pivot and speed control
-  private SparkPIDController pivotControl, speedControl;
+  private SparkPIDController pivotControl, leftSpeedControl, rightSpeedControl;
 
   private double angle = 0;
 
@@ -67,12 +69,14 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterPivotAbsEnc.setPositionConversionFactor(360);
     shooterPivotAbsEnc.setInverted(true);
 
-    shooterSpeedRelEnc = shooterLeftMotor.getEncoder();
+    leftShooterSpeedRelEnc = shooterLeftMotor.getEncoder();
+    rightShooterSpeedRelEnc = shooterRightMotor.getEncoder();
 
     //Assinging pivot controller to the pivot motor built in PID controller and flywheel motor built in PID Controller
     pivotControl = shooterPivotMotor.getPIDController();
 
-    speedControl = shooterLeftMotor.getPIDController();
+    leftSpeedControl = shooterLeftMotor.getPIDController();
+    rightSpeedControl = shooterRightMotor.getPIDController();
 
     //Configuration of everything
 
@@ -102,14 +106,22 @@ public class ShooterSubsystem extends SubsystemBase {
     pivotControl.setP(ShooterMechConstants.pivotP);
     pivotControl.setI(ShooterMechConstants.pivotI);
     pivotControl.setD(ShooterMechConstants.pivotD);
+    pivotControl.setFF(ShooterMechConstants.speedFF);
     pivotControl.setFeedbackDevice(shooterPivotAbsEnc);
     pivotControl.setOutputRange(-0.25,
     0.3);
 
-    speedControl.setP(ShooterMechConstants.speedP);
-    speedControl.setI(ShooterMechConstants.speedI);
-    speedControl.setD(ShooterMechConstants.speedD);
-    speedControl.setFeedbackDevice(shooterSpeedRelEnc);
+    leftSpeedControl.setP(ShooterMechConstants.speedP);
+    leftSpeedControl.setI(ShooterMechConstants.speedI);
+    leftSpeedControl.setD(ShooterMechConstants.speedD);
+    leftSpeedControl.setFF(ShooterMechConstants.speedFF);
+    leftSpeedControl.setFeedbackDevice(leftShooterSpeedRelEnc);
+
+    rightSpeedControl.setP(ShooterMechConstants.speedP);
+    rightSpeedControl.setI(ShooterMechConstants.speedI);
+    rightSpeedControl.setD(ShooterMechConstants.speedD);
+    rightSpeedControl.setFF(ShooterMechConstants.speedFF);
+    rightSpeedControl.setFeedbackDevice(rightShooterSpeedRelEnc);
 
     //Burn flash on motors
     indexMotor.burnFlash();
@@ -155,6 +167,7 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
+    
   }
 
   public double getPivotAngle(){
@@ -166,11 +179,18 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public double getFlywheelVelocity(){
-    return shooterSpeedRelEnc.getVelocity();
+    return leftShooterSpeedRelEnc.getVelocity();
+  }
+
+  public boolean isAbsEncConnected(){
+    return shooterPivotMotor.getFault(FaultID.kSensorFault);
   }
 
   public void setPivotAngle(double angle){
     pivotControl.setReference(angle, ControlType.kPosition);
+  }
+  public void setPivotAngle(){
+    pivotControl.setReference(this.angle, ControlType.kPosition);
   }
 
   public void setPivotSpeed(double speed){
@@ -182,8 +202,10 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterRightMotor.set((-speed) - 0.15);
   }
   public void setFlyWheelVelocity(double rpm){
-    speedControl.setReference(rpm, ControlType.kVelocity);
-    shooterRightMotor.follow(shooterLeftMotor, ShooterMechConstants.rightFlywheelInverted);
+    double rightShooterRPM = rpm + (ModuleConstants.kFreeSpeedRPM * 0.1);
+    leftSpeedControl.setReference(rpm, ControlType.kVelocity);
+    rightSpeedControl.setReference(-rightShooterRPM, ControlType.kVelocity);
+    //shooterRightMotor.follow(shooterLeftMotor, ShooterMechConstants.rightFlywheelInverted);
   }
   public void setIndexRollerSpeed(double speed){
     indexMotor.set(speed);

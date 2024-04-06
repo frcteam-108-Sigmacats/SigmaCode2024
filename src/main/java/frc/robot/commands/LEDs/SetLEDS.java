@@ -7,16 +7,21 @@ package frc.robot.commands.LEDs;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class SetLEDS extends Command {
   private LEDs ledSub;
 
   private IntakeSubsystem intakeSub;
+
+  private ShooterSubsystem shooterSub;
   /** Creates a new SetLEDS. */
-  public SetLEDS(LEDs ledSub, IntakeSubsystem intakeSub) {
+  public SetLEDS(LEDs ledSub, IntakeSubsystem intakeSub, ShooterSubsystem shooterSub) {
     this.ledSub = ledSub;
 
     this.intakeSub = intakeSub;
+
+    this.shooterSub = shooterSub;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(ledSub);
   }
@@ -29,10 +34,20 @@ public class SetLEDS extends Command {
   @Override
   public void execute() {
     if(intakeSub.getIRSensor()){
-      ledSub.setLEDColor(0.07);
+      if(shooterSub.getFlywheelVelocity() <= -5900){
+        ledSub.setLEDColor(0.07);
+      }
+      else{
+        ledSub.setLEDColor(0.03);//original speed is 0.07 for slow blue pulse
+      }
     }
     else{
-      ledSub.setLEDColor(-0.25);
+      if(intakeSub.isAbsEncConnected() || shooterSub.isAbsEncConnected()){
+        ledSub.setLEDColor(-0.85);
+      }
+      else{
+        ledSub.setLEDColor(-0.25);
+      }
     }
   }
 

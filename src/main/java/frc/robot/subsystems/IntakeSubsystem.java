@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.FaultID;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
@@ -34,7 +35,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private AbsoluteEncoder intakeAbsEnc;
 
   //Instantiating intake sensor reading
-    private DigitalInput intakeSensor;
+    private DigitalInput intakeSensor, transferSensor;
 
   /** Creates a new ExampleSubsystem. */
   public IntakeSubsystem() {
@@ -51,6 +52,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     //Assigning the DIO port to our infrared sensor
       intakeSensor = new DigitalInput(IntakeConstants.irSensorDIOPort);
+      transferSensor = new DigitalInput(IntakeConstants.irSensorTransferDIOPort);
 
     //Resetting the motors to factory default and clears sticky faults
       pivotIntakeMotor.restoreFactoryDefaults();
@@ -126,6 +128,8 @@ public class IntakeSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Intake Angle", getPivotAngle());
     SmartDashboard.putBoolean("Infrared Sensor reading:", getIRSensor());
+    SmartDashboard.putBoolean("Transfer IR Sensor: ", getTransferSensor());
+    SmartDashboard.putString("Intake Abs Reading", intakeAbsEnc.toString());
   }
 
   @Override
@@ -142,6 +146,13 @@ public class IntakeSubsystem extends SubsystemBase {
     public boolean getIRSensor(){
       //The sensor was reading the note as false so it had to be inverted
       return !intakeSensor.get();
+    }
+  
+    public boolean isAbsEncConnected(){
+      return pivotIntakeMotor.getFault(FaultID.kSensorFault);
+    }
+    public boolean getTransferSensor(){
+      return !transferSensor.get();
     }
 
   //Sets the angle of the intake mechanism

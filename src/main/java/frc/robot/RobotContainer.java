@@ -117,10 +117,10 @@ public class RobotContainer {
     intakeSubsystem.setDefaultCommand(new RestIntakeCmd(intakeSubsystem, driveController));
 
     //When no commands are running the shooter will stay at rest position with a constant speed at -40%
-    shooterSub.setDefaultCommand(new RestShooter(shooterSub));
+    shooterSub.setDefaultCommand(new RestShooter(shooterSub, intakeSubsystem));
 
     //LEDs will change based on whether or not we have a note in the robot
-    ledSubsystem.setDefaultCommand(new SetLEDS(ledSubsystem, intakeSubsystem));
+    ledSubsystem.setDefaultCommand(new SetLEDS(ledSubsystem, intakeSubsystem, shooterSub));
 
     //Elevator will stay at rest position when no commands are running
     elevatorSubsystem.setDefaultCommand(new SetElevatorPosition(elevatorSubsystem, 0));
@@ -167,10 +167,10 @@ public class RobotContainer {
       //Operator Commands
         //Operator Trigger Commands
           oLTrigger.whileTrue(new SetFlyWheelSpeeds(shooterSub, intakeSubsystem, ShooterMechConstants.flywheelShootSpeed, ShooterMechConstants.indexShootSpeed));
-          oLTrigger.whileFalse(new RestShooter(shooterSub));
+          oLTrigger.whileFalse(new RestShooter(shooterSub, intakeSubsystem));
 
           oRTrigger.whileTrue(new ReverseShooterTransfer(shooterSub, intakeSubsystem, ShooterMechConstants.indexOuttakeSpeed, ShooterMechConstants.flywheelOuttakeSpeed));
-          oRTrigger.whileFalse(new RestShooter(shooterSub));
+          oRTrigger.whileFalse(new RestShooter(shooterSub, intakeSubsystem));
 
         //Operator Bumper Commands
           oLBumper.whileTrue(new ClimbingUpCmd(elevatorSubsystem, shooterSub, ElevatorConstants.climbUpPos));
@@ -187,7 +187,7 @@ public class RobotContainer {
           oBA.whileFalse(new SetElevatorSpeed(elevatorSubsystem, 0));//Test later
 
           oBX.whileTrue(new ParallelCommandGroup(new SetElevatorPosition(elevatorSubsystem, 0), new SetPivotAngle(shooterSub, ShooterMechConstants.restPos)));
-          oBX.whileFalse(new ParallelCommandGroup(new SetElevatorPosition(elevatorSubsystem, 0), new RestShooter(shooterSub)));
+          oBX.whileFalse(new ParallelCommandGroup(new SetElevatorPosition(elevatorSubsystem, 0), new RestShooter(shooterSub, intakeSubsystem)));
 
         //Operator POV Commands
         oPadUp.whileTrue(new SetShooterPivotSpeed(shooterSub, 0.1));
@@ -284,13 +284,14 @@ public class RobotContainer {
 
   public void makeAuto(){
     //Registering the commands to the pathplanner software
-    NamedCommands.registerCommand("RestShooter", new RestShooter(shooterSub));
+    NamedCommands.registerCommand("RestShooter", new RestShooter(shooterSub, intakeSubsystem));
     NamedCommands.registerCommand("RunIntake", new IntakeANDTransferCmd(intakeSubsystem, shooterSub));
     NamedCommands.registerCommand("AutoShooter", new AutonomousAutoShooterWAlign(driveSubsystem, visionSub, shooterSub, intakeSubsystem, driveController, true));
     NamedCommands.registerCommand("RestIntake", new RestIntakeCmd(intakeSubsystem, driveController));
 
     //Getting the first path for each auto side
     PathPlannerPath sourceZonePath = PathPlannerPath.fromPathFile("SourceZonePath1");
+    PathPlannerPath sourceZonePathNoteRuin = PathPlannerPath.fromPathFile("SourceZonePathNoteRuin1");
     PathPlannerPath middlePath = PathPlannerPath.fromPathFile("MiddlePath1");
 
     //Making the red source zone auto 
@@ -302,6 +303,10 @@ public class RobotContainer {
     Command blueSourceZoneAuto = new SequentialCommandGroup(new InstantCommand(() -> 
     driveSubsystem.resetOdometry(sourceZonePath.getPreviewStartingHolonomicPose())), 
     AutoBuilder.buildAuto("SourceZoneAuto"));
+
+    Command blueSourceZoneAutoNoteRuin = new SequentialCommandGroup(new InstantCommand(() -> 
+    driveSubsystem.resetOdometry(sourceZonePathNoteRuin.getPreviewStartingHolonomicPose())), 
+    AutoBuilder.buildAuto("NoteRuinAutoSource"));
 
     //Making the red middle auto
     Command redMiddleAuto = new SequentialCommandGroup(new 
@@ -333,6 +338,7 @@ public class RobotContainer {
     chooser.addOption("Blue Middle Auto Test", blueMiddleAutoTest);
     chooser.addOption("Blue Middle Auto", blueMiddleAuto);
     chooser.addOption("Blue Source Zone Path", blueSourceZoneAuto);
+    chooser.addOption("Blue Source Zone Note Ruin Auto", blueSourceZoneAutoNoteRuin);
     chooser.addOption("Testing Path Follow", testPath);
 
     //Sending the chooser to the SmartDashboard
