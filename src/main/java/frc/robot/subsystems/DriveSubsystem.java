@@ -64,7 +64,7 @@ public class DriveSubsystem extends SubsystemBase {
     //Setting the odometry to current position of the robot on the field
       odometry = new SwerveDriveOdometry(ChassisConstants.swerveKinematics, getHeading(), getModulePosition());
     
-    AutoBuilder.configureHolonomic(this::getPose, this::resetOdometry, this::getSpeeds, 
+    AutoBuilder.configureHolonomic(this::getPose, this::autoResetOdometry, this::getSpeeds, 
     this::driveRobotRelative, 
     new HolonomicPathFollowerConfig(new PIDConstants(5.0, 0, 0), 
     new PIDConstants(5.0, 0, 0), 3.5, 
@@ -163,6 +163,10 @@ public class DriveSubsystem extends SubsystemBase {
     public void resetOdometry(Pose2d pose){
       odometry.resetPosition(getHeading(), getModulePosition(), pose);
     }
+
+  public void autoResetOdometry(Pose2d pose){
+    odometry.resetPosition(getHeading(), getModulePosition(), Vision.getRobotPose());
+  }
 
   //Sets the drive encoders to 0
     public void resetEncoders(){

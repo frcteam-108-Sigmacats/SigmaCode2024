@@ -4,8 +4,13 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimelightNoteConstants;
@@ -13,7 +18,7 @@ import frc.robot.Constants.LimelightSpeakerConstants;
 
 public class Vision extends SubsystemBase {
   //Setting up limelights
-  private NetworkTable aprilTagLimelight = NetworkTableInstance.getDefault().getTable("limelight-tag");
+  private static NetworkTable aprilTagLimelight = NetworkTableInstance.getDefault().getTable("limelight-tag");
   private NetworkTable aiObjectLimelight = NetworkTableInstance.getDefault().getTable("limelight-note");
 
   //Getting X and Y offsets of both limelights
@@ -41,6 +46,21 @@ public class Vision extends SubsystemBase {
   public double getAprilTagYOffset(){
     aprilYOffset = aprilTagLimelight.getEntry("ty").getDouble(0.0);
     return aprilYOffset;
+  }
+
+  public static Pose2d getRobotPose(){
+    if(DriverStation.getAlliance().get() == Alliance.Blue){
+      double[] bluePose = aprilTagLimelight.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
+      bluePose[5] -= 180;
+      Pose2d blueRobotPose = new Pose2d(new Translation2d(bluePose[0], bluePose[1]), Rotation2d.fromDegrees(bluePose[5]));
+      return blueRobotPose;
+    }
+    else{
+      double[] redPose = aprilTagLimelight.getEntry("botpose_wpired").getDoubleArray(new double[6]);
+      redPose[5] -=180;
+      Pose2d redRobotPose = new Pose2d(new Translation2d(redPose[0], redPose[1]), Rotation2d.fromDegrees(redPose[5]));
+      return redRobotPose;
+    }
   }
 
   public boolean isThereTag(){

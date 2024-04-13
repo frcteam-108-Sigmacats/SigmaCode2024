@@ -7,6 +7,7 @@ package frc.robot.commands.ControllerCmds;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ChassisConstants;
@@ -23,15 +24,20 @@ public class AutoAlignTag extends Command {
 
   private CommandXboxController driveController;
 
-  private PIDController alignPID = new PIDController(0.02, 0, 0);
+  private PIDController alignPID = new PIDController(0.028, 0, 0.0, 0.3);
+  private PIDController fastAlignPID = new PIDController(0.1, 0, 0.0, 0.3);
 
   private double xAxis, yAxis, rotation, offset;
 
   private Translation2d translation = new Translation2d();
 
-  private boolean fieldRelative, shooterAlign;
+  private boolean fieldRelative, shooterAlign, fastAlign;
+
+  private float kP = 0.3f;
+
+  private float min_command = 0.001f;
   /** Creates a new AutoAlignTag. */
-  public AutoAlignTag(DriveSubsystem driveSub, Vision visionSub, IntakeSubsystem intakeSub, CommandXboxController driveController, boolean fieldRelative, boolean shooterAlign) {
+  public AutoAlignTag(DriveSubsystem driveSub, Vision visionSub, IntakeSubsystem intakeSub, CommandXboxController driveController, boolean fieldRelative, boolean shooterAlign, boolean fastAlign) {
     this.driveSub = driveSub;
     this.visionSub = visionSub;
     this.intakeSub = intakeSub;
@@ -40,6 +46,7 @@ public class AutoAlignTag extends Command {
 
     this.fieldRelative = fieldRelative;
     this.shooterAlign = shooterAlign;
+    this.fastAlign = fastAlign;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveSub);
   }
@@ -55,29 +62,36 @@ public class AutoAlignTag extends Command {
     yAxis = -driveController.getLeftY();
     double currentDist = visionSub.getSpeakerDistanceFromRobot();
 
-    if(currentDist <= 90){
-      offset = 0.5;
-    }
-    else{
-      offset = 1.0;
-    }
-    if(visionSub.isThereTag() && shooterAlign){
-      if(visionSub.doesItSeeSpeaker()){
-        rotation = alignPID.calculate(visionSub.getAprilTagXOffset(), offset);
-        System.out.println("PID:" + rotation);
-      }
-      else{
-        rotation = (Math.abs(-driveController.getRightX()) < ChassisConstants.deadband ? 0 : (-driveController.getRightX() * 10));
-      }
-    }
-    else{
-      rotation = (Math.abs(-driveController.getRightX()) < ChassisConstants.deadband ? 0 : (-driveController.getRightX() * 10));
-    }
     yAxis = (Math.abs(yAxis) < ChassisConstants.deadband ? 0 : yAxis * 0.3);
     xAxis = (Math.abs(xAxis) < ChassisConstants.deadband ? 0 : xAxis * 0.3);
 
     translation = new Translation2d(yAxis, xAxis).times(ChassisConstants.kMaxSpeedMPS);
-    driveSub.drive(translation, rotation * 2, fieldRelative);
+
+    if(currentDist <= 90){
+      offset = 0.5;
+    }
+    else{
+      offset = 1.5;
+    }
+    if(visionSub.isThereTag() && shooterAlign){
+      if(visionSub.doesItSeeSpeaker()){
+          rotation = alignPID.calculate(visionSub.getAprilTagXOffset(), offset);
+        }
+        else{
+          rotation = (Math.abs(-driveController.getRightX()) < ChassisConstants.deadband ? 0 : (-driveController.getRightX() * 10));
+        }
+      }
+
+    else{
+      rotation = (Math.abs(-driveController.getRightX()) < ChassisConstants.deadband ? 0 : (-driveController.getRightX() * 10));
+    }
+
+    if(fastAlign){
+      rotation = fastAlignPID.calculate(visionSub.getAprilTagXOffset(), offset);
+    }
+    driveSub.drive(translation, rotation, fieldRelative);
+    System.out.println("PID:" + rotation);
+    SmartDashboard.putNumber("PID Value for Auto Align: ", rotation);
   }
 
   // Called once the command ends or is interrupted.

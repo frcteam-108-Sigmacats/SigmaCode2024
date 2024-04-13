@@ -60,7 +60,11 @@ public class AutonomousAutoShooter extends Command {
     //     break;
     //   }
     // }
-    pivotAngle = (-0.0030042 * Math.pow(currentDist, 2)) + (0.8324295 * currentDist) - 15.1666232;
+    //pivotAngle = (-0.0030042 * Math.pow(currentDist, 2)) + (0.8324295 * currentDist) - 15.1666232;
+    pivotAngle = (0.00000000000016370943436754830 * Math.pow(currentDist, 8)) - (0.00000000013485474610480835 * Math.pow(currentDist, 7)) +
+    (0.000000047319450547384044 * Math.pow(currentDist, 6)) - (0.0000092286980457404328 * Math.pow(currentDist, 5)) +
+    (0.0010925631267597823 * Math.pow(currentDist, 4)) - (0.080238408863234717 * Math.pow(currentDist, 3)) +
+    (3.5581453006266690 * Math.pow(currentDist, 2)) - (86.320078674990356 * currentDist) + 884.72326745926716;
     if(currentDist >= 0 && currentDist <= 71){
       speed = -0.55;
     }
@@ -79,8 +83,9 @@ public class AutonomousAutoShooter extends Command {
     // System.out.println("Auto Shooter is running");
     counter++;
     shooterSub.setPivotAngle(pivotAngle);
-    shooterSub.setFlyWheelSpeeds(speed);
-    if(counter >= 50 /*&& pivotAngle - shooterSub.getPivotAngle() <= 1*/){
+    //shooterSub.setFlyWheelSpeeds(speed);
+    shooterSub.setFlyWheelVelocity(-7000);
+    if(counter >= 40 /*&& Math.abs(pivotAngle - shooterSub.getPivotAngle()) <= 1*/){
       shooterSub.setIndexRollerSpeed(ShooterMechConstants.indexShootSpeed);
     }
 

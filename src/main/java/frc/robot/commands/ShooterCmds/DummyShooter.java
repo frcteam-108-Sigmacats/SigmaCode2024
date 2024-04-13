@@ -14,35 +14,45 @@ public class DummyShooter extends Command {
 
   private IntakeSubsystem intakeSub;
 
-  private boolean runIndex;
+  private boolean runIndex, auto;
 
   private double shooterPos, shooterSpeed;
+
+  private int counter;
+
   /** Creates a new DummyShooter. */
-  public DummyShooter(ShooterSubsystem shooterSub, IntakeSubsystem intakeSub, boolean runIndex, double shooterPos, double shooterSpeed) {
+  public DummyShooter(ShooterSubsystem shooterSub, IntakeSubsystem intakeSub, boolean runIndex, double shooterPos, double shooterSpeed, boolean auto) {
     this.shooterSub = shooterSub;
     this.intakeSub = intakeSub;
     this.runIndex = runIndex;
     this.shooterPos = shooterPos;
     this.shooterSpeed = shooterSpeed;
+    this.auto = auto;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    counter = 0;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     shooterSub.setPivotAngle(shooterPos);
-    shooterSub.setFlyWheelSpeeds(shooterSpeed);
-    if(runIndex){
+    //shooterSub.setFlyWheelSpeeds(shooterSpeed);
+    shooterSub.setFlyWheelVelocity(-7000);
+    if(runIndex || counter > 25){
       shooterSub.setIndexRollerSpeed(ShooterMechConstants.indexShootSpeed);
     }
     else{
       shooterSub.setIndexRollerSpeed(0);
       // System.out.println("Indexers at 0");
+    }
+    if(auto){
+      counter++;
     }
   }
 

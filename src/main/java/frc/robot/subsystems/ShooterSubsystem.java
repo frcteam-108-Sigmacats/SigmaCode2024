@@ -66,8 +66,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     //Assinging the absolute encoder to the pivot motor and relative encoder to the one of the flywheel motors
     shooterPivotAbsEnc = shooterPivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
-    shooterPivotAbsEnc.setPositionConversionFactor(360);
-    shooterPivotAbsEnc.setInverted(true);
+    // shooterPivotAbsEnc.setPositionConversionFactor(360);
+    // shooterPivotAbsEnc.setInverted(true);
 
     leftShooterSpeedRelEnc = shooterLeftMotor.getEncoder();
     rightShooterSpeedRelEnc = shooterRightMotor.getEncoder();
@@ -80,48 +80,59 @@ public class ShooterSubsystem extends SubsystemBase {
 
     //Configuration of everything
 
-    //Configuring index motor
-    indexMotor.setSmartCurrentLimit(ShooterMechConstants.indexCurrentLimit);//Unit is in amps
-    indexMotor.setIdleMode(IdleMode.kCoast);
+    // //Configuring index motor
+    // indexMotor.setSmartCurrentLimit(ShooterMechConstants.indexCurrentLimit);//Unit is in amps
+    // indexMotor.setIdleMode(IdleMode.kCoast);
 
-    //Configuring flywheel motors
-    shooterLeftMotor.setSmartCurrentLimit(ShooterMechConstants.flywheelCurrentLimit);//Units are in amps
-    shooterLeftMotor.setIdleMode(IdleMode.kBrake);
+    // //Configuring flywheel motors
+    // shooterLeftMotor.setSmartCurrentLimit(ShooterMechConstants.flywheelCurrentLimit);//Units are in amps
+    // shooterLeftMotor.setIdleMode(IdleMode.kBrake);
 
-    shooterRightMotor.setSmartCurrentLimit(ShooterMechConstants.flywheelCurrentLimit);//Units are in amps
-    shooterRightMotor.setIdleMode(IdleMode.kBrake);
+    // shooterRightMotor.setSmartCurrentLimit(ShooterMechConstants.flywheelCurrentLimit);//Units are in amps
+    // shooterRightMotor.setIdleMode(IdleMode.kBrake);
 
-    //Configuring pivot motor
-    shooterPivotMotor.setSmartCurrentLimit(ShooterMechConstants.pivotCurrentLimit);//Units are in amps
-    shooterPivotMotor.setIdleMode(IdleMode.kBrake);
+    // //Configuring pivot motor
+    // shooterPivotMotor.setSmartCurrentLimit(ShooterMechConstants.pivotCurrentLimit);//Units are in amps
+    // shooterPivotMotor.setIdleMode(IdleMode.kBrake);
 
-    //Configure Pivot PID Controller
-    // Enable PID wrap around for the turning motor. This will allow the PID
-    // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
-    // to 10 degrees will go through 0 rather than the other direction which is a
-    // longer route.
-      pivotControl.setPositionPIDWrappingEnabled(true);
-      pivotControl.setPositionPIDWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
-      pivotControl.setPositionPIDWrappingMaxInput(360);
-    pivotControl.setP(ShooterMechConstants.pivotP);
-    pivotControl.setI(ShooterMechConstants.pivotI);
-    pivotControl.setD(ShooterMechConstants.pivotD);
-    pivotControl.setFF(ShooterMechConstants.speedFF);
-    pivotControl.setFeedbackDevice(shooterPivotAbsEnc);
-    pivotControl.setOutputRange(-0.25,
-    0.3);
+    // //Configure Pivot PID Controller
+    // // Enable PID wrap around for the turning motor. This will allow the PID
+    // // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
+    // // to 10 degrees will go through 0 rather than the other direction which is a
+    // // longer route.
+    //   pivotControl.setPositionPIDWrappingEnabled(true);
+    //   pivotControl.setPositionPIDWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
+    //   pivotControl.setPositionPIDWrappingMaxInput(360);
+    // pivotControl.setP(ShooterMechConstants.pivotP);
+    // pivotControl.setI(ShooterMechConstants.pivotI);
+    // pivotControl.setD(ShooterMechConstants.pivotD);
+    // pivotControl.setFF(ShooterMechConstants.pivotFF);
+    // pivotControl.setFeedbackDevice(shooterPivotAbsEnc);
+    // pivotControl.setOutputRange(-0.25,
+    // 0.3);
 
-    leftSpeedControl.setP(ShooterMechConstants.speedP);
-    leftSpeedControl.setI(ShooterMechConstants.speedI);
-    leftSpeedControl.setD(ShooterMechConstants.speedD);
-    leftSpeedControl.setFF(ShooterMechConstants.speedFF);
-    leftSpeedControl.setFeedbackDevice(leftShooterSpeedRelEnc);
+    // leftSpeedControl.setP(ShooterMechConstants.speedP);
+    // leftSpeedControl.setI(ShooterMechConstants.speedI);
+    // leftSpeedControl.setD(ShooterMechConstants.speedD);
+    // leftSpeedControl.setFF(ShooterMechConstants.speedFF);
+    // leftSpeedControl.setFeedbackDevice(leftShooterSpeedRelEnc);
 
-    rightSpeedControl.setP(ShooterMechConstants.speedP);
-    rightSpeedControl.setI(ShooterMechConstants.speedI);
-    rightSpeedControl.setD(ShooterMechConstants.speedD);
-    rightSpeedControl.setFF(ShooterMechConstants.speedFF);
-    rightSpeedControl.setFeedbackDevice(rightShooterSpeedRelEnc);
+    // rightSpeedControl.setP(ShooterMechConstants.speedP);
+    // rightSpeedControl.setI(ShooterMechConstants.speedI);
+    // rightSpeedControl.setD(ShooterMechConstants.speedD);
+    // rightSpeedControl.setFF(ShooterMechConstants.speedFF);
+    // rightSpeedControl.setFeedbackDevice(rightShooterSpeedRelEnc);
+    configureIndexMotor();
+    configureIndexMotor();
+    configureIndexMotor();
+
+    configureShooterMotors();
+    configureShooterMotors();
+    configureShooterMotors();
+
+    configureShooterPivotMotor();
+    configureShooterPivotMotor();
+    configureShooterPivotMotor();
 
     //Burn flash on motors
     indexMotor.burnFlash();
@@ -189,6 +200,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setPivotAngle(double angle){
     pivotControl.setReference(angle, ControlType.kPosition);
   }
+  
   public void setPivotAngle(){
     pivotControl.setReference(this.angle, ControlType.kPosition);
   }
@@ -201,13 +213,71 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterLeftMotor.set(speed);
     shooterRightMotor.set((-speed) - 0.15);
   }
+
   public void setFlyWheelVelocity(double rpm){
     double rightShooterRPM = rpm + (ModuleConstants.kFreeSpeedRPM * 0.1);
     leftSpeedControl.setReference(rpm, ControlType.kVelocity);
     rightSpeedControl.setReference(-rightShooterRPM, ControlType.kVelocity);
     //shooterRightMotor.follow(shooterLeftMotor, ShooterMechConstants.rightFlywheelInverted);
   }
+
   public void setIndexRollerSpeed(double speed){
     indexMotor.set(speed);
+  }
+
+  public void configureShooterMotors(){
+    //Configuring flywheel motors
+      shooterLeftMotor.setSmartCurrentLimit(ShooterMechConstants.flywheelCurrentLimit);//Units are in amps
+      shooterLeftMotor.setIdleMode(IdleMode.kBrake);
+
+      shooterRightMotor.setSmartCurrentLimit(ShooterMechConstants.flywheelCurrentLimit);//Units are in amps
+      shooterRightMotor.setIdleMode(IdleMode.kBrake);
+    
+    //Setting Up Velocity Control
+      leftSpeedControl.setP(ShooterMechConstants.speedP);
+      leftSpeedControl.setI(ShooterMechConstants.speedI);
+      leftSpeedControl.setD(ShooterMechConstants.speedD);
+      leftSpeedControl.setFF(ShooterMechConstants.speedFF);
+      leftSpeedControl.setFeedbackDevice(leftShooterSpeedRelEnc);
+
+      rightSpeedControl.setP(ShooterMechConstants.speedP);
+      rightSpeedControl.setI(ShooterMechConstants.speedI);
+      rightSpeedControl.setD(ShooterMechConstants.speedD);
+      rightSpeedControl.setFF(ShooterMechConstants.speedFF);
+      rightSpeedControl.setFeedbackDevice(rightShooterSpeedRelEnc);
+  }
+  
+  public void configureShooterPivotMotor(){
+    //Converting Absolute Encoder to degrees
+      shooterPivotAbsEnc.setPositionConversionFactor(360);
+
+    //Inverting the absolute encoder to get the correct readings
+      shooterPivotAbsEnc.setInverted(true);
+
+    //Configuring pivot motor
+      shooterPivotMotor.setSmartCurrentLimit(ShooterMechConstants.pivotCurrentLimit);//Units are in amps
+      shooterPivotMotor.setIdleMode(IdleMode.kBrake);
+
+    //Configure Pivot PID Controller
+      // Enable PID wrap around for the turning motor. This will allow the PID
+      // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
+      // to 10 degrees will go through 0 rather than the other direction which is a
+      // longer route.
+        pivotControl.setPositionPIDWrappingEnabled(true);
+        pivotControl.setPositionPIDWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
+        pivotControl.setPositionPIDWrappingMaxInput(360);
+      pivotControl.setP(ShooterMechConstants.pivotP);
+      pivotControl.setI(ShooterMechConstants.pivotI);
+      pivotControl.setD(ShooterMechConstants.pivotD);
+      pivotControl.setFF(ShooterMechConstants.pivotFF);
+      pivotControl.setFeedbackDevice(shooterPivotAbsEnc);
+      pivotControl.setOutputRange(-0.25,
+      0.3);
+  }
+
+  public void configureIndexMotor(){
+    //Configuring index motor
+      indexMotor.setSmartCurrentLimit(ShooterMechConstants.indexCurrentLimit);//Unit is in amps
+      indexMotor.setIdleMode(IdleMode.kCoast);
   }
 }

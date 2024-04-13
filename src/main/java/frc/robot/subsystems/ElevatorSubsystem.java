@@ -48,20 +48,23 @@ public class ElevatorSubsystem extends SubsystemBase {
     //Assign encoder to left motor's built in encoder
     elevateEnc = leftElevatorMotor.getAlternateEncoder(8192);
 
-    //Set PID gains to the PID Controller
-    elevatePositionControl.setP(ElevatorConstants.kP);
-    elevatePositionControl.setI(ElevatorConstants.kI);
-    elevatePositionControl.setD(ElevatorConstants.kD);
-    elevatePositionControl.setOutputRange(-0.98, 1.0);
-    elevatePositionControl.setFeedbackDevice(elevateEnc);
-    //Configure motors
-    leftElevatorMotor.setIdleMode(IdleMode.kBrake);
-    leftElevatorMotor.setSmartCurrentLimit(40);//Units in amps
-    leftElevatorMotor.setInverted(true);
+    // //Set PID gains to the PID Controller
+    // elevatePositionControl.setP(ElevatorConstants.kP);
+    // elevatePositionControl.setI(ElevatorConstants.kI);
+    // elevatePositionControl.setD(ElevatorConstants.kD);
+    // elevatePositionControl.setOutputRange(-0.98, 1.0);
+    // elevatePositionControl.setFeedbackDevice(elevateEnc);
+    // //Configure motors
+    // leftElevatorMotor.setIdleMode(IdleMode.kBrake);
+    // leftElevatorMotor.setSmartCurrentLimit(40);//Units in amps
+    // leftElevatorMotor.setInverted(true);
 
-    rightElevatorMotor.setIdleMode(IdleMode.kBrake);
-    rightElevatorMotor.setSmartCurrentLimit(40);//Units in amps
-    rightElevatorMotor.follow(leftElevatorMotor, ElevatorConstants.invertRightMotor);
+    // rightElevatorMotor.setIdleMode(IdleMode.kBrake);
+    // rightElevatorMotor.setSmartCurrentLimit(40);//Units in amps
+    // rightElevatorMotor.follow(leftElevatorMotor, ElevatorConstants.invertRightMotor);
+    configureElevatorMotors();
+    configureElevatorMotors();
+    configureElevatorMotors();
 
     //Burn flash to save configuration of motors
     leftElevatorMotor.burnFlash();
@@ -133,8 +136,26 @@ public class ElevatorSubsystem extends SubsystemBase {
     leftElevatorMotor.set(speed);
     rightElevatorMotor.set(speed);
   }
+  
   public void setServoSpeed(double speed){
     leftStaticHook.setSpeed(speed);
     rightStaticHook.setSpeed(-speed);
+  }
+
+  public void configureElevatorMotors(){
+    //Set PID gains to the PID Controller
+    elevatePositionControl.setP(ElevatorConstants.kP);
+    elevatePositionControl.setI(ElevatorConstants.kI);
+    elevatePositionControl.setD(ElevatorConstants.kD);
+    elevatePositionControl.setOutputRange(-0.98, 1.0);
+    elevatePositionControl.setFeedbackDevice(elevateEnc);
+    //Configure motors
+    leftElevatorMotor.setIdleMode(IdleMode.kBrake);
+    leftElevatorMotor.setSmartCurrentLimit(40);//Units in amps
+    leftElevatorMotor.setInverted(true);
+
+    rightElevatorMotor.setIdleMode(IdleMode.kBrake);
+    rightElevatorMotor.setSmartCurrentLimit(40);//Units in amps
+    rightElevatorMotor.follow(leftElevatorMotor, ElevatorConstants.invertRightMotor);
   }
 }

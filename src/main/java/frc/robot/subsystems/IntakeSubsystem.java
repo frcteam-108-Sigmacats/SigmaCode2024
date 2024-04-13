@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.ShooterMechConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
   //Instantiating pivot motor, intake motor, and transfer motor
@@ -63,35 +64,47 @@ public class IntakeSubsystem extends SubsystemBase {
       intakeMotor.clearFaults();
       transferMotor.clearFaults();
 
-    //Configuring the pivotIntakeMotor, Intake Motor, Transfer Motor
-      pivotIntakeMotor.setIdleMode(IdleMode.kCoast);//Don't let the motor move much even when robot is disabled
-      pivotIntakeMotor.setSmartCurrentLimit(IntakeConstants.pivotMotorCurrentLimit);//Sets the amount of amps the motor should at max take (Units:amps)
+    // //Configuring the pivotIntakeMotor, Intake Motor, Transfer Motor
+    //   pivotIntakeMotor.setIdleMode(IdleMode.kCoast);//Don't let the motor move much even when robot is disabled
+    //   pivotIntakeMotor.setSmartCurrentLimit(IntakeConstants.pivotMotorCurrentLimit);//Sets the amount of amps the motor should at max take (Units:amps)
 
-      intakeMotor.setIdleMode(IdleMode.kCoast);//Don't let the motor move much even when robot is disabled
-      intakeMotor.setSmartCurrentLimit(IntakeConstants.intakeMotorCurrentLimit);//Sets the amount of amps the motor should at max take (Units:amps)
+    //   intakeMotor.setIdleMode(IdleMode.kCoast);//Don't let the motor move much even when robot is disabled
+    //   intakeMotor.setSmartCurrentLimit(IntakeConstants.intakeMotorCurrentLimit);//Sets the amount of amps the motor should at max take (Units:amps)
 
-      transferMotor.setIdleMode(IdleMode.kCoast);
-      transferMotor.setSmartCurrentLimit(IntakeConstants.transferMotorCurrentLimit);
+    //   transferMotor.setIdleMode(IdleMode.kCoast);
+    //   transferMotor.setSmartCurrentLimit(IntakeConstants.transferMotorCurrentLimit);
 
 
-    // Enable PID wrap around for the turning motor. This will allow the PID
-    // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
-    // to 10 degrees will go through 0 rather than the other direction which is a
-    // longer route.
-      pivotControl.setPositionPIDWrappingEnabled(true);
-      pivotControl.setPositionPIDWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
-      pivotControl.setPositionPIDWrappingMaxInput(360);
-    //Configuring the PID Controller
-      pivotControl.setP(IntakeConstants.kP);//Sets the P gain (Starting power to reach set position closely)
-      pivotControl.setI(IntakeConstants.kI);//Sets the I gain (Error compensation power to reach the exact position)
-      pivotControl.setD(IntakeConstants.kD);//Sets the D gain (Stop power (Basically helps with smoother stop of mechanism))
-      pivotControl.setFeedbackDevice(intakeAbsEnc);//Sets the encoder we want the PID to follow 
-      pivotControl.setOutputRange(-0.5,
-      ModuleConstants.kTurningMaxOutput);
+    // // Enable PID wrap around for the turning motor. This will allow the PID
+    // // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
+    // // to 10 degrees will go through 0 rather than the other direction which is a
+    // // longer route.
+    //   pivotControl.setPositionPIDWrappingEnabled(true);
+    //   pivotControl.setPositionPIDWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
+    //   pivotControl.setPositionPIDWrappingMaxInput(360);
+    // //Configuring the PID Controller
+    //   pivotControl.setP(IntakeConstants.kP);//Sets the P gain (Starting power to reach set position closely)
+    //   pivotControl.setI(IntakeConstants.kI);//Sets the I gain (Error compensation power to reach the exact position)
+    //   pivotControl.setD(IntakeConstants.kD);//Sets the D gain (Stop power (Basically helps with smoother stop of mechanism))
+    //   pivotControl.setFF(ShooterMechConstants.pivotFF);
+    //   pivotControl.setFeedbackDevice(intakeAbsEnc);//Sets the encoder we want the PID to follow 
+    //   pivotControl.setOutputRange(-0.5,
+    //   ModuleConstants.kTurningMaxOutput);
 
-    //Configuring Absolute Encoder
-      intakeAbsEnc.setPositionConversionFactor(360);
-      intakeAbsEnc.setInverted(false);
+    // //Configuring Absolute Encoder
+    //   intakeAbsEnc.setPositionConversionFactor(360);
+    //   intakeAbsEnc.setInverted(false);
+    configureIntakeMotor();
+    configureIntakeMotor();
+    configureIntakeMotor();
+
+    configurePivotIntakeMotor();
+    configurePivotIntakeMotor();
+    configurePivotIntakeMotor();
+
+    configureTransferMotor();
+    configureTransferMotor();
+    configureTransferMotor();
 
     //Burns flash to finish configuring the motors (Basically saying to set the configurations)
       pivotIntakeMotor.burnFlash();
@@ -148,10 +161,11 @@ public class IntakeSubsystem extends SubsystemBase {
       return !intakeSensor.get();
     }
   
-    public boolean isAbsEncConnected(){
+  public boolean isAbsEncConnected(){
       return pivotIntakeMotor.getFault(FaultID.kSensorFault);
     }
-    public boolean getTransferSensor(){
+
+  public boolean getTransferSensor(){
       return !transferSensor.get();
     }
 
@@ -159,6 +173,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setIntakeAngle(double angle){
       pivotControl.setReference(angle, ControlType.kPosition);
     }
+
     public void testIntakePivot(double speed){
       pivotIntakeMotor.set(speed);
     }
@@ -172,4 +187,42 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setTransferSpeed(double speed){
       transferMotor.set(speed);
     }
+
+  public void configurePivotIntakeMotor(){
+    //Configuring the pivotIntakeMotor
+      pivotIntakeMotor.setIdleMode(IdleMode.kCoast);//Don't let the motor move much even when robot is disabled
+      pivotIntakeMotor.setSmartCurrentLimit(IntakeConstants.pivotMotorCurrentLimit);//Sets the amount of amps the motor should at max take (Units:amps)
+
+    // Enable PID wrap around for the turning motor. This will allow the PID
+    // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
+    // to 10 degrees will go through 0 rather than the other direction which is a
+    // longer route.
+      pivotControl.setPositionPIDWrappingEnabled(true);
+      pivotControl.setPositionPIDWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
+      pivotControl.setPositionPIDWrappingMaxInput(360);
+    //Configuring the PID Controller
+      pivotControl.setP(IntakeConstants.kP);//Sets the P gain (Starting power to reach set position closely)
+      pivotControl.setI(IntakeConstants.kI);//Sets the I gain (Error compensation power to reach the exact position)
+      pivotControl.setD(IntakeConstants.kD);//Sets the D gain (Stop power (Basically helps with smoother stop of mechanism))
+      pivotControl.setFF(ShooterMechConstants.pivotFF);
+      pivotControl.setFeedbackDevice(intakeAbsEnc);//Sets the encoder we want the PID to follow 
+      pivotControl.setOutputRange(-0.5,
+      0.8);
+
+    //Configuring Absolute Encoder
+      intakeAbsEnc.setPositionConversionFactor(360);
+      intakeAbsEnc.setInverted(false);
+  }
+
+  public void configureIntakeMotor(){
+    //Configuring the Intake Motor
+      intakeMotor.setIdleMode(IdleMode.kCoast);//Don't let the motor move much even when robot is disabled
+      intakeMotor.setSmartCurrentLimit(IntakeConstants.intakeMotorCurrentLimit);//Sets the amount of amps
+  }
+
+  public void configureTransferMotor(){
+    //Configuring the Transfer Motor
+      transferMotor.setIdleMode(IdleMode.kCoast);//Idle Mode is either Brake(Can never rotate motor when robot is on) or Coast (Can rotate while robot is disabled)
+      transferMotor.setSmartCurrentLimit(IntakeConstants.transferMotorCurrentLimit);
+  }
 }

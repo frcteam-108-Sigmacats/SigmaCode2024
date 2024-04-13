@@ -10,11 +10,11 @@ import frc.robot.Constants.ShooterMechConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class RestShooter extends Command {
+public class RestShooterAuto extends Command {
   private ShooterSubsystem shooterSub;
   private IntakeSubsystem intakeSub;
   /** Creates a new RestShooter. */
-  public RestShooter(ShooterSubsystem shooterSub, IntakeSubsystem intakeSub) {
+  public RestShooterAuto(ShooterSubsystem shooterSub, IntakeSubsystem intakeSub) {
     this.shooterSub = shooterSub;
     this.intakeSub = intakeSub;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -32,12 +32,7 @@ public class RestShooter extends Command {
     // double rpm = -6784 * 0.2;
     // System.out.println("RPM is " + rpm);
     // shooterSub.setFlyWheelVelocity(rpm);
-    if(!intakeSub.getTransferSensor() == true){
-      shooterSub.setIndexRollerSpeed(0);
-    }
-    else{
-      shooterSub.setIndexRollerSpeed(ShooterMechConstants.indexTransferSpeed / 1.7);
-    }
+    shooterSub.setIndexRollerSpeed(0);
     shooterSub.setPivotAngle(ShooterMechConstants.restPos);
     // shooterSub.setPivotAngle();
     // System.out.println("Shooter at rest position");

@@ -80,8 +80,8 @@ public class RunIntakeANDTransferCmd extends Command {
     // }
     if(intakeSubsystem.getIRSensor() == true ){
       // System.out.println("Intake is Exiting");
-      // intakeSubsystem.setIntakeSpeed(0);//Adding this for auto
-      // intakeSubsystem.setTransferSpeed(0);//Adding this for auto
+      intakeSubsystem.setIntakeSpeed(0);//Adding this for auto
+      intakeSubsystem.setTransferSpeed(0);//Adding this for auto
       finish = true;
     }
   }

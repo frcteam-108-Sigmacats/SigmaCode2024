@@ -56,25 +56,6 @@
           }
         },
         {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.2
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RestShooter"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "AutoShooter"
@@ -94,25 +75,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "MiddlePath2"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.2
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RestShooter"
                 }
               }
             ]
@@ -144,28 +106,28 @@
           }
         },
         {
-          "type": "race",
+          "type": "named",
+          "data": {
+            "name": "AutoShooter"
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "wait",
+                "type": "path",
                 "data": {
-                  "waitTime": 0.2
+                  "pathName": "MiddlePath4"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "RestShooter"
+                  "name": "RunIntake"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoShooter"
           }
         }
       ]

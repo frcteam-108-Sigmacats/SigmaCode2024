@@ -39,7 +39,12 @@ public class ShooterTransfer extends Command {
   public void execute() {
     shooterSub.setPivotAngle(ShooterMechConstants.restPos);
     shooterSub.setFlyWheelSpeeds(-0.3);
-    shooterSub.setIndexRollerSpeed(indexSpeed);
+    if(!intakeSub.getTransferSensor()){
+      shooterSub.setIndexRollerSpeed(indexSpeed);
+    }
+    else{
+      shooterSub.setIndexRollerSpeed(-0.15);
+    }
     // if(ChassisConstants.isThereGamePiece == true && intakeSub.getIRSensor() == false){
     //   shooterSub.setIndexRollerSpeed(-indexSpeed);
     // }
@@ -53,7 +58,7 @@ public class ShooterTransfer extends Command {
     //   finish = true;
     // }
     if(intakeSub.getIRSensor() == true){
-      // shooterSub.setIndexRollerSpeed(0);//Adding this for auto
+      shooterSub.setIndexRollerSpeed(0);//Adding this for auto
       finish = true;
     }
   }

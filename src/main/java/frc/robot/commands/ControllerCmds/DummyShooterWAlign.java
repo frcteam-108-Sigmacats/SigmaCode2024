@@ -19,9 +19,9 @@ import frc.robot.subsystems.Vision;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class DummyShooterWAlign extends ParallelRaceGroup {
   /** Creates a new DummyShooterWAlign. */
-  public DummyShooterWAlign(ShooterSubsystem shooterSub, Vision visionSub, IntakeSubsystem intakeSub, DriveSubsystem driveSub, boolean runIndex, double shooterPos, double shootSpeed, CommandXboxController driverController, boolean fieldRelative, boolean shooterAlign) {
+  public DummyShooterWAlign(ShooterSubsystem shooterSub, Vision visionSub, IntakeSubsystem intakeSub, DriveSubsystem driveSub, boolean runIndex, double shooterPos, double shootSpeed, CommandXboxController driverController, boolean fieldRelative, boolean shooterAlign, boolean fastAlign, boolean auto) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new AutoAlignTag(driveSub, visionSub, intakeSub, driverController, fieldRelative, shooterAlign), new DummyShooter(shooterSub, intakeSub, runIndex, shooterPos, shootSpeed), new SetIntakeAngle(intakeSub, IntakeConstants.shootIntakePos, runIndex));
+    addCommands(new AutoAlignTag(driveSub, visionSub, intakeSub, driverController, fieldRelative, shooterAlign, fastAlign), new DummyShooter(shooterSub, intakeSub, runIndex, shooterPos, shootSpeed, auto), new SetIntakeAngle(intakeSub, IntakeConstants.shootIntakePos, runIndex));
   }
 }

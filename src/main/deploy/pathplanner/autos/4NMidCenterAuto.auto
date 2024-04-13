@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.481051682482512,
-      "y": 5.583099697005081
+      "x": 1.4324184098605162,
+      "y": 5.553919733431884
     },
     "rotation": 0
   },
@@ -14,26 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoShooter"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunIntake"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.1
-                }
-              }
-            ]
+            "name": "DummyShotPod"
           }
         },
         {
@@ -43,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "MiddlePath1"
+                  "pathName": "MidCenterPath1"
                 }
               },
               {
@@ -60,15 +41,15 @@
           "data": {
             "commands": [
               {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.2
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "RestShooter"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.2
                 }
               }
             ]
@@ -85,15 +66,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "RunIntake"
+                  "pathName": "MidCenterPath2"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "MiddlePath2"
+                  "name": "RunIntake"
                 }
               }
             ]
@@ -104,9 +85,9 @@
           "data": {
             "commands": [
               {
-                "type": "wait",
+                "type": "path",
                 "data": {
-                  "waitTime": 0.2
+                  "pathName": "MidCenterPath3"
                 }
               },
               {
@@ -131,32 +112,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "MiddlePath3"
+                  "pathName": "MidCenterPath4"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "RunIntake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.2
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RestShooter"
                 }
               }
             ]

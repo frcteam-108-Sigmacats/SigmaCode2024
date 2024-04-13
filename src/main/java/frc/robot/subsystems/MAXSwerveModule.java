@@ -56,46 +56,53 @@ public class MAXSwerveModule extends SubsystemBase {
 
       drivePIDControl = driveMotor.getPIDController();
       turnPIDControl = turnMotor.getPIDController();
-      drivePIDControl.setFeedbackDevice(driveEncoder);
-      turnPIDControl.setFeedbackDevice(turnEncoder);
+      // drivePIDControl.setFeedbackDevice(driveEncoder);
+      // turnPIDControl.setFeedbackDevice(turnEncoder);
 
-    //Applying Motor Conversions
-      driveEncoder.setPositionConversionFactor(ModuleConstants.kDrivingEncoderPositionFactor);
-      driveEncoder.setVelocityConversionFactor(ModuleConstants.kDrivingEncoderVelocityFactor);
+    // //Applying Motor Conversions
+    //   driveEncoder.setPositionConversionFactor(ModuleConstants.kDrivingEncoderPositionFactor);
+    //   driveEncoder.setVelocityConversionFactor(ModuleConstants.kDrivingEncoderVelocityFactor);
 
-      turnEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderPositionFactor);
-      turnEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderVelocityFactor);
-    //Setting inversion for Absolute Encoder
-      turnEncoder.setInverted(ModuleConstants.turningEncoderInverted);
+    //   turnEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderPositionFactor);
+    //   turnEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderVelocityFactor);
+    // //Setting inversion for Absolute Encoder
+    //   turnEncoder.setInverted(ModuleConstants.turningEncoderInverted);
 
-    // Enable PID wrap around for the turning motor. This will allow the PID
-    // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
-    // to 10 degrees will go through 0 rather than the other direction which is a
-    // longer route.
-      turnPIDControl.setPositionPIDWrappingEnabled(true);
-      turnPIDControl.setPositionPIDWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
-      turnPIDControl.setPositionPIDWrappingMaxInput(ModuleConstants.kTurningEncoderPositionPIDMaxInput);
+    // // Enable PID wrap around for the turning motor. This will allow the PID
+    // // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
+    // // to 10 degrees will go through 0 rather than the other direction which is a
+    // // longer route.
+    //   turnPIDControl.setPositionPIDWrappingEnabled(true);
+    //   turnPIDControl.setPositionPIDWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
+    //   turnPIDControl.setPositionPIDWrappingMaxInput(ModuleConstants.kTurningEncoderPositionPIDMaxInput);
 
-    //Setting PID gains for Drive Motors and Turn Motors for accurate drive and turning
-      drivePIDControl.setP(ModuleConstants.kDrivingP);
-      drivePIDControl.setI(ModuleConstants.kDrivingI);
-      drivePIDControl.setD(ModuleConstants.kDrivingD);
-      drivePIDControl.setFF(ModuleConstants.kDrivingFF);
-      drivePIDControl.setOutputRange(ModuleConstants.kDrivingMinOutput,
-          ModuleConstants.kDrivingMaxOutput);
+    // //Setting PID gains for Drive Motors and Turn Motors for accurate drive and turning
+    //   drivePIDControl.setP(ModuleConstants.kDrivingP);
+    //   drivePIDControl.setI(ModuleConstants.kDrivingI);
+    //   drivePIDControl.setD(ModuleConstants.kDrivingD);
+    //   drivePIDControl.setFF(ModuleConstants.kDrivingFF);
+    //   drivePIDControl.setOutputRange(ModuleConstants.kDrivingMinOutput,
+    //       ModuleConstants.kDrivingMaxOutput);
       
-      turnPIDControl.setP(ModuleConstants.kTurningP);
-      turnPIDControl.setI(ModuleConstants.kTurningI);
-      turnPIDControl.setD(ModuleConstants.kTurningD);
-      turnPIDControl.setFF(ModuleConstants.kTurningFF);
-      turnPIDControl.setOutputRange(ModuleConstants.kTurningMinOutput,
-          ModuleConstants.kTurningMaxOutput);
+    //   turnPIDControl.setP(ModuleConstants.kTurningP);
+    //   turnPIDControl.setI(ModuleConstants.kTurningI);
+    //   turnPIDControl.setD(ModuleConstants.kTurningD);
+    //   turnPIDControl.setFF(ModuleConstants.kTurningFF);
+    //   turnPIDControl.setOutputRange(ModuleConstants.kTurningMinOutput,
+    //       ModuleConstants.kTurningMaxOutput);
 
-    //Setting up Idle mode and Current Limit. Needed to not overpower the motors and burn it
-    driveMotor.setIdleMode(IdleMode.kBrake);
-    turnMotor.setIdleMode(IdleMode.kCoast);
-    driveMotor.setSmartCurrentLimit(ModuleConstants.kDrivingMotorCurrentLimit);
-    turnMotor.setSmartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit);
+    // //Setting up Idle mode and Current Limit. Needed to not overpower the motors and burn it
+    // driveMotor.setIdleMode(IdleMode.kBrake);
+    // turnMotor.setIdleMode(IdleMode.kCoast);
+    // driveMotor.setSmartCurrentLimit(ModuleConstants.kDrivingMotorCurrentLimit);
+    // turnMotor.setSmartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit);
+    configureDriveMotor();
+    configureDriveMotor();
+    configureDriveMotor();
+
+    configureTurnMotor();
+    configureTurnMotor();
+    configureTurnMotor();
 
     //Burn flash to save configurations of the Speed Controllers
       driveMotor.burnFlash();
@@ -140,6 +147,63 @@ public class MAXSwerveModule extends SubsystemBase {
       public void resetEncoders(){
         driveEncoder.setPosition(0);
       }
+
+  //Configuring each motor
+  public void configureDriveMotor(){
+    //Setting the encoder the PID controller will be reading
+      drivePIDControl.setFeedbackDevice(driveEncoder);
+
+    //Applying Motor Conversions
+      driveEncoder.setPositionConversionFactor(ModuleConstants.kDrivingEncoderPositionFactor);
+      driveEncoder.setVelocityConversionFactor(ModuleConstants.kDrivingEncoderVelocityFactor);
+
+    //Setting PID gains for Drive Motors for accurate drive
+      drivePIDControl.setP(ModuleConstants.kDrivingP);
+      drivePIDControl.setI(ModuleConstants.kDrivingI);
+      drivePIDControl.setD(ModuleConstants.kDrivingD);
+      drivePIDControl.setFF(ModuleConstants.kDrivingFF);
+      drivePIDControl.setOutputRange(ModuleConstants.kDrivingMinOutput,
+          ModuleConstants.kDrivingMaxOutput);
+
+    //Setting the Idle Mode for the motor (Brake or Coast Mode)
+      driveMotor.setIdleMode(IdleMode.kBrake);
+
+    //Setting the power limit for the motor
+      driveMotor.setSmartCurrentLimit(ModuleConstants.kDrivingMotorCurrentLimit);
+  }
+
+  public void configureTurnMotor(){
+    //Setting the encoder that the PID controller will be reading from
+      turnPIDControl.setFeedbackDevice(turnEncoder);  
+
+    //Setting Motor Conversions
+      turnEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderPositionFactor);
+      turnEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderVelocityFactor);
+
+    //Setting inversion for Absolute Encoder
+      turnEncoder.setInverted(ModuleConstants.turningEncoderInverted);
+
+    // Enable PID wrap around for the turning motor. This will allow the PID
+    // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
+    // to 10 degrees will go through 0 rather than the other direction which is a
+    // longer route.
+      turnPIDControl.setPositionPIDWrappingEnabled(true);
+      turnPIDControl.setPositionPIDWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
+      turnPIDControl.setPositionPIDWrappingMaxInput(ModuleConstants.kTurningEncoderPositionPIDMaxInput);
+
+      turnPIDControl.setP(ModuleConstants.kTurningP);
+      turnPIDControl.setI(ModuleConstants.kTurningI);
+      turnPIDControl.setD(ModuleConstants.kTurningD);
+      turnPIDControl.setFF(ModuleConstants.kTurningFF);
+      turnPIDControl.setOutputRange(ModuleConstants.kTurningMinOutput,
+          ModuleConstants.kTurningMaxOutput);
+
+    //Setting the Idle Mode for the Motor (Brake or Coast Mode)
+      turnMotor.setIdleMode(IdleMode.kCoast);
+
+    //Setting the power limit for the turn motor
+      turnMotor.setSmartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit);
+  }
 
   /**
    * Example command factory method.

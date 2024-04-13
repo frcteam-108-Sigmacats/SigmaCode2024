@@ -65,7 +65,12 @@ public class AutoShooter extends Command {
     //   }
     // }
     //pivotAngle = (-0.0030042 * Math.pow(currentDist, 2)) + (0.8324295 * currentDist) - 15.1666232;
-    pivotAngle = (-12.764943846962566) + (0.79771905891679129 * currentDist) + (-0.0031590772834475325 * Math.pow(currentDist, 2));
+    //pivotAngle = (-12.764943846962566) + (0.79771905891679129 * currentDist) + (-0.0031590772834475325 * Math.pow(currentDist, 2));
+    pivotAngle = (0.00000000000016370943436754830 * Math.pow(currentDist, 8)) - (0.00000000013485474610480835 * Math.pow(currentDist, 7)) +
+    (0.000000047319450547384044 * Math.pow(currentDist, 6)) - (0.0000092286980457404328 * Math.pow(currentDist, 5)) +
+    (0.0010925631267597823 * Math.pow(currentDist, 4)) - (0.080238408863234717 * Math.pow(currentDist, 3)) +
+    (3.5581453006266690 * Math.pow(currentDist, 2)) - (86.320078674990356 * currentDist) + 884.72326745926716;
+    // pivotAngle = (-0.0024512509473472699 * Math.pow(currentDist, 2)) + (0.70558030260894622 * currentDist) - 9.6701102318001979;
      
     if(currentDist >= 0 && currentDist <= 71){
       speed = -0.65;
@@ -82,10 +87,11 @@ public class AutoShooter extends Command {
     else{
       speed = -0.8;
     }
-    System.out.println("Auto Shooter is running");
+    // System.out.println("Auto Shooter is running");
     counter++;
     //shooterSub.setPivotAngle(pivotAngle);
     shooterSub.setPivotAngle(pivotAngle);
+    // System.out.println("Shooter Angle is " + pivotAngle);
     //shooterSub.setFlyWheelSpeeds(speed);
     shooterSub.setFlyWheelVelocity(-7000);
     // if(counter >= 50 && Math.abs(pivotAngle - shooterSub.getPivotAngle()) <= 0.5 /*&& pivotAngle - shooterSub.getPivotAngle() >= 0*/){
@@ -99,7 +105,7 @@ public class AutoShooter extends Command {
       // System.out.println("Indexers at 0");
     }
     if(!intakeSub.getIRSensor()){
-      System.out.println("Auto Shooter is ending");
+      //System.out.println("Auto Shooter is ending");
       finish = true;
     }
   }

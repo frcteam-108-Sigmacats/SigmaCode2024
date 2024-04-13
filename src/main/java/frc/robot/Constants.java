@@ -131,7 +131,7 @@ public final class Constants {
     public static final int transferMotorCurrentLimit = 20; //Units in amps
 
     //PID gains for pivot control
-    public static final double kP = 0.014;//Try to make the intake pivot faster
+    public static final double kP = 0.02;//Try to make the intake pivot faster
     public static final double kI = 0.0;//Try to make the intake pivot faster
     public static final double kD = 0.0;
 
@@ -141,12 +141,12 @@ public final class Constants {
 
     //Values for the intake angle's
     public static final double restPos = 0;//Switch to 25 later//The rest position which will also be the handoff position
-    public static final double groundIntakePos = 137;//The position where we will intake from the ground (Find value first)
+    public static final double groundIntakePos = 130;//The position where we will intake from the ground (Find value first)135
     public static final double shootIntakePos = 35;
 
     //The speeds for intaking, outtaking
     public static final double intakeSpeed = -0.8; //Keep at -100% unless needed to change (negative is to suck in the note and positive is to spit out if motor is not inverted)
-    public static final double transferSpeed = -0.4; //Keep at -25% unless needed to change (negative is to suck in the note and positive is to spit out if motor is not inverted)
+    public static final double transferSpeed = -0.55; //Keep at -25% unless needed to change (negative is to suck in the note and positive is to spit out if motor is not inverted)
     public static final double outtakeSpeed = 1.0; //(negative is to suck in the note and positive is to spit out if motor is not inverted)
     public static final double reverseTransferSpeed = 0.5; //(negative is to suck in the note and positive is to spit out if motor is not inverted)
   }
@@ -169,29 +169,30 @@ public final class Constants {
     //Pivot angles
     public static final double restPos = 0.75; //Switch to 1 later
     public static final double ampPos = 100;
+    public static final double trapPos = 20;
     public static final double climbPos = 110;
 
-    public static final double podiumPos = 37;
-    public static final double midPos = 26;
-    public static final double subwooferPos = 9;
+    public static final double podiumPos = 36;
+    public static final double midPos = 29;
+    public static final double subwooferPos = 12;//12
 
     //PID gains for Pivot Controller
-    public static final double pivotP = 0.07;//Try to make the pivot faster
-    public static final double pivotI = 0;
-    public static final double pivotD = 0.001;
+    public static final double pivotP = 0.06;//Try to make the pivot faster
+    public static final double pivotI = 0.0;
+    public static final double pivotD = 1.0;
     public static final double pivotFF = 0.00085;
 
     //PID gains for Speed Control
-    public static final double speedP = 0.00075;
-    public static final double speedI = 0.0;
+    public static final double speedP = 0.1;
+    public static final double speedI = 0.;
     public static final double speedD = 0.0;
-    public static final double speedFF = 0.001;
+    public static final double speedFF = 0.005;
 
     //Should the right side of the flywheel motors need to be inverted to spin the same direction as the left side of the flywheel motor
     public static boolean rightFlywheelInverted = true;
 
     //Speeds for the motors
-    public static final double indexTransferSpeed = -0.25;//Keep at -33% for automatic intake (negative to suck in the note and positive to spit out unless the motor is inverted)
+    public static final double indexTransferSpeed = -0.2;//Keep at -33% for automatic intake (negative to suck in the note and positive to spit out unless the motor is inverted)
     public static final double indexShootSpeed = -1.0;//(negative to suck in the note and positive to spit out unless the motor is inverted)
     public static final double indexOuttakeSpeed = 0.25;
 
@@ -230,6 +231,7 @@ public final class Constants {
 
     //Positions for Elevator
     public static final double ampPos = 1;
+    public static final double trapPos = 0.5;
     public static final double climbUpPos = 1.99;
     public static final double climbDownPos = 0.05;
 

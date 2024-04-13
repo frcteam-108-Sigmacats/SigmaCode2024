@@ -18,6 +18,7 @@ import frc.robot.commands.ShooterCmds.AutoShooter;
 import frc.robot.commands.ShooterCmds.AutonomousAutoShooterWAlign;
 import frc.robot.commands.ShooterCmds.DummyShooter;
 import frc.robot.commands.ShooterCmds.RestShooter;
+import frc.robot.commands.ShooterCmds.RestShooterAuto;
 import frc.robot.commands.ShooterCmds.ReverseShooterTransfer;
 import frc.robot.commands.ShooterCmds.SetAngleAndFlywheelSpeeds;
 import frc.robot.commands.ShooterCmds.SetFlyWheelSpeeds;
@@ -53,6 +54,7 @@ import frc.robot.commands.ControllerCmds.IntakeANDTransferANDAlignCmd;
 import frc.robot.commands.ControllerCmds.IntakeANDTransferCmd;
 import frc.robot.commands.ControllerCmds.OuttakeANDTransferCmd;
 import frc.robot.commands.ControllerCmds.StopTransferANDIntake;
+import frc.robot.commands.ControllerCmds.TrapShootWElevator;
 import frc.robot.commands.ElevatorCmds.ClimbDownCmd;
 import frc.robot.commands.ElevatorCmds.ClimbingUpCmd;
 import frc.robot.commands.ElevatorCmds.KeepClimbCmd;
@@ -155,14 +157,14 @@ public class RobotContainer {
         // dBB.whileTrue(new AutoAlignTag(driveSubsystem, visionSub, intakeSubsystem, driveController, fieldRelative, false));
         // dBB.whileFalse(new DriveJoystick(driveSubsystem, driveController, fieldRelative));
 
-        dBX.whileTrue(new DummyShooterWAlign(shooterSub, visionSub, intakeSubsystem, driveSubsystem, false, ShooterMechConstants.subwooferPos, -0.8, driveController, fieldRelative, true));
-        dBX.whileFalse(new DummyShooterWAlign(shooterSub, visionSub, intakeSubsystem, driveSubsystem, true, ShooterMechConstants.subwooferPos, -0.8, driveController, fieldRelative, true));
+        dBX.whileTrue(new DummyShooterWAlign(shooterSub, visionSub, intakeSubsystem, driveSubsystem, false, ShooterMechConstants.subwooferPos, -0.8, driveController, fieldRelative, true, true, false));
+        dBX.whileFalse(new DummyShooterWAlign(shooterSub, visionSub, intakeSubsystem, driveSubsystem, true, ShooterMechConstants.subwooferPos, -0.8, driveController, fieldRelative, true, true, false));
 
-        dBY.whileTrue(new DummyShooterWAlign(shooterSub, visionSub, intakeSubsystem, driveSubsystem, false, ShooterMechConstants.midPos, -0.65, driveController, fieldRelative, true));
-        dBY.whileFalse(new DummyShooterWAlign(shooterSub, visionSub, intakeSubsystem, driveSubsystem, true, ShooterMechConstants.midPos, -0.65, driveController, fieldRelative, true));
+        dBY.whileTrue(new DummyShooterWAlign(shooterSub, visionSub, intakeSubsystem, driveSubsystem, false, ShooterMechConstants.midPos, -0.65, driveController, fieldRelative, true, true, false));
+        dBY.whileFalse(new DummyShooterWAlign(shooterSub, visionSub, intakeSubsystem, driveSubsystem, true, ShooterMechConstants.midPos, -0.65, driveController, fieldRelative, true, true, false));
         
-        dBB.whileTrue(new DummyShooterWAlign(shooterSub, visionSub, intakeSubsystem, driveSubsystem, false, ShooterMechConstants.podiumPos, -0.8, driveController, fieldRelative, true));
-        dBB.whileFalse(new DummyShooterWAlign(shooterSub, visionSub, intakeSubsystem, driveSubsystem, true, ShooterMechConstants.podiumPos, -0.8, driveController, fieldRelative, true));
+        dBB.whileTrue(new DummyShooterWAlign(shooterSub, visionSub, intakeSubsystem, driveSubsystem, false, ShooterMechConstants.podiumPos, -0.8, driveController, fieldRelative, true, true, false));
+        dBB.whileFalse(new DummyShooterWAlign(shooterSub, visionSub, intakeSubsystem, driveSubsystem, true, ShooterMechConstants.podiumPos, -0.8, driveController, fieldRelative, true, true, false));
 
       //Operator Commands
         //Operator Trigger Commands
@@ -284,9 +286,10 @@ public class RobotContainer {
 
   public void makeAuto(){
     //Registering the commands to the pathplanner software
-    NamedCommands.registerCommand("RestShooter", new RestShooter(shooterSub, intakeSubsystem));
+    NamedCommands.registerCommand("RestShooter", new RestShooterAuto(shooterSub, intakeSubsystem));
     NamedCommands.registerCommand("RunIntake", new IntakeANDTransferCmd(intakeSubsystem, shooterSub));
     NamedCommands.registerCommand("AutoShooter", new AutonomousAutoShooterWAlign(driveSubsystem, visionSub, shooterSub, intakeSubsystem, driveController, true));
+    NamedCommands.registerCommand("DummyShotPod", new DummyShooterWAlign(shooterSub, visionSub, intakeSubsystem, driveSubsystem, false, ShooterMechConstants.subwooferPos, -1.0, driveController, true, true, true, true));
     NamedCommands.registerCommand("RestIntake", new RestIntakeCmd(intakeSubsystem, driveController));
 
     //Getting the first path for each auto side
@@ -301,7 +304,7 @@ public class RobotContainer {
 
     //Making the blue source zone auto
     Command blueSourceZoneAuto = new SequentialCommandGroup(new InstantCommand(() -> 
-    driveSubsystem.resetOdometry(sourceZonePath.getPreviewStartingHolonomicPose())), 
+    driveSubsystem.autoResetOdometry(sourceZonePath.getPreviewStartingHolonomicPose())), 
     AutoBuilder.buildAuto("SourceZoneAuto"));
 
     Command blueSourceZoneAutoNoteRuin = new SequentialCommandGroup(new InstantCommand(() -> 
@@ -319,13 +322,17 @@ public class RobotContainer {
     AutoBuilder.buildAuto("MiddleAutoTest"));
 
     //Making the blue middle auto
-    Command blueMiddleAuto = new SequentialCommandGroup(new InstantCommand(() -> 
-    driveSubsystem.resetOdometry(middlePath.getPreviewStartingHolonomicPose())), 
+    Command blueBCAAuto = new SequentialCommandGroup(new InstantCommand(() -> 
+    driveSubsystem.autoResetOdometry(middlePath.getPreviewStartingHolonomicPose())), 
     AutoBuilder.buildAuto("MiddleAuto"));
 
-    Command blueMiddleAutoTest = new SequentialCommandGroup(new InstantCommand(() -> 
-    driveSubsystem.resetOdometry(middlePath.getPreviewStartingHolonomicPose())), 
-    AutoBuilder.buildAuto("MiddleAutoTest"));
+    Command blueB3CAAuto = new SequentialCommandGroup(new InstantCommand(() -> 
+    driveSubsystem.autoResetOdometry(middlePath.getPreviewStartingHolonomicPose())), 
+    AutoBuilder.buildAuto("MidCenterAuto"));
+
+    Command blueB3CAuto = new SequentialCommandGroup(new InstantCommand(() -> 
+    driveSubsystem.autoResetOdometry(middlePath.getPreviewStartingHolonomicPose())), 
+    AutoBuilder.buildAuto("4NMidCenterAuto"));
 
     //Testing auto
     Command testPath = new SequentialCommandGroup(new InstantCommand(() -> driveSubsystem.resetOdometry(sourceZonePath.flipPath().getPreviewStartingHolonomicPose())), AutoBuilder.followPath(sourceZonePath));
@@ -335,8 +342,9 @@ public class RobotContainer {
     chooser.addOption("Red Source Zone Auto", redSourceZoneAuto);
     chooser.addOption("Red Middle Auto Test", redMiddleAutoTest);
     chooser.addOption("Red Middle Auto", redMiddleAuto);
-    chooser.addOption("Blue Middle Auto Test", blueMiddleAutoTest);
-    chooser.addOption("Blue Middle Auto", blueMiddleAuto);
+    chooser.addOption("Blue B3CA Auto", blueB3CAAuto);
+    chooser.addOption("Blue BCA Auto", blueBCAAuto);
+    chooser.addOption("Blue B3C Auto", blueB3CAuto);
     chooser.addOption("Blue Source Zone Path", blueSourceZoneAuto);
     chooser.addOption("Blue Source Zone Note Ruin Auto", blueSourceZoneAutoNoteRuin);
     chooser.addOption("Testing Path Follow", testPath);

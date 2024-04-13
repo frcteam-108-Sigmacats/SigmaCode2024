@@ -23,6 +23,6 @@ public class AutoShooterWithAlign extends ParallelRaceGroup {
   public AutoShooterWithAlign(DriveSubsystem driveSub, Vision visionSub, ShooterSubsystem shooterSub, IntakeSubsystem intakeSub, CommandXboxController driveController, boolean fieldRelative, boolean runIndex, boolean shooterAlign) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new AutoAlignTag(driveSub, visionSub, intakeSub, driveController, fieldRelative, shooterAlign), new AutoShooter(shooterSub, visionSub, intakeSub, runIndex), new SetIntakeAngle(intakeSub, IntakeConstants.shootIntakePos, runIndex));
+    addCommands(new AutoAlignTag(driveSub, visionSub, intakeSub, driveController, fieldRelative, shooterAlign, false), new AutoShooter(shooterSub, visionSub, intakeSub, runIndex), new SetIntakeAngle(intakeSub, IntakeConstants.shootIntakePos, runIndex));
   }
 }

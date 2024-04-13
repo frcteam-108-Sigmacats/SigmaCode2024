@@ -20,6 +20,6 @@ public class AutonomousAutoShooterWAlign extends ParallelCommandGroup {
   public AutonomousAutoShooterWAlign(DriveSubsystem driveSub, Vision visionSub, ShooterSubsystem shooterSub, IntakeSubsystem intakeSub, CommandXboxController driveController, boolean fieldRelative) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new AutoAlignTag(driveSub, visionSub, intakeSub, driveController, fieldRelative, true), new AutonomousAutoShooter(shooterSub, visionSub, intakeSub));
+    addCommands(new AutoAlignTag(driveSub, visionSub, intakeSub, driveController, fieldRelative, true, true), new AutonomousAutoShooter(shooterSub, visionSub, intakeSub));
   }
 }

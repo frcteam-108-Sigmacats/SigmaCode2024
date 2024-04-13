@@ -5,18 +5,21 @@
 package frc.robot.commands.ShooterCmds;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.ShooterMechConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class RestShooter extends Command {
+public class TrapShoot extends Command {
   private ShooterSubsystem shooterSub;
+
   private IntakeSubsystem intakeSub;
-  /** Creates a new RestShooter. */
-  public RestShooter(ShooterSubsystem shooterSub, IntakeSubsystem intakeSub) {
+
+  private boolean runIndex;
+  /** Creates a new AmpShoot. */
+  public TrapShoot(ShooterSubsystem shooterSub, IntakeSubsystem intakeSub, boolean runIndex) {
     this.shooterSub = shooterSub;
     this.intakeSub = intakeSub;
+    this.runIndex = runIndex;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSub);
   }
@@ -28,19 +31,16 @@ public class RestShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterSub.setFlyWheelSpeeds(-0.3);//switch to -30%
-    // double rpm = -6784 * 0.2;
-    // System.out.println("RPM is " + rpm);
-    // shooterSub.setFlyWheelVelocity(rpm);
-    if(!intakeSub.getTransferSensor() == true){
-      shooterSub.setIndexRollerSpeed(0);
+    shooterSub.setPivotAngle(ShooterMechConstants.trapPos);
+    shooterSub.setFlyWheelVelocity(-7000);
+    if(runIndex){
+      shooterSub.setIndexRollerSpeed(ShooterMechConstants.indexShootSpeed);
     }
     else{
-      shooterSub.setIndexRollerSpeed(ShooterMechConstants.indexTransferSpeed / 1.7);
+      shooterSub.setIndexRollerSpeed(0);
+      // System.out.println("Indexers at 0");
     }
-    shooterSub.setPivotAngle(ShooterMechConstants.restPos);
-    // shooterSub.setPivotAngle();
-    // System.out.println("Shooter at rest position");
+
   }
 
   // Called once the command ends or is interrupted.
@@ -50,6 +50,11 @@ public class RestShooter extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if(!intakeSub.getIRSensor()){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 }
