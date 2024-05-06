@@ -11,12 +11,14 @@ import frc.robot.commands.IntakeCmds.IntakeRollersRest;
 import frc.robot.commands.IntakeCmds.RestIntakeCmd;
 import frc.robot.commands.IntakeCmds.RunIntakeANDTransferCmd;
 import frc.robot.commands.IntakeCmds.RunOuttakeANDReverseTransferCmd;
+import frc.robot.commands.IntakeCmds.SetIntakeAngle;
 import frc.robot.commands.IntakeCmds.TestIntakePivot;
 import frc.robot.commands.LEDs.SetLEDS;
 import frc.robot.commands.ShooterCmds.AmpShoot;
 import frc.robot.commands.ShooterCmds.AutoShooter;
 import frc.robot.commands.ShooterCmds.AutonomousAutoShooterWAlign;
 import frc.robot.commands.ShooterCmds.DummyShooter;
+import frc.robot.commands.ShooterCmds.PassShooter;
 import frc.robot.commands.ShooterCmds.RestShooter;
 import frc.robot.commands.ShooterCmds.RestShooterAuto;
 import frc.robot.commands.ShooterCmds.ReverseShooterTransfer;
@@ -44,6 +46,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
 
+import frc.robot.commands.ControllerCmds.AlignWGyro;
 import frc.robot.commands.ControllerCmds.AmpShootWElevator;
 import frc.robot.commands.ControllerCmds.AutoAlignNote;
 import frc.robot.commands.ControllerCmds.AutoAlignTag;
@@ -99,7 +102,7 @@ public class RobotContainer {
   CommandXboxController(OperatorConstants.kOperatorControllerPort);
 
   //Instantiating the controllers buttons for driver
-  private Trigger dRTrigger, dLTrigger, dLBumper, dRBumper;
+  private Trigger dRTrigger, dLTrigger, dLBumper, dRBumper, dMenuButton;
 
   private Trigger dBA, dBB, dBY, dBX, dPadUp, dPadDown;
 
@@ -163,8 +166,12 @@ public class RobotContainer {
         dBY.whileTrue(new DummyShooterWAlign(shooterSub, visionSub, intakeSubsystem, driveSubsystem, false, ShooterMechConstants.midPos, -0.65, driveController, fieldRelative, true, true, false));
         dBY.whileFalse(new DummyShooterWAlign(shooterSub, visionSub, intakeSubsystem, driveSubsystem, true, ShooterMechConstants.midPos, -0.65, driveController, fieldRelative, true, true, false));
         
-        dBB.whileTrue(new DummyShooterWAlign(shooterSub, visionSub, intakeSubsystem, driveSubsystem, false, ShooterMechConstants.podiumPos, -0.8, driveController, fieldRelative, true, true, false));
-        dBB.whileFalse(new DummyShooterWAlign(shooterSub, visionSub, intakeSubsystem, driveSubsystem, true, ShooterMechConstants.podiumPos, -0.8, driveController, fieldRelative, true, true, false));
+        dBB.whileTrue(new ParallelCommandGroup(new DummyShooter(shooterSub, intakeSubsystem, false, ShooterMechConstants.podiumPos, 0, false), new SetIntakeAngle(intakeSubsystem, IntakeConstants.shootIntakePos, false)));
+        dBB.whileFalse(new ParallelCommandGroup(new DummyShooter(shooterSub, intakeSubsystem, true, ShooterMechConstants.podiumPos, 0, false), new SetIntakeAngle(intakeSubsystem, IntakeConstants.shootIntakePos, true)));
+
+        //New for passing
+        // dMenuButton.whileTrue(new ParallelCommandGroup(new PassShooter(shooterSub, intakeSubsystem, false, ShooterMechConstants.midPos, 0, false), new AlignWGyro(driveSubsystem, intakeSubsystem, driveController, fieldRelative)));
+        // dMenuButton.whileFalse(new ParallelCommandGroup(new PassShooter(shooterSub, intakeSubsystem, true, ShooterMechConstants.midPos, 0, false), new AlignWGyro(driveSubsystem, intakeSubsystem, driveController, fieldRelative)));
 
       //Operator Commands
         //Operator Trigger Commands
@@ -260,9 +267,11 @@ public class RobotContainer {
     dBY = driveController.y();
     dBX = driveController.x();
 
+    dMenuButton = driveController.button(8);
+
     //Getting the driver's pov input (DPAD)
     dPadUp = driveController.povUp();
-    dPadDown = driveController.povDown();
+    dPadDown = driveController.povDown(); 
 
     //Getting the operator's trigger input
     oLTrigger = operatorController.leftTrigger();
@@ -317,21 +326,29 @@ public class RobotContainer {
     driveSubsystem.resetOdometry(middlePath.flipPath().getPreviewStartingHolonomicPose())), 
     AutoBuilder.buildAuto("MiddleAuto"));
 
+    Command redB3CAAuto = new SequentialCommandGroup(new InstantCommand(() -> 
+    driveSubsystem.resetOdometry(PathPlannerPath.fromPathFile("MidCenterPath1").flipPath().getPreviewStartingHolonomicPose())),
+    AutoBuilder.buildAuto("MidCenterAuto"));
+
+    Command redB3CAuto = new SequentialCommandGroup(new InstantCommand(() -> 
+    driveSubsystem.resetOdometry(PathPlannerPath.fromPathFile("MidCenterPath1").flipPath().getPreviewStartingHolonomicPose())),
+    AutoBuilder.buildAuto("4NMidCenterAuto"));
+
     Command redMiddleAutoTest = new SequentialCommandGroup(new InstantCommand(() -> 
     driveSubsystem.resetOdometry(middlePath.flipPath().getPreviewStartingHolonomicPose())), 
     AutoBuilder.buildAuto("MiddleAutoTest"));
 
     //Making the blue middle auto
     Command blueBCAAuto = new SequentialCommandGroup(new InstantCommand(() -> 
-    driveSubsystem.autoResetOdometry(middlePath.getPreviewStartingHolonomicPose())), 
+    driveSubsystem.resetOdometry(middlePath.getPreviewStartingHolonomicPose())), 
     AutoBuilder.buildAuto("MiddleAuto"));
 
     Command blueB3CAAuto = new SequentialCommandGroup(new InstantCommand(() -> 
-    driveSubsystem.autoResetOdometry(middlePath.getPreviewStartingHolonomicPose())), 
+    driveSubsystem.resetOdometry(PathPlannerPath.fromPathFile("MidCenterPath1").getPreviewStartingHolonomicPose())), 
     AutoBuilder.buildAuto("MidCenterAuto"));
 
     Command blueB3CAuto = new SequentialCommandGroup(new InstantCommand(() -> 
-    driveSubsystem.autoResetOdometry(middlePath.getPreviewStartingHolonomicPose())), 
+    driveSubsystem.resetOdometry(PathPlannerPath.fromPathFile("MidCenterPath1").getPreviewStartingHolonomicPose())), 
     AutoBuilder.buildAuto("4NMidCenterAuto"));
 
     //Testing auto
@@ -342,6 +359,8 @@ public class RobotContainer {
     chooser.addOption("Red Source Zone Auto", redSourceZoneAuto);
     chooser.addOption("Red Middle Auto Test", redMiddleAutoTest);
     chooser.addOption("Red Middle Auto", redMiddleAuto);
+    chooser.addOption("Red B3CA Auto", redB3CAAuto);
+    chooser.addOption("Red B3C Auto", redB3CAuto);
     chooser.addOption("Blue B3CA Auto", blueB3CAAuto);
     chooser.addOption("Blue BCA Auto", blueBCAAuto);
     chooser.addOption("Blue B3C Auto", blueB3CAuto);

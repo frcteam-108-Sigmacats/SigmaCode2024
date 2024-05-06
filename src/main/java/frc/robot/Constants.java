@@ -146,7 +146,7 @@ public final class Constants {
 
     //The speeds for intaking, outtaking
     public static final double intakeSpeed = -0.8; //Keep at -100% unless needed to change (negative is to suck in the note and positive is to spit out if motor is not inverted)
-    public static final double transferSpeed = -0.55; //Keep at -25% unless needed to change (negative is to suck in the note and positive is to spit out if motor is not inverted)
+    public static final double transferSpeed = -0.75; //Keep at -25% unless needed to change (negative is to suck in the note and positive is to spit out if motor is not inverted)
     public static final double outtakeSpeed = 1.0; //(negative is to suck in the note and positive is to spit out if motor is not inverted)
     public static final double reverseTransferSpeed = 0.5; //(negative is to suck in the note and positive is to spit out if motor is not inverted)
   }
