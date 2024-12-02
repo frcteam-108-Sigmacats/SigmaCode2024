@@ -11,6 +11,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,8 +22,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ChassisConstants;
 import frc.robot.Constants.ModuleConstants;
 
@@ -42,6 +45,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   //Creating the gyroscope that tracks the robots angles in all axis's
     private final Pigeon2 gyro = new Pigeon2(1);
+
+    private SwerveDrivePoseEstimator swervePoseEstimator;
+
+    private Vision vision = new Vision();
 
   private SlewRateLimiter driveLimit = new SlewRateLimiter(20);
   private SlewRateLimiter turnLimit = new SlewRateLimiter(20);
@@ -63,6 +70,14 @@ public class DriveSubsystem extends SubsystemBase {
 
     //Setting the odometry to current position of the robot on the field
       odometry = new SwerveDriveOdometry(ChassisConstants.swerveKinematics, getHeading(), getModulePosition());
+
+    //Setting up the swerve drive pose estimator
+    swervePoseEstimator = new SwerveDrivePoseEstimator(Constants.ChassisConstants.swerveKinematics, 
+    getHeading(), getModulePosition(), new Pose2d());
+
+    //Adding the vision measurements for pose estimation
+    swervePoseEstimator.addVisionMeasurement(vision.getBotPose(), Timer.getFPGATimestamp());
+    //swervePoseEstimator.setVisionMeasurementStdDevs(); Add this part if pose estimation needs greater accuracy
     
     AutoBuilder.configureHolonomic(this::getPose, this::resetOdometry, this::getSpeeds, 
     this::driveRobotRelative, 
@@ -88,6 +103,11 @@ public class DriveSubsystem extends SubsystemBase {
       return odometry.getPoseMeters();
     }
 
+  //Gets the Pose Estimators position
+  public Pose2d getEstimatedPose(){
+    return swervePoseEstimator.getEstimatedPosition();
+  }
+
   //Resets the gyro's angle to 0
     public void zeroHeading(){
       gyro.reset();
@@ -98,6 +118,8 @@ public class DriveSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     //Updates the robots position
       odometry.update(getHeading(), getModulePosition());
+    //Updating Pose Estimators position
+    swervePoseEstimator.update(getHeading(), getModulePosition());
 
     //Logging the Modules states and the robots state
       SmartDashboard.putNumber("Robot Heading", getHeading().getDegrees());
@@ -108,6 +130,11 @@ public class DriveSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("FrontR Angle: ", frontRight.getState().angle.getDegrees());
       SmartDashboard.putNumber("BackL Angle: ", backLeft.getState().angle.getDegrees());
       SmartDashboard.putNumber("BackR Angle: ", backRight.getState().angle.getDegrees());
+
+      //Outputting Pose Estimation Results
+      SmartDashboard.putNumber("Robot Pose Estimator X: ", getEstimatedPose().getX());
+      SmartDashboard.putNumber("Robot Pose Estimator Y: ", getEstimatedPose().getY());
+      SmartDashboard.putNumber("Robot Pose Estimator Rotation: ", getEstimatedPose().getRotation().getDegrees());
   }
 
   //Sets the speed and direction of each module and adjusts based on if we want to drive field relative or not
@@ -163,6 +190,11 @@ public class DriveSubsystem extends SubsystemBase {
     public void resetOdometry(Pose2d pose){
       odometry.resetPosition(getHeading(), getModulePosition(), pose);
     }
+  
+  //Resetting the Pose Estimator
+  public void resetEstimator(Pose2d pose){
+    swervePoseEstimator.resetPosition(getHeading(), getModulePosition(), pose);
+  }
 
   public void autoResetOdometry(Pose2d pose){
     odometry.resetPosition(getHeading(), getModulePosition(), Vision.getRobotPose());

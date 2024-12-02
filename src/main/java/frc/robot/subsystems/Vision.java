@@ -63,6 +63,14 @@ public class Vision extends SubsystemBase {
     }
   }
 
+  //Code for Pose Estimation
+  public Pose2d getBotPose(){
+    double[] botPose = aprilTagLimelight.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
+    botPose[5] -= 180;
+    Pose2d finalBotPose = new Pose2d(new Translation2d(botPose[0], botPose[1]), Rotation2d.fromDegrees(botPose[5]));
+    return finalBotPose;
+  }
+
   public boolean isThereTag(){
     tagCount = aprilTagLimelight.getEntry("tv").getDouble(0.0);
     if(tagCount == 1){

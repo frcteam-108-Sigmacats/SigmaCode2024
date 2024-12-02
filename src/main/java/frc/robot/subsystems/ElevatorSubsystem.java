@@ -129,6 +129,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     //   setElevatorSpeed(0);
     // }
     elevatePositionControl.setReference(position, ControlType.kPosition);
+    // Smart motion code to test
+    // elevatePositionControl.setReference(position, ControlType.kSmartMotion);
   }
   
   //Moving elevator based on speeds
@@ -149,13 +151,19 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatePositionControl.setD(ElevatorConstants.kD);
     elevatePositionControl.setOutputRange(-0.98, 1.0);
     elevatePositionControl.setFeedbackDevice(elevateEnc);
+
+    //Smart Motion code to test out
+    // elevatePositionControl.setSmartMotionMaxAccel(2000, 0);
+    // elevatePositionControl.setSmartMotionMaxVelocity(2500, 0);
+    // elevatePositionControl.setSmartMotionMinOutputVelocity(2000, 0);
+
     //Configure motors
     leftElevatorMotor.setIdleMode(IdleMode.kBrake);
-    leftElevatorMotor.setSmartCurrentLimit(40);//Units in amps
+    leftElevatorMotor.setSmartCurrentLimit(40);//Units in amps change amps when testing smart motion
     leftElevatorMotor.setInverted(true);
 
     rightElevatorMotor.setIdleMode(IdleMode.kBrake);
-    rightElevatorMotor.setSmartCurrentLimit(40);//Units in amps
+    rightElevatorMotor.setSmartCurrentLimit(40);//Units in amps change amps when testing smart motion
     rightElevatorMotor.follow(leftElevatorMotor, ElevatorConstants.invertRightMotor);
   }
 }
