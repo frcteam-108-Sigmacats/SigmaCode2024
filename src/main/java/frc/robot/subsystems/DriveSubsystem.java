@@ -23,6 +23,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -47,6 +48,9 @@ public class DriveSubsystem extends SubsystemBase {
     private final Pigeon2 gyro = new Pigeon2(1);
 
     private SwerveDrivePoseEstimator swervePoseEstimator;
+
+    //Creating a field to display robot pose estimator
+    private Field2d field = new Field2d();
 
     private Vision vision = new Vision();
 
@@ -78,6 +82,9 @@ public class DriveSubsystem extends SubsystemBase {
     //Adding the vision measurements for pose estimation
     swervePoseEstimator.addVisionMeasurement(vision.getBotPose(), Timer.getFPGATimestamp());
     //swervePoseEstimator.setVisionMeasurementStdDevs(); Add this part if pose estimation needs greater accuracy
+
+    //Displaying the field into smartdashboard for testing pose estimator
+    SmartDashboard.putData("Field", field);
     
     AutoBuilder.configureHolonomic(this::getPose, this::resetOdometry, this::getSpeeds, 
     this::driveRobotRelative, 
@@ -120,6 +127,9 @@ public class DriveSubsystem extends SubsystemBase {
       odometry.update(getHeading(), getModulePosition());
     //Updating Pose Estimators position
     swervePoseEstimator.update(getHeading(), getModulePosition());
+
+    //Trying to see if we can see robot pose on a field widget in smart dashboard
+    field.setRobotPose(getEstimatedPose());
 
     //Logging the Modules states and the robots state
       SmartDashboard.putNumber("Robot Heading", getHeading().getDegrees());
