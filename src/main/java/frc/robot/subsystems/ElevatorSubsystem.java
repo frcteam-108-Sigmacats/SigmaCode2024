@@ -104,7 +104,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Get Left Hook Angle", leftStaticHook.getPosition());
     SmartDashboard.putNumber("Get Right Hook Angle", rightStaticHook.getPosition());  
     SmartDashboard.putNumber("Left Elevator Motor:", leftElevatorMotor.get());
-    SmartDashboard.putNumber("Right Motor Speed:", rightElevatorMotor.get());  
+    SmartDashboard.putNumber("Right Motor Speed:", rightElevatorMotor.get()); 
+    SmartDashboard.putNumber("Elevator P ", elevatePositionControl.getP());
+    SmartDashboard.putNumber("Elevator I ", elevatePositionControl.getI());
+    SmartDashboard.putNumber("Elevator D ", elevatePositionControl.getD());
   }
 
   @Override
@@ -149,7 +152,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatePositionControl.setP(ElevatorConstants.kP);
     elevatePositionControl.setI(ElevatorConstants.kI);
     elevatePositionControl.setD(ElevatorConstants.kD);
-    elevatePositionControl.setOutputRange(-0.98, 1.0);
+    elevatePositionControl.setIZone(ElevatorConstants.kIZone);
+    elevatePositionControl.setOutputRange(-1.0, 1.0);
     elevatePositionControl.setFeedbackDevice(elevateEnc);
 
     //Smart Motion code to test out

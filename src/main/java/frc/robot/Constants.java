@@ -218,9 +218,10 @@ public final class Constants {
     public static final int rightElevatorMotorID = 16;
 
     //PID gains for position control of elevator
-    public static final double kP = 0.7;//Change when robot is with software
-    public static final double kI = 0;//Change when robot is with software
-    public static final double kD = 0.0;//Change when robot is with software
+    public static final double kP = 7.0;//Change when robot is with software
+    public static final double kI = 0.001;//Change when robot is with software
+    public static final double kD = 1.0;//Change when robot is with software
+    public static final double kIZone = 0.5;
 
     //Conversion for position of elevator
 
@@ -232,8 +233,8 @@ public final class Constants {
     //Positions for Elevator
     public static final double ampPos = 1;
     public static final double trapPos = 0.5;
-    public static final double climbUpPos = 1.99;
-    public static final double climbDownPos = 0.05;
+    public static final double climbUpPos = 2.0;
+    public static final double climbDownPos = 0.0;
 
     //Speeds for Elevator
     public static final double climbUpSpeed = 0.3;

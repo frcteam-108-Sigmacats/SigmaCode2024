@@ -53,6 +53,7 @@ public class DriveSubsystem extends SubsystemBase {
     private Field2d field = new Field2d();
 
     private Vision vision = new Vision();
+    private final boolean isRobotHavingFun = true;
 
   private SlewRateLimiter driveLimit = new SlewRateLimiter(20);
   private SlewRateLimiter turnLimit = new SlewRateLimiter(20);
@@ -145,6 +146,9 @@ public class DriveSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Robot Pose Estimator X: ", getEstimatedPose().getX());
       SmartDashboard.putNumber("Robot Pose Estimator Y: ", getEstimatedPose().getY());
       SmartDashboard.putNumber("Robot Pose Estimator Rotation: ", getEstimatedPose().getRotation().getDegrees());
+
+      SmartDashboard.putNumber("Vision Pose X: ", vision.getBotPose().getX());
+      SmartDashboard.putNumber("Vision Pose Y: ", vision.getBotPose().getY());
   }
 
   //Sets the speed and direction of each module and adjusts based on if we want to drive field relative or not
