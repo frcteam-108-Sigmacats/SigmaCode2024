@@ -218,8 +218,8 @@ public final class Constants {
     public static final int rightElevatorMotorID = 16;
 
     //PID gains for position control of elevator
-    public static final double kP = 7.0;//Change when robot is with software
-    public static final double kI = 0.001;//Change when robot is with software
+    public static final double kP = 14.0;//Change when robot is with software
+    public static final double kI = 0.01;//Change when robot is with software
     public static final double kD = 1.0;//Change when robot is with software
     public static final double kIZone = 0.5;
 

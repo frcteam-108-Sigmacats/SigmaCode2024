@@ -9,6 +9,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.PWM;
@@ -65,6 +66,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     configureElevatorMotors();
     configureElevatorMotors();
     configureElevatorMotors();
+    leftElevatorMotor.setSoftLimit(SoftLimitDirection.kForward, 2.0f);
+    leftElevatorMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    leftElevatorMotor.setSoftLimit(SoftLimitDirection.kReverse, 0f);
+    leftElevatorMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
     //Burn flash to save configuration of motors
     leftElevatorMotor.burnFlash();
@@ -152,14 +157,15 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatePositionControl.setP(ElevatorConstants.kP);
     elevatePositionControl.setI(ElevatorConstants.kI);
     elevatePositionControl.setD(ElevatorConstants.kD);
+    elevatePositionControl.setFF(1/5676); //Test this out on Saturday 
     elevatePositionControl.setIZone(ElevatorConstants.kIZone);
     elevatePositionControl.setOutputRange(-1.0, 1.0);
     elevatePositionControl.setFeedbackDevice(elevateEnc);
 
     //Smart Motion code to test out
-    // elevatePositionControl.setSmartMotionMaxAccel(2000, 0);
-    // elevatePositionControl.setSmartMotionMaxVelocity(2500, 0);
-    // elevatePositionControl.setSmartMotionMinOutputVelocity(2000, 0);
+    // elevatePositionControl.setSmartMotionMaxAccel(2000, 0); //Test it out on Saturday
+    // elevatePositionControl.setSmartMotionMaxVelocity(2500, 0); //Test it out on Saturday
+    // elevatePositionControl.setSmartMotionMinOutputVelocity(2000, 0); //Test it out on Saturday
 
     //Configure motors
     leftElevatorMotor.setIdleMode(IdleMode.kBrake);
